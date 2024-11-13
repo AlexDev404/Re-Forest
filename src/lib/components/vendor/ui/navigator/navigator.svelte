@@ -10,7 +10,7 @@
 
 <MenubarPrimitive.Root
 	class={cn(
-		"bg-primary text-background flex h-9 items-center justify-center space-x-1 rounded-md border p-1 shadow-sm",
+		"bg-primary text-background flex h-fit items-center justify-center space-x-1 rounded-md border p-1 shadow-sm",
 		className
 	)}
 >

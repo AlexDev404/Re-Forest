@@ -91,13 +91,12 @@
 					<p class="text-sm font-light">This is a pin with the following information:</p>
 					<p class="text-sm font-light">
 						Overall Tree Health:
-						{#if // Regex off the % sign
-						parseInt(tree.health.replace(/[^0-9]/g, '')) > 80}
-							<span class="text-green-600 font-bold">Good</span>
+						{#if parseInt(tree.health.replace(/[^0-9]/g, '')) > 80}
+							<span class="font-bold text-green-600">Good</span>
 						{:else if parseInt(tree.health.replace(/[^0-9]/g, '')) > 70}
-							<span class="text-orange-600 font-bold">Fair</span>
+							<span class="font-bold text-orange-600">Fair</span>
 						{:else}
-							<span class="text-red-600 font-bold">Poor</span>
+							<span class="font-bold text-red-600">Poor</span>
 						{/if}
 					</p>
 					<p class="text-sm font-light">Planted by: {tree.plantedBy}</p>
@@ -105,6 +104,7 @@
 				</div>
 			</Marker>
 		{/each}
+
 		<NavigationControl />
 		<GeolocateControl options={{ some: 'control-option' }} on:eventname={eventHandler} />
 		<!-- <ScaleControl /> -->

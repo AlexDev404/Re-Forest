@@ -8,7 +8,7 @@
 </script>
 
 <div class="w-full rounded-md bg-secondary px-6 py-5">
-	<div class="flex justify-between space-x-4">
+	<div class="flex justify-start space-x-8">
 		<Avatar.Root>
 			<Avatar.Image {src} />
 			<Avatar.Fallback>{avatarFallback}</Avatar.Fallback>

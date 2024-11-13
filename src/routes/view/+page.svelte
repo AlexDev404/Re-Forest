@@ -4,52 +4,49 @@
 	import { type Tree } from '$lib/types/Tree';
 	import { Calendar } from 'lucide-svelte';
 	const trees: Tree[] = TreeData;
-    let oldDate: string;
+	let oldDate: string;
 
-    const getRelativeDay = (tree: Tree) => {
-        const today = new Date();
-        const plantedDate = new Date(tree.plantedOn);
+	const getRelativeDay = (tree: Tree) => {
+		const today = new Date();
+		const plantedDate = new Date(tree.plantedOn);
 
-        const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric' };
-        const formattedDate = plantedDate.toLocaleDateString(undefined, options);
+		const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric' };
+		const formattedDate = plantedDate.toLocaleDateString(undefined, options);
 
-        const diffTime = today.getTime() - plantedDate.getTime();
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+		const diffTime = today.getTime() - plantedDate.getTime();
+		const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-        switch (diffDays) {
-            case 0:
-                oldDate = 'Today';
-                return 'Today';
-            case 1:
-                oldDate = 'Yesterday';
-                return 'Yesterday';
-            case 2:
-                oldDate = 'Two Days Ago';
-                return 'Two Days Ago';
-            case 2:
-                oldDate = 'Three Days Ago';
-                return 'Three Days Ago';
-            case 7:
-                oldDate = 'Last Week';
-                return 'Last Week';
-            case 14:
-                oldDate = 'Two Weeks Ago';
-                return 'Two Weeks Ago';
-            default:
-                oldDate = formattedDate;
-                return formattedDate;
-        }
-    };
+		let relativeDay = '';
+
+		if (diffDays === 0) {
+			relativeDay = 'Today';
+		} else if (diffDays === 1) {
+			relativeDay = 'Yesterday';
+		} else if (diffDays === 2) {
+			relativeDay = 'Two Days Ago';
+		} else if (diffDays === 3) {
+			relativeDay = 'Three Days Ago';
+		} else if (diffDays === 7) {
+			relativeDay = 'Last Week';
+		} else if (diffDays === 14) {
+			relativeDay = 'Two Weeks Ago';
+		} else {
+			relativeDay = formattedDate;
+		}
+
+		if (oldDate !== relativeDay) {
+			oldDate = relativeDay;
+			return `<article class="flex items-start self-stretch"><h1 class="text-2xl font-semibold">${relativeDay}</h1></article>`;
+		}
+
+		return '';
+	};
 </script>
 
 <page class="overflow-y-auto">
 	<main class="mx-6 my-10 flex flex-col items-start gap-12">
 		{#each trees as tree, index}
-            {#if oldDate !== getRelativeDay(tree)}
-                <article class="flex items-start self-stretch">
-                    <h1 class="text-2xl font-semibold">{getRelativeDay(tree)}</h1>
-                </article>
-            {/if}
+			{@html getRelativeDay(tree)}
 
 			<IconCard
 				avatarSrc="/static/tree.svg"
@@ -63,11 +60,14 @@
 				</svelte:fragment>
 			</IconCard>
 		{/each}
+		<article class="w-full pb-12 text-center text-sm font-light text-slate-600">
+			It seems that you have reached the end.
+		</article>
 	</main>
 </page>
 
 <style>
-    :global(body) {
-        overflow: auto;
-    }
+	:global(body) {
+		overflow: auto;
+	}
 </style>
