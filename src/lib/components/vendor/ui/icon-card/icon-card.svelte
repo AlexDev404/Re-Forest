@@ -7,7 +7,7 @@
 	export let description: string;
 </script>
 
-<div class="w-full">
+<div class="w-full rounded-md bg-secondary px-6 py-5">
 	<div class="flex justify-between space-x-4">
 		<Avatar.Root>
 			<Avatar.Image {src} />
@@ -17,7 +17,7 @@
 			<h4 class="text-sm font-semibold">{title}</h4>
 			<p class="text-sm">{description}</p>
 			<div class="flex items-center pt-2">
-				<slot name="content" />
+				<slot name="content"/>
 			</div>
 		</div>
 	</div>
