@@ -25,8 +25,8 @@ body {
 	background: rgb(0, 99, 10);
 	border: 2px solid rgb(137, 242, 0);
 	z-index: 1;
-	width: 16px;
-	height: 16px;
+	width: 32px;
+	height: 32px;
 }
 
 .mapboxgl-popup {
