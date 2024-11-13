@@ -36,7 +36,7 @@
 		>
 		<Menubar.Trigger
 			on:click={() => handleNavigation('add')}
-			class="{activeButton === 'add' ? 'bg-accent' : ''} w-16 justify-center"
+			class="{activeButton === 'add' ? 'bg-accent' : ''} w-20 justify-center"
 			><CirclePlus /></Menubar.Trigger
 		>
 		<Menubar.Trigger
