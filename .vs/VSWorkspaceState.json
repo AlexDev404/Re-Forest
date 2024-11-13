@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\lib",
+    "\\src\\lib\\components",
+    "\\src\\lib\\components\\vendor",
+    "\\src\\lib\\components\\vendor\\shadcn",
+    "\\src\\routes"
+  ],
+  "SelectedNode": "\\src\\routes\\+page.svelte",
+  "PreviewInSolutionExplorer": false
+}
