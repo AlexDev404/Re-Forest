@@ -1,6 +1,8 @@
 <script lang="ts">
+	import * as Alert from '$lib/components/vendor/ui/alert';
 	import TreeData from '$lib/data/trees.json';
 	import { type Tree } from '$lib/types/Tree';
+	import { BadgePlus } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { inview } from 'svelte-inview';
 	let trees: Tree[] = TreeData;
@@ -17,8 +19,9 @@
 		}, 3000);
 	});
 </script>
+
 <svelte:head>
-    <title>Re:Forest :: Explore</title>
+	<title>Re:Forest :: Explore</title>
 </svelte:head>
 <page>
 	<div class="h-screen snap-y snap-mandatory overflow-y-scroll">
@@ -100,6 +103,15 @@
 									</div>
 								</div>
 							</div>
+						</div>
+						<div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-25 p-4 pb-20">
+							<Alert.Root>
+								<BadgePlus />
+								<div class="mx-2 mt-1">
+									<Alert.Title>Planted by</Alert.Title>
+									<Alert.Description>{tree.plantedBy} on {tree.plantedOn}</Alert.Description>
+								</div>
+							</Alert.Root>
 						</div>
 					</div>
 				{/each}
