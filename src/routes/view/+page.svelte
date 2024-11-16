@@ -42,7 +42,9 @@
 		return '';
 	};
 </script>
-
+<svelte:head>
+    <title>Re:Forest :: View</title>
+</svelte:head>
 <page class="overflow-y-auto">
 	<main class="mx-6 my-10 flex flex-col items-start gap-12">
 		{#each trees as tree, index}

@@ -17,7 +17,9 @@
 		}, 3000);
 	});
 </script>
-
+<svelte:head>
+    <title>Re:Forest :: Explore</title>
+</svelte:head>
 <page>
 	<div class="h-screen snap-y snap-mandatory overflow-y-scroll">
 		<main class="flex flex-col">
