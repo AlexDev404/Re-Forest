@@ -40,6 +40,7 @@
 	},
 	"dependencies": {
 		"lucide-svelte": "^0.456.0",
+		"svelte-inview": "^4.0.4",
 		"svelte-radix": "^2.0.1"
 	}
 }

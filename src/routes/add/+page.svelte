@@ -1,9 +1,14 @@
 <script lang="ts">
+	import * as Alert from '$lib/components/vendor/ui/alert';
 	import { Button } from '$lib/components/vendor/ui/button';
 	import IconCard from '$lib/components/vendor/ui/icon-card/icon-card.svelte';
+	import { Input } from '$lib/components/vendor/ui/input';
+	import { Label } from '$lib/components/vendor/ui/label';
+	import { Zap } from 'lucide-svelte';
 
 	// Location handling
 	let currentLocation: GeolocationCoordinates | null = null;
+    let tree_added = false;
 
 	async function getCurrentLocation() {
 		try {
@@ -11,7 +16,7 @@
 				navigator.geolocation.getCurrentPosition(resolve, reject);
 			});
 			currentLocation = position.coords;
-            console.log('Current location:', currentLocation);
+			console.log('Current location:', currentLocation);
 		} catch (error) {
 			alert('Error getting location: ' + error.message);
 		}
@@ -51,9 +56,9 @@
 		</article>
 		<IconCard
 			avatarSrc="/static/camera.svg"
-			avatarFallback="SK"
+			avatarFallback="📸"
 			title={'Click to add a photo'}
-			description={'Click to insert a photo of the tree'}
+			description={'Add a photo to represent the tree'}
 			on:click={handlePhotoClick}
 		>
 			<svelte:fragment slot="content1">
@@ -63,13 +68,46 @@
 		<IconCard
 			avatarSrc="null"
 			avatarFallback="✏️"
-			title={'Click to edit tree name'}
-			description={'Click to edit tree description'}
+			title={'Create a new tree'}
+			description={'Provide details about the new tree you want to add.'}
+			dialog_title="Create a new tree"
+			dialog_description="Fill in the details below to create a new tree"
+			wants_dialog
 		>
-			<svelte:fragment slot="content1">
+			<svelte:fragment slot="dialog-trigger">
 				<Button class="w-full">Add this tree</Button>
 			</svelte:fragment>
+			<svelte:fragment slot="dialog-content">
+				<div class="grid gap-4 py-4">
+					<div class="grid grid-cols-4 items-center gap-4">
+						<Label for="name" class="text-right">Name</Label>
+						<Input id="name" placeholder="Beech tree" class="col-span-3" />
+					</div>
+					<div class="grid grid-cols-4 items-center gap-4">
+						<Label for="username" class="text-right">Label</Label>
+						<Input id="username" placeholder="This tree is..." class="col-span-3" />
+					</div>
+				</div>
+			</svelte:fragment>
+			<svelte:fragment slot="dialog-footer">
+				<Button
+					type="submit"
+					class="w-full"
+					on:click={() => {
+						document.querySelector('[data-melt-dialog-overlay]')?.remove();
+						document.getElementById('add-tree')?.remove();
+                        tree_added = true;
+					}}>Add this tree</Button
+				>
+			</svelte:fragment>
 		</IconCard>
+		{#if tree_added}
+			<Alert.Root>
+				<Zap />
+				<Alert.Title>Your tree was added.</Alert.Title>
+				<Alert.Description>Go over to the view screen to see it live!</Alert.Description>
+			</Alert.Root>
+		{/if}
 	</main>
 </page>
 

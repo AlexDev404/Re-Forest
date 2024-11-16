@@ -15,13 +15,13 @@
 		mapComponent.setZoom(10.5);
 		mapComponent.flyTo({ center: [-88.768579, 17.25118] }); // documentation (https://docs.mapbox.com/mapbox-gl-js/example/flyto)
 
-		trees.forEach((tree) => {
-			const distance = Math.random() * (15 - 1) + 1; // Random distance between 1 and 15 miles
-			const angle = Math.random() * 360; // Random angle in degrees
-			const { newLat, newLng } = calculateNewCoordinates(originalLat, originalLng, distance, angle);
-			tree.lat = newLat;
-			tree.lng = newLng;
-		});
+		// trees.forEach((tree) => {
+		// 	const distance = Math.random() * (15 - 1) + 1; // Random distance between 1 and 15 miles
+		// 	const angle = Math.random() * 360; // Random angle in degrees
+		// 	const { newLat, newLng } = calculateNewCoordinates(originalLat, originalLng, distance, angle);
+		// 	tree.lat = newLat;
+		// 	tree.lng = newLng;
+		// });
 	});
 	// Define this to handle `eventname` events - see [GeoLocate Events](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol-events)
 	function eventHandler(e: CustomEvent) {
@@ -31,41 +31,41 @@
 
 	// Tree information data
 	// Original coordinates for the main marker
-	const originalLat = 17.25118;
-	const originalLng = -88.768579;
+	// const originalLat = 17.25118;
+	// const originalLng = -88.768579;
 
 	// Distance between two points formula
-	function calculateNewCoordinates(
-		lat: number,
-		lng: number,
-		distanceInMiles: number,
-		angleInDegrees: number
-	) {
-		const earthRadius = 3958.8; // Radius of Earth in miles
-		const angleInRadians = angleInDegrees * (Math.PI / 180);
+	// function calculateNewCoordinates(
+	// 	lat: number,
+	// 	lng: number,
+	// 	distanceInMiles: number,
+	// 	angleInDegrees: number
+	// ) {
+	// 	const earthRadius = 3958.8; // Radius of Earth in miles
+	// 	const angleInRadians = angleInDegrees * (Math.PI / 180);
 
-		const newLat =
-			Math.asin(
-				Math.sin(lat * (Math.PI / 180)) * Math.cos(distanceInMiles / earthRadius) +
-					Math.cos(lat * (Math.PI / 180)) *
-						Math.sin(distanceInMiles / earthRadius) *
-						Math.cos(angleInRadians)
-			) *
-			(180 / Math.PI);
+	// 	const newLat =
+	// 		Math.asin(
+	// 			Math.sin(lat * (Math.PI / 180)) * Math.cos(distanceInMiles / earthRadius) +
+	// 				Math.cos(lat * (Math.PI / 180)) *
+	// 					Math.sin(distanceInMiles / earthRadius) *
+	// 					Math.cos(angleInRadians)
+	// 		) *
+	// 		(180 / Math.PI);
 
-		const newLng =
-			lng +
-			Math.atan2(
-				Math.sin(angleInRadians) *
-					Math.sin(distanceInMiles / earthRadius) *
-					Math.cos(lat * (Math.PI / 180)),
-				Math.cos(distanceInMiles / earthRadius) -
-					Math.sin(lat * (Math.PI / 180)) * Math.sin(newLat * (Math.PI / 180))
-			) *
-				(180 / Math.PI);
+	// 	const newLng =
+	// 		lng +
+	// 		Math.atan2(
+	// 			Math.sin(angleInRadians) *
+	// 				Math.sin(distanceInMiles / earthRadius) *
+	// 				Math.cos(lat * (Math.PI / 180)),
+	// 			Math.cos(distanceInMiles / earthRadius) -
+	// 				Math.sin(lat * (Math.PI / 180)) * Math.sin(newLat * (Math.PI / 180))
+	// 		) *
+	// 			(180 / Math.PI);
 
-		return { newLat, newLng };
-	}
+	// 	return { newLat, newLng };
+	// }
 
 	// List of trees with original data, and we'll generate coordinates onMount
 	const trees: Tree[] = treesData;
