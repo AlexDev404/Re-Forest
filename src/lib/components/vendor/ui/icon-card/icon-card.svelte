@@ -21,4 +21,5 @@
 			</div>
 		</div>
 	</div>
+	<slot name="content1"/>
 </div>
