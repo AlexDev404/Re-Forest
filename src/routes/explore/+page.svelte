@@ -109,7 +109,7 @@
 										/>
 									{/each}
 								</div>
-								<p class="font-semibold">
+								<p class="font-semibold w-full text-right pr-2">
 									{#snippet healthStatus()}
 										{@const healthScore =
 											Math.round(parseInt(tree.health.replace(/[^0-9]/g, '')) / 20) * 30}
