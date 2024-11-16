@@ -9,4 +9,5 @@ export interface Tree {
 	description?: string;
 	height?: string;
 	age: string;
+	location_readable?: string;
 }

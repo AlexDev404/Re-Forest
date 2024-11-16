@@ -45,15 +45,16 @@
 										class="location-data mt-2 text-sm font-light"
 										use:inview
 										on:inview_enter={(isVisible) => {
-											if (isVisible) {
+											if (isVisible && !tree.location_readable) {
 												// Do something when the div is visible
 												fetch(
-													`https://nominatim.openstreetmap.org/reverse.php?format=jsonv2&lat=${tree.lat}&lon=${tree.lng}`,
+													`https://geocode.maps.co/reverse?format=jsonv2&lat=${tree.lat}&lon=${tree.lng}&api_key=67383f9b5a5d8533348772gbf5de3c7`,
 													{ signal: controller.signal }
 												)
 													.then((r) => r.json())
 													.then((d) => {
 														data = d;
+														tree.location_readable = data.display_name;
 													})
 													.catch((err) => {
 														if (err.name === 'AbortError') {
@@ -68,26 +69,29 @@
 										on:inview_leave={(event) => {
 											console.log(index);
 											// Check one more time to see if the element is still in view
-											// if (
-											// 	document.getElementById(`tree__${index}`)?.getBoundingClientRect().top <
-											// 	window.innerHeight
-											// ) {
-											// 	console.log('Still in view');
-											// 	return;
-											// }
-											if (!signal_ready || !index) {
+											if (
+												document.getElementById(`tree__${index}`)?.getBoundingClientRect().top <
+												window.innerHeight
+											) {
+												// console.log('Still in view');
+												return;
+											}
+											if (
+												(event.scrollDirection =
+													('down' && index === 1) || index === 0 || !signal_ready || !index)
+											) {
 												return;
 											}
 											// Do something when the div is not visible
 											controller.abort();
 											// Create a new controller
 											controller = new AbortController(); // Weird lol
-											// console.log(event, 'This div is not in view');
+											console.log(event, 'This div is not in view');
 										}}
 										bind:this={locationElement}
 									>
-										{#if data}
-											{data.display_name}
+										{#if tree}
+											{tree.location_readable}
 										{:else}
 											Location unavailable.
 										{/if}

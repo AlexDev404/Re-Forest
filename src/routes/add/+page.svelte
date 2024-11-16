@@ -75,7 +75,7 @@
 			wants_dialog
 		>
 			<svelte:fragment slot="dialog-trigger">
-				<Button class="w-full">Add this tree</Button>
+				<Button class="w-full">Add a tree</Button>
 			</svelte:fragment>
 			<svelte:fragment slot="dialog-content">
 				<div class="grid gap-4 py-4">
