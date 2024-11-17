@@ -32,7 +32,7 @@
 			<Dialog.Trigger class="w-full"><slot name="dialog-trigger" /></Dialog.Trigger>
 		{/if}
 	</div>
-	<Dialog.Content class="sm:max-w-[425px]" id="add-tree">
+	<Dialog.Content class="sm:max-w-[275px] rounded-lg" id="add-tree">
 		<Dialog.Header>
 			<Dialog.Title>{dialog_title}</Dialog.Title>
 			<Dialog.Description>
