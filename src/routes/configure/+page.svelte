@@ -1,9 +1,9 @@
 <script lang="ts">
-	import MenuItem from '$lib/components/vendor/ui/menuitem/menuitem.svelte';
-	import { ChevronRight, HelpCircle, Map, Thermometer } from 'lucide-svelte';
 	import { Label } from '$lib/components/vendor/ui/label/index';
+	import MenuItem from '$lib/components/vendor/ui/menuitem/menuitem.svelte';
 	import { Switch } from '$lib/components/vendor/ui/switch/index';
-	import { mount, onMount } from 'svelte';
+	import { ChevronRight, HelpCircle, Map, Thermometer } from 'lucide-svelte';
+	import { onMount } from 'svelte';
 	let Units: Switch;
 	let checked: boolean;
 	onMount(() => {
@@ -17,7 +17,7 @@
 </script>
 
 <svelte:head>
-	<title>Re:Forest :: View</title>
+	<title>Re:Forest :: Settings</title>
 </svelte:head>
 <page class="overflow-y-auto">
 	<main class="mx-6 my-10 flex min-h-[80vh] flex-col items-start gap-9">
