@@ -2,7 +2,8 @@
 	import { Label } from '$lib/components/vendor/ui/label/index';
 	import MenuItem from '$lib/components/vendor/ui/menuitem/menuitem.svelte';
 	import { Switch } from '$lib/components/vendor/ui/switch/index';
-	import { ChevronRight, HelpCircle, Map, Thermometer } from 'lucide-svelte';
+	import { ChevronRight, HelpCircle, Link, Map, Thermometer } from 'lucide-svelte';
+	import { Button } from '$lib/components/vendor/ui/button/index';
 	import { onMount } from 'svelte';
 	let Units: Switch;
 	let checked: boolean;
@@ -54,12 +55,14 @@
 			</MenuItem>
 		</optionsList>
 		<div class="flex w-full flex-1 flex-col items-end justify-end">
-			<MenuItem title="Help">
-				<svelte:fragment slot="start-icon">
-					<HelpCircle class="h-4 w-4" />
-				</svelte:fragment>
-				<ChevronRight class="h-4 w-4" />
-			</MenuItem>
+			<Button variant="link" href="/configure/help" class="flex w-full">
+				<MenuItem title="Help">
+					<svelte:fragment slot="start-icon">
+						<HelpCircle class="h-4 w-4" />
+					</svelte:fragment>
+					<ChevronRight class="h-4 w-4" />
+				</MenuItem>
+			</Button>
 		</div>
 	</main>
 </page>
