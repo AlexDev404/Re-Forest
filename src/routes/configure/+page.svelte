@@ -1,39 +1,56 @@
 <script lang="ts">
 	import MenuItem from '$lib/components/vendor/ui/menuitem/menuitem.svelte';
-	import { ChevronRight, Thermometer } from 'lucide-svelte';
-	import { onMount } from 'svelte';
-	let data: any;
-
-	onMount(() => {
-		console.log('Settings page loaded');
-	});
+	import { ChevronRight, HelpCircle, Map, Thermometer } from 'lucide-svelte';
+	import { Label } from '$lib/components/vendor/ui/label/index';
+	import { Switch } from '$lib/components/vendor/ui/switch/index';
+	let Units: Switch;
 </script>
 
 <svelte:head>
 	<title>Re:Forest :: View</title>
 </svelte:head>
 <page class="overflow-y-auto">
-	<main class="mx-6 my-10 flex flex-col items-start gap-9">
+	<main class="mx-6 my-10 flex min-h-[80vh] flex-col items-start gap-9">
 		<article class="flex flex-col items-start self-stretch">
 			<h1 class="text-2xl font-semibold">Settings</h1>
 		</article>
 		<optionsList class="flex w-full flex-col items-start gap-2">
-			<MenuItem title="Profile">
+			<MenuItem title="Unit Scale ">
 				<svelte:fragment slot="start-icon">
 					<Thermometer class="h-4 w-4" />
 				</svelte:fragment>
-				<ChevronRight class="h-4 w-4" />
+
+				<div class="flex items-center space-x-2">
+					<Label for="Units">Metric</Label>
+					<Switch
+						id="Units"
+						bind:this={Units}
+						
+						on:click={(event) => {// this is a function to get the current state of the switch and save it to local storage
+							const dataset=JSON.parse(event.detail.currentTarget.getAttribute('aria-checked') ?? 'false');
+							localStorage.setItem('units', JSON.stringify(!dataset));
+							
+						}}
+					/>
+					<Label for="Units">Imperial</Label>
+				</div>
 			</MenuItem>
-			<MenuItem title="Profile">
+
+			<MenuItem title="Site Location">
 				<svelte:fragment slot="start-icon">
-					<Thermometer class="h-4 w-4" />
+					<Map class="h-4 w-4" />
 				</svelte:fragment>
 				<ChevronRight class="h-4 w-4" />
 			</MenuItem>
 		</optionsList>
-		<article class="w-full pb-12 text-center text-sm font-light text-slate-600">
-			It seems that you have reached the end.
-		</article>
+		<div class="flex w-full flex-1 flex-col items-end justify-end">
+			<MenuItem title="Help">
+				<svelte:fragment slot="start-icon">
+					<HelpCircle class="h-4 w-4" />
+				</svelte:fragment>
+				<ChevronRight class="h-4 w-4" />
+			</MenuItem>
+		</div>
 	</main>
 </page>
 

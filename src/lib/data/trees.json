@@ -5,7 +5,7 @@
 		"plantedBy": "Alex",
 		"plantedOn": "2024-11-13",
 		"image": "https://pixabay.com/get/g1c21ab114f666e27a792a5750ef77d4636b8b97960fb16a263b4e0707eba00672e9347f1d722e040e313a12f560c428452f08c8021787b50a9baad0757d8a90f_1280.jpg",
-		"height": "31.93 meters",
+		"height": "31.93",
 		"age": "78 years",
 		"lat": 17.175151084545227,
 		"lng": -88.75486052986732
@@ -16,7 +16,7 @@
 		"plantedBy": "Maria",
 		"plantedOn": "2021-07-22",
 		"image": "https://pixabay.com/get/g145744b554a98d015cf36e6429983f5b3258ec70fedb23f020e2dfa26effaff845c9b6b2c36984ca21716dba9e61178c6f0fc711f3779705ceb9ccf9b1a9cea7_1280.jpg",
-		"height": "33.06 meters",
+		"height": "33.06",
 		"age": "69 years",
 		"lat": 17.289998087515247,
 		"lng": -88.79351082110121
@@ -27,7 +27,7 @@
 		"plantedBy": "John",
 		"plantedOn": "2021-07-22",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "28.00 meters",
+		"height": "28.00",
 		"age": "60 years",
 		"lat": 17.238565296696088,
 		"lng": -88.79520095641907
@@ -38,7 +38,7 @@
 		"plantedBy": "Sarah",
 		"plantedOn": "2022-11-01",
 		"image": "https://pixabay.com/get/gfee17bc6cb68b266c11d978b7eb506c067a0ef1720ba357d138ed7d035ae99753831f43543929236a4874d0cacb8820a387f8ec2c2c03262194c247c9f6ad373_1280.jpg",
-		"height": "9.54 meters",
+		"height": "9.54",
 		"age": "34 years",
 		"lat": 17.10343120352661,
 		"lng": -88.71434792509974
@@ -49,7 +49,7 @@
 		"plantedBy": "Eli",
 		"plantedOn": "2022-11-01",
 		"image": "https://pixabay.com/get/g512abedfad65c907572f6fa48c5e44582107d1167b1959b85cdc2e8c1544f577092925483619c4694003648b8b051af9ef62234720c2c1ce2f5d8e993a022c22_1280.jpg",
-		"height": "33.56 meters",
+		"height": "33.56",
 		"age": "35 years",
 		"lat": 17.278109086164953,
 		"lng": -88.69145512143166
@@ -60,7 +60,7 @@
 		"plantedBy": "Samantha",
 		"plantedOn": "2022-11-01",
 		"image": "https://pixabay.com/get/g4db66977db217a1b89600ec564dc713ba2314ffbbe20fb60f774bf05dd3c2c43b3df5615b30e52404d6bdb2145d8a39585aed3b8e5d60ba78a60a823d464fa4b_1280.jpg",
-		"height": "31.67 meters",
+		"height": "31.67",
 		"age": "28 years",
 		"lat": 17.193057652040356,
 		"lng": -88.97334622722106
@@ -71,7 +71,7 @@
 		"plantedBy": "Henry",
 		"plantedOn": "2022-11-01",
 		"image": "https://pixabay.com/get/g338d272eaff3856e710ac6eb71bb1d1c4ee1ae3768b5c1a9ba32d0718a546550ba8de35eab23c32d5cf007de980b903aecbe80ea7dcc83d0fbb9d62569e9a220_1280.jpg",
-		"height": "5.85 meters",
+		"height": "5.85",
 		"age": "30 years",
 		"lat": 17.278896206801278,
 		"lng": -88.788580843261
@@ -82,7 +82,7 @@
 		"plantedBy": "Diana",
 		"plantedOn": "2024-03-05",
 		"image": "https://pixabay.com/get/g145744b554a98d015cf36e6429983f5b3258ec70fedb23f020e2dfa26effaff845c9b6b2c36984ca21716dba9e61178c6f0fc711f3779705ceb9ccf9b1a9cea7_1280.jpg",
-		"height": "21.93 meters",
+		"height": "21.93",
 		"age": "54 years",
 		"lat": 17.462913534843903,
 		"lng": -88.8072837182201
@@ -93,7 +93,7 @@
 		"plantedBy": "Michael",
 		"plantedOn": "2024-03-05",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "31.49 meters",
+		"height": "31.49",
 		"age": "86 years",
 		"lat": 17.407289136024367,
 		"lng": -88.86626030086776
@@ -104,7 +104,7 @@
 		"plantedBy": "Rachel",
 		"plantedOn": "2024-03-05",
 		"image": "https://pixabay.com/get/g82c6f00651e5c98028c7953530265d514c0c266500df2cf90585029fb766e23a2f8a09c189c1fd0cf3d20d8dd547371fb3ac8fdc6161bee5a0736d96bbf7fcc8_1280.jpg",
-		"height": "10.41 meters",
+		"height": "10.41",
 		"age": "87 years",
 		"lat": 17.2527804509454,
 		"lng": -88.72865967628894
@@ -115,7 +115,7 @@
 		"plantedBy": "Oliver",
 		"plantedOn": "2024-03-05",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "14.66 meters",
+		"height": "14.66",
 		"age": "68 years",
 		"lat": 17.341946488693058,
 		"lng": -88.63598465955793
@@ -126,7 +126,7 @@
 		"plantedBy": "Ava",
 		"plantedOn": "2021-10-11",
 		"image": "https://pixabay.com/get/gfee17bc6cb68b266c11d978b7eb506c067a0ef1720ba357d138ed7d035ae99753831f43543929236a4874d0cacb8820a387f8ec2c2c03262194c247c9f6ad373_1280.jpg",
-		"height": "10.18 meters",
+		"height": "10.18",
 		"age": "37 years",
 		"lat": 17.306028202240526,
 		"lng": -88.58894483249776
@@ -137,7 +137,7 @@
 		"plantedBy": "Noah",
 		"plantedOn": "2022-11-15",
 		"image": "https://pixabay.com/get/g512abedfad65c907572f6fa48c5e44582107d1167b1959b85cdc2e8c1544f577092925483619c4694003648b8b051af9ef62234720c2c1ce2f5d8e993a022c22_1280.jpg",
-		"height": "17.13 meters",
+		"height": "17.13",
 		"age": "18 years",
 		"lat": 17.188301604537443,
 		"lng": -88.88972092452381
@@ -148,7 +148,7 @@
 		"plantedBy": "Grace",
 		"plantedOn": "2024-04-23",
 		"image": "https://pixabay.com/get/g4db66977db217a1b89600ec564dc713ba2314ffbbe20fb60f774bf05dd3c2c43b3df5615b30e52404d6bdb2145d8a39585aed3b8e5d60ba78a60a823d464fa4b_1280.jpg",
-		"height": "17.18 meters",
+		"height": "17.18",
 		"age": "78 years",
 		"lat": 17.173525996770575,
 		"lng": -88.77750990909092
@@ -159,7 +159,7 @@
 		"plantedBy": "James",
 		"plantedOn": "2024-04-23",
 		"image": "https://pixabay.com/get/g338d272eaff3856e710ac6eb71bb1d1c4ee1ae3768b5c1a9ba32d0718a546550ba8de35eab23c32d5cf007de980b903aecbe80ea7dcc83d0fbb9d62569e9a220_1280.jpg",
-		"height": "9.84 meters",
+		"height": "9.84",
 		"age": "24 years",
 		"lat": 17.33899977113281,
 		"lng": -88.83415624649352
@@ -170,7 +170,7 @@
 		"plantedBy": "Sophia",
 		"plantedOn": "2024-04-23",
 		"image": "https://pixabay.com/get/g145744b554a98d015cf36e6429983f5b3258ec70fedb23f020e2dfa26effaff845c9b6b2c36984ca21716dba9e61178c6f0fc711f3779705ceb9ccf9b1a9cea7_1280.jpg",
-		"height": "11.53 meters",
+		"height": "11.53",
 		"age": "9 years",
 		"lat": 17.20536231175345,
 		"lng": -88.78797669356545
@@ -181,7 +181,7 @@
 		"plantedBy": "Benjamin",
 		"plantedOn": "2021-12-09",
 		"image": "https://pixabay.com/get/g512abedfad65c907572f6fa48c5e44582107d1167b1959b85cdc2e8c1544f577092925483619c4694003648b8b051af9ef62234720c2c1ce2f5d8e993a022c22_1280.jpg",
-		"height": "21.75 meters",
+		"height": "21.75",
 		"age": "22 years",
 		"lat": 17.21309160910909,
 		"lng": -88.92607473469621
@@ -192,7 +192,7 @@
 		"plantedBy": "Lily",
 		"plantedOn": "2022-08-16",
 		"image": "https://pixabay.com/get/g82c6f00651e5c98028c7953530265d514c0c266500df2cf90585029fb766e23a2f8a09c189c1fd0cf3d20d8dd547371fb3ac8fdc6161bee5a0736d96bbf7fcc8_1280.jpg",
-		"height": "34.65 meters",
+		"height": "34.65",
 		"age": "27 years",
 		"lat": 17.239014009402027,
 		"lng": -88.77718609501592
@@ -203,7 +203,7 @@
 		"plantedBy": "William",
 		"plantedOn": "2024-03-28",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "8.77 meters",
+		"height": "8.77",
 		"age": "40 years",
 		"lat": 17.071576511812626,
 		"lng": -88.8124012596285
@@ -214,7 +214,7 @@
 		"plantedBy": "Emma",
 		"plantedOn": "2022-10-04",
 		"image": "https://pixabay.com/get/gfee17bc6cb68b266c11d978b7eb506c067a0ef1720ba357d138ed7d035ae99753831f43543929236a4874d0cacb8820a387f8ec2c2c03262194c247c9f6ad373_1280.jpg",
-		"height": "30.91 meters",
+		"height": "30.91",
 		"age": "89 years",
 		"lat": 17.272915091975968,
 		"lng": -88.7243420808831
@@ -225,7 +225,7 @@
 		"plantedBy": "Jack",
 		"plantedOn": "2024-01-16",
 		"image": "https://pixabay.com/get/g512abedfad65c907572f6fa48c5e44582107d1167b1959b85cdc2e8c1544f577092925483619c4694003648b8b051af9ef62234720c2c1ce2f5d8e993a022c22_1280.jpg",
-		"height": "30.67 meters",
+		"height": "30.67",
 		"age": "38 years",
 		"lat": 17.14871384032898,
 		"lng": -88.74267714665247
@@ -236,7 +236,7 @@
 		"plantedBy": "Olivia",
 		"plantedOn": "2022-06-25",
 		"image": "https://pixabay.com/get/g4db66977db217a1b89600ec564dc713ba2314ffbbe20fb60f774bf05dd3c2c43b3df5615b30e52404d6bdb2145d8a39585aed3b8e5d60ba78a60a823d464fa4b_1280.jpg",
-		"height": "33.84 meters",
+		"height": "33.84",
 		"age": "82 years",
 		"lat": 17.3025223777929,
 		"lng": -88.58087874262553
@@ -247,7 +247,7 @@
 		"plantedBy": "Lucas",
 		"plantedOn": "2024-07-03",
 		"image": "https://pixabay.com/get/g338d272eaff3856e710ac6eb71bb1d1c4ee1ae3768b5c1a9ba32d0718a546550ba8de35eab23c32d5cf007de980b903aecbe80ea7dcc83d0fbb9d62569e9a220_1280.jpg",
-		"height": "13.01 meters",
+		"height": "13.01",
 		"age": "85 years",
 		"lat": 17.394325579768406,
 		"lng": -88.67150432114201
@@ -258,7 +258,7 @@
 		"plantedBy": "Chloe",
 		"plantedOn": "2021-08-22",
 		"image": "https://pixabay.com/get/g145744b554a98d015cf36e6429983f5b3258ec70fedb23f020e2dfa26effaff845c9b6b2c36984ca21716dba9e61178c6f0fc711f3779705ceb9ccf9b1a9cea7_1280.jpg",
-		"height": "31.05 meters",
+		"height": "31.05",
 		"age": "3 years",
 		"lat": 17.312581993991625,
 		"lng": -88.62270315971432
@@ -269,7 +269,7 @@
 		"plantedBy": "Ethan",
 		"plantedOn": "2024-02-08",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "23.83 meters",
+		"height": "23.83",
 		"age": "25 years",
 		"lat": 17.306993038468374,
 		"lng": -88.57513797361392
@@ -280,7 +280,7 @@
 		"plantedBy": "Mia",
 		"plantedOn": "2021-11-12",
 		"image": "https://pixabay.com/get/g82c6f00651e5c98028c7953530265d514c0c266500df2cf90585029fb766e23a2f8a09c189c1fd0cf3d20d8dd547371fb3ac8fdc6161bee5a0736d96bbf7fcc8_1280.jpg",
-		"height": "16.44 meters",
+		"height": "16.44",
 		"age": "12 years",
 		"lat": 17.273386487344116,
 		"lng": -88.79513739193617
@@ -291,7 +291,7 @@
 		"plantedBy": "Liam",
 		"plantedOn": "2024-06-09",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "12.12 meters",
+		"height": "12.12",
 		"age": "2 years",
 		"lat": 17.219408879187657,
 		"lng": -88.80277886111664
@@ -302,7 +302,7 @@
 		"plantedBy": "Isabella",
 		"plantedOn": "2022-05-30",
 		"image": "https://pixabay.com/get/gfee17bc6cb68b266c11d978b7eb506c067a0ef1720ba357d138ed7d035ae99753831f43543929236a4874d0cacb8820a387f8ec2c2c03262194c247c9f6ad373_1280.jpg",
-		"height": "16.18 meters",
+		"height": "16.18",
 		"age": "9 years",
 		"lat": 17.16672475916188,
 		"lng": -88.63474646634887
@@ -313,7 +313,7 @@
 		"plantedBy": "Mason",
 		"plantedOn": "2022-09-17",
 		"image": "https://pixabay.com/get/g512abedfad65c907572f6fa48c5e44582107d1167b1959b85cdc2e8c1544f577092925483619c4694003648b8b051af9ef62234720c2c1ce2f5d8e993a022c22_1280.jpg",
-		"height": "33.47 meters",
+		"height": "33.47",
 		"age": "30 years",
 		"lat": 17.37831289129045,
 		"lng": -88.76416058589277
@@ -324,7 +324,7 @@
 		"plantedBy": "Sophia",
 		"plantedOn": "2024-05-06",
 		"image": "https://pixabay.com/get/g4db66977db217a1b89600ec564dc713ba2314ffbbe20fb60f774bf05dd3c2c43b3df5615b30e52404d6bdb2145d8a39585aed3b8e5d60ba78a60a823d464fa4b_1280.jpg",
-		"height": "14.36 meters",
+		"height": "14.36",
 		"age": "8 years",
 		"lat": 17.189012407804796,
 		"lng": -88.9221191905798
@@ -335,7 +335,7 @@
 		"plantedBy": "Noah",
 		"plantedOn": "2022-04-24",
 		"image": "https://pixabay.com/get/g338d272eaff3856e710ac6eb71bb1d1c4ee1ae3768b5c1a9ba32d0718a546550ba8de35eab23c32d5cf007de980b903aecbe80ea7dcc83d0fbb9d62569e9a220_1280.jpg",
-		"height": "27.71 meters",
+		"height": "27.71",
 		"age": "0 years",
 		"lat": 17.36572275308299,
 		"lng": -88.78498106933773
@@ -346,7 +346,7 @@
 		"plantedBy": "Emma",
 		"plantedOn": "2022-08-03",
 		"image": "https://pixabay.com/get/g145744b554a98d015cf36e6429983f5b3258ec70fedb23f020e2dfa26effaff845c9b6b2c36984ca21716dba9e61178c6f0fc711f3779705ceb9ccf9b1a9cea7_1280.jpg",
-		"height": "12.78 meters",
+		"height": "12.78",
 		"age": "55 years",
 		"lat": 17.318721540636112,
 		"lng": -88.84176481671501
@@ -357,7 +357,7 @@
 		"plantedBy": "James",
 		"plantedOn": "2021-10-25",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "30.24 meters",
+		"height": "30.24",
 		"age": "34 years",
 		"lat": 17.365956035169415,
 		"lng": -88.82760294869833
@@ -368,7 +368,7 @@
 		"plantedBy": "Lily",
 		"plantedOn": "2022-11-22",
 		"image": "https://pixabay.com/get/g82c6f00651e5c98028c7953530265d514c0c266500df2cf90585029fb766e23a2f8a09c189c1fd0cf3d20d8dd547371fb3ac8fdc6161bee5a0736d96bbf7fcc8_1280.jpg",
-		"height": "28.51 meters",
+		"height": "28.51",
 		"age": "95 years",
 		"lat": 17.17651777128809,
 		"lng": -88.7772517365826
@@ -379,7 +379,7 @@
 		"plantedBy": "Elijah",
 		"plantedOn": "2024-01-04",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "32.97 meters",
+		"height": "32.97",
 		"age": "25 years",
 		"lat": 17.13451724530304,
 		"lng": -88.93614121771778
@@ -390,7 +390,7 @@
 		"plantedBy": "Emily",
 		"plantedOn": "2024-03-21",
 		"image": "https://pixabay.com/get/gfee17bc6cb68b266c11d978b7eb506c067a0ef1720ba357d138ed7d035ae99753831f43543929236a4874d0cacb8820a387f8ec2c2c03262194c247c9f6ad373_1280.jpg",
-		"height": "30.00 meters",
+		"height": "30.00",
 		"age": "48 years",
 		"lat": 17.130642622189832,
 		"lng": -88.58277739024929
@@ -401,7 +401,7 @@
 		"plantedBy": "Jacob",
 		"plantedOn": "2021-09-14",
 		"image": "https://pixabay.com/get/g512abedfad65c907572f6fa48c5e44582107d1167b1959b85cdc2e8c1544f577092925483619c4694003648b8b051af9ef62234720c2c1ce2f5d8e993a022c22_1280.jpg",
-		"height": "18.35 meters",
+		"height": "18.35",
 		"age": "81 years",
 		"lat": 17.204670893750468,
 		"lng": -88.93244779801354
@@ -412,7 +412,7 @@
 		"plantedBy": "Avery",
 		"plantedOn": "2022-05-02",
 		"image": "https://pixabay.com/get/g4db66977db217a1b89600ec564dc713ba2314ffbbe20fb60f774bf05dd3c2c43b3df5615b30e52404d6bdb2145d8a39585aed3b8e5d60ba78a60a823d464fa4b_1280.jpg",
-		"height": "34.01 meters",
+		"height": "34.01",
 		"age": "71 years",
 		"lat": 17.431269421246853,
 		"lng": -88.65953795191515
@@ -423,7 +423,7 @@
 		"plantedBy": "Matthew",
 		"plantedOn": "2022-12-19",
 		"image": "https://pixabay.com/get/g338d272eaff3856e710ac6eb71bb1d1c4ee1ae3768b5c1a9ba32d0718a546550ba8de35eab23c32d5cf007de980b903aecbe80ea7dcc83d0fbb9d62569e9a220_1280.jpg",
-		"height": "20.31 meters",
+		"height": "20.31",
 		"age": "42 years",
 		"lat": 17.34016123415882,
 		"lng": -88.74853867065794
@@ -434,7 +434,7 @@
 		"plantedBy": "Sofia",
 		"plantedOn": "2021-06-20",
 		"image": "https://pixabay.com/get/g145744b554a98d015cf36e6429983f5b3258ec70fedb23f020e2dfa26effaff845c9b6b2c36984ca21716dba9e61178c6f0fc711f3779705ceb9ccf9b1a9cea7_1280.jpg",
-		"height": "22.96 meters",
+		"height": "22.96",
 		"age": "91 years",
 		"lat": 17.164373659952805,
 		"lng": -88.87254674029221
@@ -445,7 +445,7 @@
 		"plantedBy": "Logan",
 		"plantedOn": "2024-07-05",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "11.75 meters",
+		"height": "11.75",
 		"age": "37 years",
 		"lat": 17.148664594105938,
 		"lng": -88.75725539171327
@@ -456,7 +456,7 @@
 		"plantedBy": "Charlotte",
 		"plantedOn": "2022-09-08",
 		"image": "https://pixabay.com/get/g82c6f00651e5c98028c7953530265d514c0c266500df2cf90585029fb766e23a2f8a09c189c1fd0cf3d20d8dd547371fb3ac8fdc6161bee5a0736d96bbf7fcc8_1280.jpg",
-		"height": "21.51 meters",
+		"height": "21.51",
 		"age": "15 years",
 		"lat": 17.427192705018413,
 		"lng": -88.8341063924109
@@ -467,7 +467,7 @@
 		"plantedBy": "Carter",
 		"plantedOn": "2021-07-15",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "30.06 meters",
+		"height": "30.06",
 		"age": "9 years",
 		"lat": 17.22322691570442,
 		"lng": -88.72896021106014
@@ -478,7 +478,7 @@
 		"plantedBy": "Zoe",
 		"plantedOn": "2024-02-26",
 		"image": "https://pixabay.com/get/gfee17bc6cb68b266c11d978b7eb506c067a0ef1720ba357d138ed7d035ae99753831f43543929236a4874d0cacb8820a387f8ec2c2c03262194c247c9f6ad373_1280.jpg",
-		"height": "7.74 meters",
+		"height": "7.74",
 		"age": "74 years",
 		"lat": 17.108744079136425,
 		"lng": -88.8136059390536
@@ -489,7 +489,7 @@
 		"plantedBy": "David",
 		"plantedOn": "2022-11-13",
 		"image": "https://pixabay.com/get/g512abedfad65c907572f6fa48c5e44582107d1167b1959b85cdc2e8c1544f577092925483619c4694003648b8b051af9ef62234720c2c1ce2f5d8e993a022c22_1280.jpg",
-		"height": "31.47 meters",
+		"height": "31.47",
 		"age": "51 years",
 		"lat": 17.269963297798355,
 		"lng": -88.71057568363368
@@ -500,7 +500,7 @@
 		"plantedBy": "Harper",
 		"plantedOn": "2024-04-07",
 		"image": "https://pixabay.com/get/g4db66977db217a1b89600ec564dc713ba2314ffbbe20fb60f774bf05dd3c2c43b3df5615b30e52404d6bdb2145d8a39585aed3b8e5d60ba78a60a823d464fa4b_1280.jpg",
-		"height": "15.34 meters",
+		"height": "15.34",
 		"age": "73 years",
 		"lat": 17.150990923007683,
 		"lng": -88.80489929845695
@@ -511,7 +511,7 @@
 		"plantedBy": "Nathan",
 		"plantedOn": "2022-10-02",
 		"image": "https://pixabay.com/get/g338d272eaff3856e710ac6eb71bb1d1c4ee1ae3768b5c1a9ba32d0718a546550ba8de35eab23c32d5cf007de980b903aecbe80ea7dcc83d0fbb9d62569e9a220_1280.jpg",
-		"height": "9.70 meters",
+		"height": "9.70",
 		"age": "86 years",
 		"lat": 17.431004148369055,
 		"lng": -88.87925441946246
@@ -522,7 +522,7 @@
 		"plantedBy": "Ella",
 		"plantedOn": "2024-03-30",
 		"image": "https://pixabay.com/get/g145744b554a98d015cf36e6429983f5b3258ec70fedb23f020e2dfa26effaff845c9b6b2c36984ca21716dba9e61178c6f0fc711f3779705ceb9ccf9b1a9cea7_1280.jpg",
-		"height": "14.06 meters",
+		"height": "14.06",
 		"age": "93 years",
 		"lat": 17.301510996151286,
 		"lng": -88.628283945277
@@ -533,7 +533,7 @@
 		"plantedBy": "Ryan",
 		"plantedOn": "2022-06-18",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "16.23 meters",
+		"height": "16.23",
 		"age": "2 years",
 		"lat": 17.32572196441747,
 		"lng": -88.69948552029908
@@ -544,7 +544,7 @@
 		"plantedBy": "Nora",
 		"plantedOn": "2024-05-16",
 		"image": "https://pixabay.com/get/g82c6f00651e5c98028c7953530265d514c0c266500df2cf90585029fb766e23a2f8a09c189c1fd0cf3d20d8dd547371fb3ac8fdc6161bee5a0736d96bbf7fcc8_1280.jpg",
-		"height": "9.49 meters",
+		"height": "9.49",
 		"age": "24 years",
 		"lat": 17.36597975779114,
 		"lng": -88.76135237213389
@@ -555,7 +555,7 @@
 		"plantedBy": "Leo",
 		"plantedOn": "2022-07-27",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "14.81 meters",
+		"height": "14.81",
 		"age": "19 years",
 		"lat": 17.190914624752306,
 		"lng": -88.81327949851433
@@ -566,7 +566,7 @@
 		"plantedBy": "Lucy",
 		"plantedOn": "2021-12-07",
 		"image": "https://pixabay.com/get/gfee17bc6cb68b266c11d978b7eb506c067a0ef1720ba357d138ed7d035ae99753831f43543929236a4874d0cacb8820a387f8ec2c2c03262194c247c9f6ad373_1280.jpg",
-		"height": "11.96 meters",
+		"height": "11.96",
 		"age": "51 years",
 		"lat": 17.28362517495791,
 		"lng": -88.95835330965149
@@ -577,7 +577,7 @@
 		"plantedBy": "Jackson",
 		"plantedOn": "2024-02-12",
 		"image": "https://pixabay.com/get/g512abedfad65c907572f6fa48c5e44582107d1167b1959b85cdc2e8c1544f577092925483619c4694003648b8b051af9ef62234720c2c1ce2f5d8e993a022c22_1280.jpg",
-		"height": "26.21 meters",
+		"height": "26.21",
 		"age": "30 years",
 		"lat": 17.311897478652327,
 		"lng": -88.92656870630496
@@ -588,7 +588,7 @@
 		"plantedBy": "Mila",
 		"plantedOn": "2022-11-03",
 		"image": "https://pixabay.com/get/g4db66977db217a1b89600ec564dc713ba2314ffbbe20fb60f774bf05dd3c2c43b3df5615b30e52404d6bdb2145d8a39585aed3b8e5d60ba78a60a823d464fa4b_1280.jpg",
-		"height": "9.71 meters",
+		"height": "9.71",
 		"age": "21 years",
 		"lat": 17.07285079005289,
 		"lng": -88.6677333714251
@@ -599,7 +599,7 @@
 		"plantedBy": "Eli",
 		"plantedOn": "2021-08-01",
 		"image": "https://pixabay.com/get/g338d272eaff3856e710ac6eb71bb1d1c4ee1ae3768b5c1a9ba32d0718a546550ba8de35eab23c32d5cf007de980b903aecbe80ea7dcc83d0fbb9d62569e9a220_1280.jpg",
-		"height": "16.74 meters",
+		"height": "16.74",
 		"age": "15 years",
 		"lat": 17.070859229542297,
 		"lng": -88.6998194368905
@@ -610,7 +610,7 @@
 		"plantedBy": "Luna",
 		"plantedOn": "2024-04-17",
 		"image": "https://pixabay.com/get/g145744b554a98d015cf36e6429983f5b3258ec70fedb23f020e2dfa26effaff845c9b6b2c36984ca21716dba9e61178c6f0fc711f3779705ceb9ccf9b1a9cea7_1280.jpg",
-		"height": "33.35 meters",
+		"height": "33.35",
 		"age": "44 years",
 		"lat": 17.354757715482318,
 		"lng": -88.8598671650408
@@ -621,7 +621,7 @@
 		"plantedBy": "Hudson",
 		"plantedOn": "2022-08-28",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "19.34 meters",
+		"height": "19.34",
 		"age": "11 years",
 		"lat": 17.245139613259067,
 		"lng": -88.79524248803898
@@ -632,7 +632,7 @@
 		"plantedBy": "Addison",
 		"plantedOn": "2024-07-14",
 		"image": "https://pixabay.com/get/g82c6f00651e5c98028c7953530265d514c0c266500df2cf90585029fb766e23a2f8a09c189c1fd0cf3d20d8dd547371fb3ac8fdc6161bee5a0736d96bbf7fcc8_1280.jpg",
-		"height": "15.77 meters",
+		"height": "15.77",
 		"age": "27 years",
 		"lat": 17.204015417574833,
 		"lng": -88.72686070532953
@@ -643,7 +643,7 @@
 		"plantedBy": "Owen",
 		"plantedOn": "2021-11-25",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "31.99 meters",
+		"height": "31.99",
 		"age": "85 years",
 		"lat": 17.229089095888497,
 		"lng": -88.80922215640805
@@ -654,7 +654,7 @@
 		"plantedBy": "Scarlett",
 		"plantedOn": "2022-06-09",
 		"image": "https://pixabay.com/get/gfee17bc6cb68b266c11d978b7eb506c067a0ef1720ba357d138ed7d035ae99753831f43543929236a4874d0cacb8820a387f8ec2c2c03262194c247c9f6ad373_1280.jpg",
-		"height": "13.76 meters",
+		"height": "13.76",
 		"age": "84 years",
 		"lat": 17.136541175850187,
 		"lng": -88.7998140987711
@@ -665,7 +665,7 @@
 		"plantedBy": "Jason",
 		"plantedOn": "2024-01-24",
 		"image": "https://pixabay.com/get/g512abedfad65c907572f6fa48c5e44582107d1167b1959b85cdc2e8c1544f577092925483619c4694003648b8b051af9ef62234720c2c1ce2f5d8e993a022c22_1280.jpg",
-		"height": "6.35 meters",
+		"height": "6.35",
 		"age": "54 years",
 		"lat": 17.307944061758604,
 		"lng": -88.7783945952939
@@ -676,7 +676,7 @@
 		"plantedBy": "Aria",
 		"plantedOn": "2022-05-11",
 		"image": "https://pixabay.com/get/g4db66977db217a1b89600ec564dc713ba2314ffbbe20fb60f774bf05dd3c2c43b3df5615b30e52404d6bdb2145d8a39585aed3b8e5d60ba78a60a823d464fa4b_1280.jpg",
-		"height": "12.38 meters",
+		"height": "12.38",
 		"age": "24 years",
 		"lat": 17.25211158579361,
 		"lng": -88.8556084705307
@@ -687,7 +687,7 @@
 		"plantedBy": "Levi",
 		"plantedOn": "2021-12-15",
 		"image": "https://pixabay.com/get/g338d272eaff3856e710ac6eb71bb1d1c4ee1ae3768b5c1a9ba32d0718a546550ba8de35eab23c32d5cf007de980b903aecbe80ea7dcc83d0fbb9d62569e9a220_1280.jpg",
-		"height": "28.72 meters",
+		"height": "28.72",
 		"age": "68 years",
 		"lat": 17.359315086988534,
 		"lng": -88.94821890317081
@@ -698,7 +698,7 @@
 		"plantedBy": "Aubrey",
 		"plantedOn": "2022-07-29",
 		"image": "https://pixabay.com/get/g145744b554a98d015cf36e6429983f5b3258ec70fedb23f020e2dfa26effaff845c9b6b2c36984ca21716dba9e61178c6f0fc711f3779705ceb9ccf9b1a9cea7_1280.jpg",
-		"height": "14.70 meters",
+		"height": "14.70",
 		"age": "79 years",
 		"lat": 17.270964418649516,
 		"lng": -88.64755626525269
@@ -709,7 +709,7 @@
 		"plantedBy": "Samuel",
 		"plantedOn": "2024-03-11",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "6.41 meters",
+		"height": "6.41",
 		"age": "38 years",
 		"lat": 17.257421615702665,
 		"lng": -88.78429424456992
@@ -720,7 +720,7 @@
 		"plantedBy": "Madeline",
 		"plantedOn": "2022-10-14",
 		"image": "https://pixabay.com/get/g82c6f00651e5c98028c7953530265d514c0c266500df2cf90585029fb766e23a2f8a09c189c1fd0cf3d20d8dd547371fb3ac8fdc6161bee5a0736d96bbf7fcc8_1280.jpg",
-		"height": "32.48 meters",
+		"height": "32.48",
 		"age": "45 years",
 		"lat": 17.205584582460034,
 		"lng": -88.65366042289193
@@ -731,7 +731,7 @@
 		"plantedBy": "Evan",
 		"plantedOn": "2021-09-01",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "14.14 meters",
+		"height": "14.14",
 		"age": "40 years",
 		"lat": 17.427710107163218,
 		"lng": -88.79876069623622
@@ -742,7 +742,7 @@
 		"plantedBy": "Savannah",
 		"plantedOn": "2024-04-04",
 		"image": "https://pixabay.com/get/gfee17bc6cb68b266c11d978b7eb506c067a0ef1720ba357d138ed7d035ae99753831f43543929236a4874d0cacb8820a387f8ec2c2c03262194c247c9f6ad373_1280.jpg",
-		"height": "23.21 meters",
+		"height": "23.21",
 		"age": "63 years",
 		"lat": 17.373504389257118,
 		"lng": -88.75304791238374
@@ -753,7 +753,7 @@
 		"plantedBy": "Hunter",
 		"plantedOn": "2022-11-17",
 		"image": "https://pixabay.com/get/g512abedfad65c907572f6fa48c5e44582107d1167b1959b85cdc2e8c1544f577092925483619c4694003648b8b051af9ef62234720c2c1ce2f5d8e993a022c22_1280.jpg",
-		"height": "17.69 meters",
+		"height": "17.69",
 		"age": "20 years",
 		"lat": 17.433993873505656,
 		"lng": -88.71128746174789
@@ -764,7 +764,7 @@
 		"plantedBy": "Leah",
 		"plantedOn": "2022-06-01",
 		"image": "https://pixabay.com/get/g4db66977db217a1b89600ec564dc713ba2314ffbbe20fb60f774bf05dd3c2c43b3df5615b30e52404d6bdb2145d8a39585aed3b8e5d60ba78a60a823d464fa4b_1280.jpg",
-		"height": "25.27 meters",
+		"height": "25.27",
 		"age": "68 years",
 		"lat": 17.286016729762345,
 		"lng": -88.6984496603828
@@ -775,7 +775,7 @@
 		"plantedBy": "Grayson",
 		"plantedOn": "2024-05-08",
 		"image": "https://pixabay.com/get/g338d272eaff3856e710ac6eb71bb1d1c4ee1ae3768b5c1a9ba32d0718a546550ba8de35eab23c32d5cf007de980b903aecbe80ea7dcc83d0fbb9d62569e9a220_1280.jpg",
-		"height": "22.57 meters",
+		"height": "22.57",
 		"age": "86 years",
 		"lat": 17.254150735815333,
 		"lng": -88.75161086422746
@@ -786,7 +786,7 @@
 		"plantedBy": "Isabelle",
 		"plantedOn": "2022-08-31",
 		"image": "https://pixabay.com/get/g145744b554a98d015cf36e6429983f5b3258ec70fedb23f020e2dfa26effaff845c9b6b2c36984ca21716dba9e61178c6f0fc711f3779705ceb9ccf9b1a9cea7_1280.jpg",
-		"height": "6.88 meters",
+		"height": "6.88",
 		"age": "1 years",
 		"lat": 17.34421405356194,
 		"lng": -88.86615286904104
@@ -797,7 +797,7 @@
 		"plantedBy": "Dylan",
 		"plantedOn": "2021-10-06",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "23.76 meters",
+		"height": "23.76",
 		"age": "14 years",
 		"lat": 17.097772369902923,
 		"lng": -88.77150360457124
@@ -808,7 +808,7 @@
 		"plantedBy": "Hazel",
 		"plantedOn": "2024-06-26",
 		"image": "https://pixabay.com/get/g82c6f00651e5c98028c7953530265d514c0c266500df2cf90585029fb766e23a2f8a09c189c1fd0cf3d20d8dd547371fb3ac8fdc6161bee5a0736d96bbf7fcc8_1280.jpg",
-		"height": "30.03 meters",
+		"height": "30.03",
 		"age": "92 years",
 		"lat": 17.25076465710045,
 		"lng": -88.73761985477007
@@ -819,7 +819,7 @@
 		"plantedBy": "Lincoln",
 		"plantedOn": "2022-09-05",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "20.54 meters",
+		"height": "20.54",
 		"age": "61 years",
 		"lat": 17.224519830424335,
 		"lng": -88.65477213173567
@@ -830,7 +830,7 @@
 		"plantedBy": "Arianna",
 		"plantedOn": "2021-07-31",
 		"image": "https://pixabay.com/get/gfee17bc6cb68b266c11d978b7eb506c067a0ef1720ba357d138ed7d035ae99753831f43543929236a4874d0cacb8820a387f8ec2c2c03262194c247c9f6ad373_1280.jpg",
-		"height": "15.07 meters",
+		"height": "15.07",
 		"age": "99 years",
 		"lat": 17.31540013084741,
 		"lng": -88.78220308586674
@@ -841,7 +841,7 @@
 		"plantedBy": "Ezekiel",
 		"plantedOn": "2024-04-19",
 		"image": "https://pixabay.com/get/g512abedfad65c907572f6fa48c5e44582107d1167b1959b85cdc2e8c1544f577092925483619c4694003648b8b051af9ef62234720c2c1ce2f5d8e993a022c22_1280.jpg",
-		"height": "30.68 meters",
+		"height": "30.68",
 		"age": "92 years",
 		"lat": 17.190998018408976,
 		"lng": -88.88486617513513
@@ -852,7 +852,7 @@
 		"plantedBy": "Julia",
 		"plantedOn": "2022-06-12",
 		"image": "https://pixabay.com/get/g4db66977db217a1b89600ec564dc713ba2314ffbbe20fb60f774bf05dd3c2c43b3df5615b30e52404d6bdb2145d8a39585aed3b8e5d60ba78a60a823d464fa4b_1280.jpg",
-		"height": "9.22 meters",
+		"height": "9.22",
 		"age": "15 years",
 		"lat": 17.09451867965448,
 		"lng": -88.61318442720598
@@ -863,7 +863,7 @@
 		"plantedBy": "Easton",
 		"plantedOn": "2021-10-20",
 		"image": "https://pixabay.com/get/g338d272eaff3856e710ac6eb71bb1d1c4ee1ae3768b5c1a9ba32d0718a546550ba8de35eab23c32d5cf007de980b903aecbe80ea7dcc83d0fbb9d62569e9a220_1280.jpg",
-		"height": "32.02 meters",
+		"height": "32.02",
 		"age": "77 years",
 		"lat": 17.216913665408303,
 		"lng": -88.7375969045655
@@ -874,7 +874,7 @@
 		"plantedBy": "Paisley",
 		"plantedOn": "2022-12-30",
 		"image": "https://pixabay.com/get/g145744b554a98d015cf36e6429983f5b3258ec70fedb23f020e2dfa26effaff845c9b6b2c36984ca21716dba9e61178c6f0fc711f3779705ceb9ccf9b1a9cea7_1280.jpg",
-		"height": "8.81 meters",
+		"height": "8.81",
 		"age": "13 years",
 		"lat": 17.32272214586792,
 		"lng": -88.7997884588926
@@ -885,7 +885,7 @@
 		"plantedBy": "Roman",
 		"plantedOn": "2024-07-10",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "15.76 meters",
+		"height": "15.76",
 		"age": "50 years",
 		"lat": 17.365498746583917,
 		"lng": -88.94947518935152
@@ -896,7 +896,7 @@
 		"plantedBy": "Penelope",
 		"plantedOn": "2021-08-07",
 		"image": "https://pixabay.com/get/g82c6f00651e5c98028c7953530265d514c0c266500df2cf90585029fb766e23a2f8a09c189c1fd0cf3d20d8dd547371fb3ac8fdc6161bee5a0736d96bbf7fcc8_1280.jpg",
-		"height": "23.56 meters",
+		"height": "23.56",
 		"age": "43 years",
 		"lat": 17.263557423399106,
 		"lng": -88.97936436262972
@@ -907,7 +907,7 @@
 		"plantedBy": "Micah",
 		"plantedOn": "2022-05-28",
 		"image": "https://pixabay.com/get/g5895bcafc8a24116cc25199b8a552607b7ef11697e945902de7f6237ab03b2048c833261bf4f43ba6b2f8c4633e4b89e5bf37a4c9086e781da735eedc7a5be95_1280.jpg",
-		"height": "16.04 meters",
+		"height": "16.04",
 		"age": "42 years",
 		"lat": 17.244846477374114,
 		"lng": -88.71624636676445
@@ -918,7 +918,7 @@
 		"plantedBy": "Willow",
 		"plantedOn": "2024-03-01",
 		"image": "https://pixabay.com/get/gfee17bc6cb68b266c11d978b7eb506c067a0ef1720ba357d138ed7d035ae99753831f43543929236a4874d0cacb8820a387f8ec2c2c03262194c247c9f6ad373_1280.jpg",
-		"height": "21.35 meters",
+		"height": "21.35",
 		"age": "97 years",
 		"lat": 17.235599988427985,
 		"lng": -88.58632136812959
@@ -929,7 +929,7 @@
 		"plantedBy": "Riley",
 		"plantedOn": "2022-11-06",
 		"image": "https://pixabay.com/get/g512abedfad65c907572f6fa48c5e44582107d1167b1959b85cdc2e8c1544f577092925483619c4694003648b8b051af9ef62234720c2c1ce2f5d8e993a022c22_1280.jpg",
-		"height": "9.94 meters",
+		"height": "9.94",
 		"age": "20 years",
 		"lat": 17.233727552038342,
 		"lng": -88.78058895909213
@@ -940,7 +940,7 @@
 		"plantedBy": "Weston",
 		"plantedOn": "2021-09-27",
 		"image": "https://pixabay.com/get/g4db66977db217a1b89600ec564dc713ba2314ffbbe20fb60f774bf05dd3c2c43b3df5615b30e52404d6bdb2145d8a39585aed3b8e5d60ba78a60a823d464fa4b_1280.jpg",
-		"height": "32.14 meters",
+		"height": "32.14",
 		"age": "67 years",
 		"lat": 17.360134746174595,
 		"lng": -88.8829106374281
@@ -951,7 +951,7 @@
 		"plantedBy": "Nova",
 		"plantedOn": "2024-05-18",
 		"image": "https://pixabay.com/get/g338d272eaff3856e710ac6eb71bb1d1c4ee1ae3768b5c1a9ba32d0718a546550ba8de35eab23c32d5cf007de980b903aecbe80ea7dcc83d0fbb9d62569e9a220_1280.jpg",
-		"height": "27.73 meters",
+		"height": "27.73",
 		"age": "7 years",
 		"lat": 17.425735684651205,
 		"lng": -88.86812619602519
@@ -962,7 +962,7 @@
 		"plantedBy": "Cooper",
 		"plantedOn": "2022-06-29",
 		"image": "https://pixabay.com/get/g145744b554a98d015cf36e6429983f5b3258ec70fedb23f020e2dfa26effaff845c9b6b2c36984ca21716dba9e61178c6f0fc711f3779705ceb9ccf9b1a9cea7_1280.jpg",
-		"height": "5.61 meters",
+		"height": "5.61",
 		"age": "83 years",
 		"lat": 17.206435777668382,
 		"lng": -88.79980262841222
