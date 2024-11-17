@@ -21,7 +21,7 @@
 	let signal_ready: boolean = false;
 
 	onMount(() => {
-		console.log(trees);
+		// console.log(trees);
 		setTimeout(() => {
 			signal_ready = true;
 		}, 3000);
@@ -75,7 +75,7 @@
 											}
 										}}
 										on:inview_leave={(event) => {
-											console.log(index);
+											// console.log(index);
 											// Check one more time to see if the element is still in view
 											if (
 												document.getElementById(`tree__${index}`)?.getBoundingClientRect().top <
