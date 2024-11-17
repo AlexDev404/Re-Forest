@@ -8,10 +8,9 @@
 	let checked: boolean;
 	onMount(() => {
 		let unitcheck: boolean = JSON.parse(localStorage.getItem('units') ?? 'false');
-		if (unitcheck) {
+		checked = true; // Default value
+		if (!unitcheck) {
 			checked = unitcheck;
-
-			console.log(checked);
 		}
 	});
 </script>
