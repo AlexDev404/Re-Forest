@@ -3,7 +3,17 @@
 	import { ChevronRight, HelpCircle, Map, Thermometer } from 'lucide-svelte';
 	import { Label } from '$lib/components/vendor/ui/label/index';
 	import { Switch } from '$lib/components/vendor/ui/switch/index';
+	import { mount, onMount } from 'svelte';
 	let Units: Switch;
+	let checked: boolean;
+	onMount(() => {
+		let unitcheck: boolean = JSON.parse(localStorage.getItem('units') ?? 'false');
+		if (unitcheck) {
+			checked = unitcheck;
+
+			console.log(checked);
+		}
+	});
 </script>
 
 <svelte:head>
@@ -23,13 +33,13 @@
 				<div class="flex items-center space-x-2">
 					<Label for="Units">Metric</Label>
 					<Switch
+						bind:checked
 						id="Units"
 						bind:this={Units}
-						
-						on:click={(event) => {// this is a function to get the current state of the switch and save it to local storage
-							const dataset=JSON.parse(event.detail.currentTarget.getAttribute('aria-checked') ?? 'false');
+						on:click={(event) => {
+							// this is a function to get the current state of the switch and save it to local storage
+							const dataset = checked;
 							localStorage.setItem('units', JSON.stringify(!dataset));
-							
 						}}
 					/>
 					<Label for="Units">Imperial</Label>

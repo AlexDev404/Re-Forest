@@ -9,7 +9,14 @@
 	let trees: Tree[] = TreeData;
 	let locationElement: HTMLDivElement;
 	let data: any;
-
+	//this function converts meters to feet
+	function metersToFeet(meters: number) {
+		let height =
+			localStorage.getItem('units') === 'false'
+				? meters.toFixed(2).toString() + ' metres'
+				: (meters * 3.28084).toFixed(2).toString() + ' ft';
+		return height;
+	}
 	let controller = new AbortController();
 	let signal_ready: boolean = false;
 
@@ -139,7 +146,7 @@
 											<Dialog.Title>Tree details</Dialog.Title>
 										</Dialog.Header>
 										<div class="text-md">
-											<p>Height: <b>{tree.height}</b></p>
+											<p>Height: <b>{metersToFeet(JSON.parse(tree.height ?? '0'))}</b></p>
 											<p>Age: <b>{tree.age}</b></p>
 										</div>
 									</Dialog.Content>
