@@ -8,13 +8,20 @@
 	let Units: Switch;
 	let checked: boolean;
 	onMount(() => {
-		let unitcheck: boolean = JSON.parse(localStorage.getItem('units') ?? 'false');
-		if (unitcheck) {
+		const unitcheck: boolean = JSON.parse(localStorage.getItem('units') ?? 'false');
+		const is_unset = localStorage.getItem('units') === null;
+		checked = true; // Default value
+		if (!unitcheck && !is_unset) {
 			checked = unitcheck;
-
-			console.log(checked);
 		}
 	});
+
+	function onclick_units() {
+		checked = !checked; // Toggle the switch on or off
+		// this is a function to get the current state of the switch and save it to local storage
+		const dataset = !checked;
+		localStorage.setItem('units', JSON.stringify(dataset));
+	}
 </script>
 
 <svelte:head>
@@ -26,23 +33,21 @@
 			<h1 class="text-2xl font-semibold">Settings</h1>
 		</article>
 		<optionsList class="flex w-full flex-col items-start gap-2">
-			<MenuItem title="Unit Scale ">
+			<MenuItem title="Unit Scale" onclick={onclick_units}>
 				<svelte:fragment slot="start-icon">
 					<Thermometer class="h-4 w-4" />
 				</svelte:fragment>
 
-				<div class="flex items-center space-x-2">
+				<div
+					tabindex="-1"
+					role="button"
+					class="flex items-center space-x-2"
+					onclick={onclick_units}
+					onkeydown={(e) => e.key === 'Enter' && onclick_units()}
+					aria-label="Toggle Units"
+				>
 					<Label for="Units">Metric</Label>
-					<Switch
-						bind:checked
-						id="Units"
-						bind:this={Units}
-						on:click={(event) => {
-							// this is a function to get the current state of the switch and save it to local storage
-							const dataset = checked;
-							localStorage.setItem('units', JSON.stringify(!dataset));
-						}}
-					/>
+					<Switch bind:checked id="Units" bind:this={Units} />
 					<Label for="Units">Imperial</Label>
 				</div>
 			</MenuItem>

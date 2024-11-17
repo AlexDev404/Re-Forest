@@ -52,7 +52,7 @@
 
 			<IconCard
 				avatarSrc="/static/tree.svg"
-				avatarFallback="SK"
+				avatarFallback="🌲"
 				title={tree.name}
 				description={`Planted by: ${tree.plantedBy}`}
 			>
