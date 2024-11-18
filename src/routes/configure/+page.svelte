@@ -7,6 +7,7 @@
 	import { onMount } from 'svelte';
 	let Units: Switch;
 	let checked: boolean;
+
 	onMount(() => {
 		const unitcheck: boolean = JSON.parse(localStorage.getItem('units') ?? 'false');
 		const is_unset = localStorage.getItem('units') === null;
