@@ -5,23 +5,31 @@
 	import IconCard from '$lib/components/vendor/ui/icon-card/icon-card.svelte';
 	import { Input } from '$lib/components/vendor/ui/input';
 	import { Label } from '$lib/components/vendor/ui/label';
-	import { Zap } from 'lucide-svelte';
+	import { type ReverseGeoJSON } from '$lib/types/GeoJSON';
+	import { getCurrentLocation, getReverseLoc } from '$lib/utility/utility';
+	import { MapPin, Zap } from 'lucide-svelte';
+	import { onMount } from 'svelte';
 
 	// Location handling
-	let currentLocation: GeolocationCoordinates | null = null;
 	let tree_added = false;
 
-	async function getCurrentLocation() {
-		try {
-			const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-				navigator.geolocation.getCurrentPosition(resolve, reject);
-			});
-			currentLocation = position.coords;
-			console.log('Current location:', currentLocation);
-		} catch (error) {
-			alert('Error getting location: ' + error.message);
-		}
-	}
+	// ---
+	let location: GeolocationCoordinates | (string | null) = null;
+	let translated_location: string | null = null;
+
+	onMount(async () => {
+		// Set the location
+		location = localStorage.getItem('location') ?? null;
+		if (location === null) return;
+		location = JSON.parse(location);
+		if (location === null) return;
+		const reverse_location: ReverseGeoJSON | null = await getReverseLoc(
+			(location as GeolocationCoordinates).latitude,
+			(location as GeolocationCoordinates).longitude
+		);
+		if (reverse_location === null) return;
+		translated_location = reverse_location.display_name;
+	});
 
 	function openMapPicker() {
 		goto('/configure/site-location');
@@ -43,6 +51,16 @@
 			console.log('Selected file:', file);
 		}
 	}
+
+	// Get the reverse location
+	async function getReverseLoc_(lat: number, lng: number): Promise<ReverseGeoJSON> {
+		const result: ReverseGeoJSON | null = await getReverseLoc(lat, lng);
+		if (result === null) {
+			translated_location = 'Try that again.';
+			throw new Error('Location not found.');
+		}
+		return result;
+	}
 </script>
 
 <svelte:head>
@@ -53,7 +71,21 @@
 		<article class="flex items-start self-stretch">
 			<div class="block w-full space-y-1">
 				<h1 class="text-2xl font-semibold">New Tree</h1>
-				<Button on:click={getCurrentLocation}>Grab my current location</Button>
+				<Button
+					onclick={async () => {
+						const loc: GeolocationCoordinates | null = await getCurrentLocation();
+						console.log(loc);
+						if (loc !== null) {
+							const reverse_location: ReverseGeoJSON = await getReverseLoc_(
+								loc.latitude,
+								loc.longitude
+							);
+							translated_location = reverse_location.display_name;
+
+							localStorage.setItem('location', JSON.stringify(loc));
+						}
+					}}>Grab my current location</Button
+				>
 				<Button on:click={openMapPicker}>Set site location</Button>
 			</div>
 		</article>
@@ -111,6 +143,18 @@
 				<Alert.Description>Go over to the view screen to see it live!</Alert.Description>
 			</Alert.Root>
 		{/if}
+
+		<Alert.Root>
+			<MapPin />
+			<Alert.Title>Your set location.</Alert.Title>
+			<Alert.Description
+				>{#if translated_location !== null}
+					{translated_location}
+				{:else}
+					<div>Set a default location</div><a class="underline" href="/configure/site-location"> in settings.</a>
+				{/if}
+			</Alert.Description>
+		</Alert.Root>
 	</main>
 </page>
 

@@ -30,7 +30,13 @@
 	});
 
 	afterNavigate(() => {
-		loadingBar.style.opacity = '0';
+		setTimeout(() => {
+			loadingBar.classList.add('animate-fade-out');
+		}, 1115);
+		setTimeout(() => {
+			loadingBar.style.opacity = '0';
+			loadingBar.classList.remove('animate-fade-out');
+		}, 1125);
 	});
 
 	onMount(() => {
