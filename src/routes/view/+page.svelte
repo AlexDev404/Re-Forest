@@ -3,8 +3,19 @@
 	import TreeData from '$lib/data/trees.json';
 	import { type Tree } from '$lib/types/Tree';
 	import { Calendar } from 'lucide-svelte';
-	const trees: Tree[] = TreeData;
+	import { onMount } from 'svelte';
+	let trees: Tree[];
 	let oldDate: string;
+
+	onMount(() => {
+		let trees__fromstorage: Tree[] = JSON.parse(localStorage.getItem('trees') ?? '[]');
+		if (trees__fromstorage.length > 0) {
+			trees = trees__fromstorage;
+			trees = trees;
+		} else {
+			trees = TreeData;
+		}
+	});
 
 	const getRelativeDay = (tree: Tree) => {
 		const today = new Date();
@@ -42,8 +53,9 @@
 		return '';
 	};
 </script>
+
 <svelte:head>
-    <title>Re:Forest :: View</title>
+	<title>Re:Forest :: View</title>
 </svelte:head>
 <page class="overflow-y-auto">
 	<main class="mx-6 my-10 flex flex-col items-start gap-12">

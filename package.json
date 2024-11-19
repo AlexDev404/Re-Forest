@@ -43,6 +43,7 @@
 		"vite-plugin-image-optimizer": "^1.1.8"
 	},
 	"dependencies": {
+		"@sveltejs/adapter-vercel": "^5.4.7",
 		"lucide-svelte": "^0.456.0",
 		"svelte-inview": "^4.0.4",
 		"svelte-radix": "^2.0.1"

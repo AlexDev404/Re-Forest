@@ -1,9 +1,22 @@
 <script lang="ts">
-	import treesData from '$lib/data/trees.json';
+	import TreeData from '$lib/data/trees.json';
 	import { type Tree } from '$lib/types/Tree';
 	import { Map, Marker, controls } from '@beyonk/svelte-mapbox';
 	import { onMount } from 'svelte';
 	// custom component
+
+	let trees: Tree[];
+	// let oldDate: string;
+
+	onMount(() => {
+		let trees__fromstorage: Tree[] = JSON.parse(localStorage.getItem('trees') ?? '[]');
+		if (trees__fromstorage.length > 0) {
+			trees = trees__fromstorage;
+			trees = trees;
+		} else {
+			trees = TreeData;
+		}
+	});
 
 	const { GeolocateControl, NavigationControl, ScaleControl } = controls;
 	let mapComponent;
@@ -66,12 +79,10 @@
 
 	// 	return { newLat, newLng };
 	// }
-
-	// List of trees with original data, and we'll generate coordinates onMount
-	const trees: Tree[] = treesData;
 </script>
+
 <svelte:head>
-    <title>Re:Forest :: Home</title>
+	<title>Re:Forest :: Home</title>
 </svelte:head>
 <page>
 	<Map
