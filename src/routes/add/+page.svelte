@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import * as Alert from '$lib/components/vendor/ui/alert';
 	import { Button } from '$lib/components/vendor/ui/button';
 	import IconCard from '$lib/components/vendor/ui/icon-card/icon-card.svelte';
@@ -8,7 +9,7 @@
 
 	// Location handling
 	let currentLocation: GeolocationCoordinates | null = null;
-    let tree_added = false;
+	let tree_added = false;
 
 	async function getCurrentLocation() {
 		try {
@@ -23,8 +24,7 @@
 	}
 
 	function openMapPicker() {
-		// This is a placeholder - you'll need to implement your map picker UI
-		alert('Map picker functionality to be implemented');
+		goto('/configure/site-location');
 	}
 
 	// Photo handling
@@ -44,8 +44,9 @@
 		}
 	}
 </script>
+
 <svelte:head>
-    <title>Re:Forest :: Add</title>
+	<title>Re:Forest :: Add</title>
 </svelte:head>
 <page class="overflow-y-auto">
 	<main class="mx-6 my-10 flex flex-col items-start gap-12">
@@ -98,7 +99,7 @@
 					on:click={() => {
 						document.querySelector('[data-melt-dialog-overlay]')?.remove();
 						document.getElementById('add-tree')?.remove();
-                        tree_added = true;
+						tree_added = true;
 					}}>Add this tree</Button
 				>
 			</svelte:fragment>

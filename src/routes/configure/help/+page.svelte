@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { Switch } from '$lib/components/vendor/ui/switch/index';
 	import { onMount } from 'svelte';
-	let Units: Switch;
 	let checked: boolean;
 	onMount(() => {
 		let unitcheck: boolean = JSON.parse(localStorage.getItem('units') ?? 'false');

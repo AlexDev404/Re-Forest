@@ -1,8 +1,12 @@
 <svelte:options customElement="menu-item" />
 
 <script lang="ts">
-	let { title = '' as string, onclick = (() => {}) as (event: MouseEvent | KeyboardEvent) => void } =
-		$props();
+	import { cn } from '$lib/components/vendor/shadcn/utils.js';
+	let {
+		class: className = '' as string,
+		title = '' as string,
+		onclick = (() => {}) as (event: MouseEvent | KeyboardEvent) => void
+	} = $props();
 </script>
 
 <div
@@ -13,7 +17,10 @@
 	role="menuitem"
 	tabindex="0"
 	aria-expanded="false"
-	class="flex w-full cursor-pointer items-center rounded-sm border border-slate-100 px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-foreground data-[highlighted]:bg-accent data-[state=open]:bg-accent"
+	class={cn(
+		'flex w-full cursor-pointer items-center rounded-sm border border-slate-100 px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-foreground data-[highlighted]:bg-accent data-[state=open]:bg-accent',
+		className
+	)}
 >
 	<div class="flex items-center space-x-2">
 		<icon class="ml-auto">

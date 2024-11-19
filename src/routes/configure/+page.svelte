@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { Button } from '$lib/components/vendor/ui/button/index';
 	import { Label } from '$lib/components/vendor/ui/label/index';
 	import MenuItem from '$lib/components/vendor/ui/menuitem/menuitem.svelte';
@@ -53,7 +54,7 @@
 				</div>
 			</MenuItem>
 
-			<MenuItem title="Site Location">
+			<MenuItem onclick={()=>goto('/configure/site-location')} title="Site Location">
 				<svelte:fragment slot="start-icon">
 					<Map class="h-4 w-4" />
 				</svelte:fragment>

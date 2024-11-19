@@ -135,6 +135,51 @@ body {
 	}
 }
 
+/* Loading bar */
+/*
+animation: loading2 10s ease-out 1; // Expands the loading bar
+animation: loading 10s ease-out 1;  // Scatters the loading bar colors
+*/
+@keyframes loading2 {
+	from {
+		transform: translateX(-100%);
+	}
+
+	to {
+		transform: translateX(0);
+	}
+}
+
+@keyframes loading {
+	from {
+		transform: translateX(0) scaleX(6);
+	}
+
+	to {
+		transform: translateX(500%) scaleX(6);
+	}
+}
+
+.loading-gradient-2 {
+	will-change: transform;
+}
+
+.loading-gradient {
+	will-change: transform;
+	transform-origin: right;
+	background-image: linear-gradient(
+		to right,
+		hsl(var(--accent)),
+		hsl(var(--primary)),
+		hsl(var(--secondary))
+	);
+}
+
+.animate-fade-out {
+	animation: fade-out 0.3s ease-out;
+	animation-fill-mode: forwards;
+}
+
 /* No transition for the navigation bar */
 control {
 	display: flex;
