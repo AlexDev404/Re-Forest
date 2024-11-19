@@ -28,7 +28,7 @@
 	let treeImageSrc: string | null = null;
 
 	// Location handling
-	let tree_added = true;
+	let tree_added = false;
 
 	// ---
 	let location: GeolocationCoordinates | (string | null) = null;
@@ -128,6 +128,7 @@
 			dialog_title="Create a new tree"
 			dialog_description="Fill in the details below to create a new tree"
 			wants_dialog
+			disabled_when={tree_added}
 		>
 			<svelte:fragment slot="dialog-trigger">
 				<ButtonAlt data-disabled={tree_added}>

@@ -14,6 +14,7 @@
 	export let srcImgAlt: string | undefined = undefined;
 	export let srcImagePlaceholderText: string = 'No image available';
 	export let wants_image: boolean = false;
+	export let disabled_when: boolean = false;
 </script>
 
 <Dialog.Root>
@@ -36,7 +37,7 @@
 			</div>
 			<slot name="content1" />
 			{#if wants_dialog}
-				<Dialog.Trigger class="w-full"><slot name="dialog-trigger" /></Dialog.Trigger>
+				<Dialog.Trigger class="w-full" disabled={disabled_when}><slot name="dialog-trigger" /></Dialog.Trigger>
 			{/if}
 		</div>
 		{#if wants_image}
