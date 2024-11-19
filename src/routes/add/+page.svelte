@@ -95,7 +95,7 @@
 		<article class="flex items-start self-stretch">
 			<div class="block w-full space-y-1">
 				<h1 class="text-2xl font-semibold">New Tree</h1>
-				<Button on:click={openMapPicker}>Set a location</Button>
+				<Button class="w-full" on:click={openMapPicker}>Set a location</Button>
 			</div>
 		</article>
 		<IconCard

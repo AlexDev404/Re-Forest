@@ -6,7 +6,7 @@
 	import { BadgePlus } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { inview } from 'svelte-inview';
-	let trees: Tree[] = TreeData;
+	let trees: Tree[];
 	let locationElement: HTMLDivElement;
 	let data: any;
 	//this function converts meters to feet
@@ -25,6 +25,8 @@
 		if (trees__fromstorage.length > 0) {
 			trees = trees__fromstorage;
 			trees = trees;
+		} else {
+			trees = TreeData;
 		}
 		// console.log(trees);
 		setTimeout(() => {
