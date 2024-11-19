@@ -98,18 +98,21 @@
 						/>
 					</div>
 					<div class="grid grid-cols-4 items-center gap-4">
-						<Label for="tree-label" class="text-right">Label</Label>
+						<Label for="tree-height" class="text-right">Height</Label>
 						<Input
-							id="tree-label"
-							placeholder="This tree is..."
+							id="tree-height"
+							type="number"
+							placeholder="10"
 							class="col-span-3 border-slate-800"
 						/>
 					</div>
+					<p class="text-red-500 font-light text-xs">Image missing. Please go back and insert one.</p>
 				</div>
 			</svelte:fragment>
 			<svelte:fragment slot="dialog-footer">
 				<Button
 					type="submit"
+					disabled
 					class="w-full"
 					on:click={() => {
 						document.querySelector('[data-melt-dialog-overlay]')?.remove();
@@ -129,7 +132,7 @@
 
 		<Alert.Root>
 			<MapPin />
-			<Alert.Title>Your set location.</Alert.Title>
+			<Alert.Title>Your location.</Alert.Title>
 			<Alert.Description
 				>{#if translated_location !== null}
 					{translated_location}
