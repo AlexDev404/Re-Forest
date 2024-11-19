@@ -21,7 +21,7 @@
 	function onclick_units() {
 		checked = !checked; // Toggle the switch on or off
 		// this is a function to get the current state of the switch and save it to local storage
-		const dataset = !checked;
+		const dataset = checked;
 		localStorage.setItem('units', JSON.stringify(dataset));
 	}
 </script>
@@ -54,7 +54,7 @@
 				</div>
 			</MenuItem>
 
-			<MenuItem onclick={()=>goto('/configure/site-location')} title="Site Location">
+			<MenuItem onclick={() => goto('/configure/site-location')} title="Site Location">
 				<svelte:fragment slot="start-icon">
 					<Map class="h-4 w-4" />
 				</svelte:fragment>

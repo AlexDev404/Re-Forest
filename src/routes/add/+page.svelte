@@ -161,6 +161,8 @@
 					on:click={() => {
 						document.querySelector('[data-melt-dialog-overlay]')?.remove();
 						document.getElementById('add-tree')?.remove();
+						submittedTree.lat = (location as GeolocationCoordinates).latitude;
+						submittedTree.lng = (location as GeolocationCoordinates).longitude;
 						localStorage.setItem('trees', JSON.stringify([submittedTree, ...TreeData]));
 						tree_added = true;
 					}}>Add this tree</Button
