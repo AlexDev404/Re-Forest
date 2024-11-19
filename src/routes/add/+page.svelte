@@ -28,7 +28,7 @@
 	let treeImageSrc: string | null = null;
 
 	// Location handling
-	let tree_added = false;
+	let tree_added = true;
 
 	// ---
 	let location: GeolocationCoordinates | (string | null) = null;
@@ -49,6 +49,7 @@
 	});
 
 	function openMapPicker() {
+		// console.log('Trying to open map picker...');
 		goto('/configure/site-location');
 	}
 
@@ -74,7 +75,6 @@
 				const data = await response.json();
 				if (response.ok) {
 					const imageUrl = data.url;
-					console.log('Image URL:', imageUrl);
 					submittedTree.image = imageUrl;
 					treeImageSrc = imageUrl;
 				} else {
@@ -95,25 +95,33 @@
 		<article class="flex items-start self-stretch">
 			<div class="block w-full space-y-1">
 				<h1 class="text-2xl font-semibold">New Tree</h1>
-				<Button class="w-full" on:click={openMapPicker}>Set a location</Button>
 			</div>
 		</article>
+		{#if !location}
+			<IconCard
+				avatarFallback="📌"
+				title={'Click to set your location'}
+				description={'You need to add a location first before you can add a tree.'}
+			>
+				<svelte:fragment slot="content1">
+					<ButtonAlt class="w-full" onclick={openMapPicker}>Set a location</ButtonAlt>
+				</svelte:fragment>
+			</IconCard>
+		{/if}
 		<IconCard
 			wants_image
 			srcImgAlt="Tree image"
 			srcImg={treeImageSrc}
-			avatarSrc="/static/camera.svg"
 			srcImagePlaceholderText="No image available.<br/>Insert one above.<br/>(you can't click here)"
 			avatarFallback="📸"
 			title={'Click to add a photo'}
 			description={'Add a photo to represent the tree'}
 		>
 			<svelte:fragment slot="content1">
-				<Button class="w-full" on:click={handlePhotoClick}>Or select from your gallery</Button>
+				<ButtonAlt class="w-full" onclick={handlePhotoClick}>Select from your gallery</ButtonAlt>
 			</svelte:fragment>
 		</IconCard>
 		<IconCard
-			avatarSrc="null"
 			avatarFallback="✏️"
 			title={'Now, provide some details...'}
 			description={'Provide details about the new tree you want to add.'}
@@ -122,7 +130,13 @@
 			wants_dialog
 		>
 			<svelte:fragment slot="dialog-trigger">
-				<ButtonAlt>Add Tree</ButtonAlt>
+				<ButtonAlt data-disabled={tree_added}>
+					{#if tree_added === true}
+						Tree added
+					{:else}
+						Add this tree
+					{/if}</ButtonAlt
+				>
 			</svelte:fragment>
 			<svelte:fragment slot="dialog-content">
 				<div class="grid gap-4 py-4">
@@ -156,17 +170,31 @@
 			<svelte:fragment slot="dialog-footer">
 				<Button
 					type="submit"
-					disabled={treeImageSrc === null || location === null}
+					disabled={treeImageSrc === null || location === null || tree_added}
 					class="w-full"
 					on:click={() => {
 						document.querySelector('[data-melt-dialog-overlay]')?.remove();
 						document.getElementById('add-tree')?.remove();
 						submittedTree.lat = (location as GeolocationCoordinates).latitude;
 						submittedTree.lng = (location as GeolocationCoordinates).longitude;
-						localStorage.setItem('trees', JSON.stringify([submittedTree, ...TreeData]));
+						if (submittedTree.name === '') submittedTree.name = 'Unnamed tree';
+						const trees__fromstorage = JSON.parse(localStorage.getItem('trees') ?? '[]');
+						if (trees__fromstorage.length > 0) {
+							// Are there trees in storage?
+							localStorage.setItem('trees', JSON.stringify([submittedTree, ...trees__fromstorage]));
+						} else {
+							// No trees in storage
+							localStorage.setItem('trees', JSON.stringify([submittedTree, ...TreeData]));
+						}
 						tree_added = true;
-					}}>Add this tree</Button
+					}}
 				>
+					{#if tree_added === true}
+						Tree added
+					{:else}
+						Add this tree
+					{/if}
+				</Button>
 			</svelte:fragment>
 		</IconCard>
 		{#if tree_added}

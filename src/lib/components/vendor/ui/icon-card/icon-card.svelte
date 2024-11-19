@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Avatar from '$lib/components/vendor/ui/avatar';
 	import * as Dialog from '$lib/components/vendor/ui/dialog';
-	let src: string;
+	let src: string | undefined = undefined;
 	export { src as avatarSrc };
 	export let avatarFallback: string;
 	export let title: string;
@@ -21,7 +21,9 @@
 		<div class="w-full rounded-md bg-secondary px-6 py-5">
 			<div class="flex justify-start space-x-8">
 				<Avatar.Root>
-					<Avatar.Image {src} />
+					{#if src}
+						<Avatar.Image {src} />
+					{/if}
 					<Avatar.Fallback>{avatarFallback}</Avatar.Fallback>
 				</Avatar.Root>
 				<div class="space-y-1">
