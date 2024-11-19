@@ -6,7 +6,7 @@
 	import { Input } from '$lib/components/vendor/ui/input';
 	import { Label } from '$lib/components/vendor/ui/label';
 	import { type ReverseGeoJSON } from '$lib/types/GeoJSON';
-	import { getCurrentLocation, getReverseLoc } from '$lib/utility/utility';
+	import { getReverseLoc } from '$lib/utility/utility';
 	import { MapPin, Zap } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 
@@ -51,16 +51,6 @@
 			console.log('Selected file:', file);
 		}
 	}
-
-	// Get the reverse location
-	async function getReverseLoc_(lat: number, lng: number): Promise<ReverseGeoJSON> {
-		const result: ReverseGeoJSON | null = await getReverseLoc(lat, lng);
-		if (result === null) {
-			translated_location = 'Try that again.';
-			throw new Error('Location not found.');
-		}
-		return result;
-	}
 </script>
 
 <svelte:head>
@@ -71,22 +61,7 @@
 		<article class="flex items-start self-stretch">
 			<div class="block w-full space-y-1">
 				<h1 class="text-2xl font-semibold">New Tree</h1>
-				<Button
-					onclick={async () => {
-						const loc: GeolocationCoordinates | null = await getCurrentLocation();
-						console.log(loc);
-						if (loc !== null) {
-							const reverse_location: ReverseGeoJSON = await getReverseLoc_(
-								loc.latitude,
-								loc.longitude
-							);
-							translated_location = reverse_location.display_name;
-
-							localStorage.setItem('location', JSON.stringify(loc));
-						}
-					}}>Grab my current location</Button
-				>
-				<Button on:click={openMapPicker}>Set site location</Button>
+				<Button on:click={openMapPicker}>Set a location</Button>
 			</div>
 		</article>
 		<IconCard
@@ -116,11 +91,19 @@
 				<div class="grid gap-4 py-4">
 					<div class="grid grid-cols-4 items-center gap-4">
 						<Label for="tree-name" class="text-right">Name</Label>
-						<Input id="tree-name" placeholder="Beech tree" class="col-span-3 border-slate-800 text-background" />
+						<Input
+							id="tree-name"
+							placeholder="Beech tree"
+							class="col-span-3 border-slate-800 text-background"
+						/>
 					</div>
 					<div class="grid grid-cols-4 items-center gap-4">
 						<Label for="tree-label" class="text-right">Label</Label>
-						<Input id="tree-label" placeholder="This tree is..." class="col-span-3 border-slate-800" />
+						<Input
+							id="tree-label"
+							placeholder="This tree is..."
+							class="col-span-3 border-slate-800"
+						/>
 					</div>
 				</div>
 			</svelte:fragment>
@@ -151,7 +134,8 @@
 				>{#if translated_location !== null}
 					{translated_location}
 				{:else}
-					<div>Set a default location</div><a class="underline" href="/configure/site-location"> in settings.</a>
+					<div>Set a default location</div>
+					<a class="underline" href="/configure/site-location"> in settings.</a>
 				{/if}
 			</Alert.Description>
 		</Alert.Root>
