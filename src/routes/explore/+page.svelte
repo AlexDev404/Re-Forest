@@ -21,6 +21,11 @@
 	let signal_ready: boolean = false;
 
 	onMount(() => {
+		let trees__fromstorage: Tree[] = JSON.parse(localStorage.getItem('trees') ?? '[]');
+		if (trees__fromstorage.length > 0) {
+			trees = trees__fromstorage;
+			trees = trees;
+		}
 		// console.log(trees);
 		setTimeout(() => {
 			signal_ready = true;
