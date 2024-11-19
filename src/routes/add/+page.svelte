@@ -115,12 +115,12 @@
 			<svelte:fragment slot="dialog-content">
 				<div class="grid gap-4 py-4">
 					<div class="grid grid-cols-4 items-center gap-4">
-						<Label for="name" class="text-right">Name</Label>
-						<Input id="name" placeholder="Beech tree" class="col-span-3" />
+						<Label for="tree-name" class="text-right">Name</Label>
+						<Input id="tree-name" placeholder="Beech tree" class="col-span-3 border-slate-800 text-background" />
 					</div>
 					<div class="grid grid-cols-4 items-center gap-4">
-						<Label for="username" class="text-right">Label</Label>
-						<Input id="username" placeholder="This tree is..." class="col-span-3" />
+						<Label for="tree-label" class="text-right">Label</Label>
+						<Input id="tree-label" placeholder="This tree is..." class="col-span-3 border-slate-800" />
 					</div>
 				</div>
 			</svelte:fragment>
