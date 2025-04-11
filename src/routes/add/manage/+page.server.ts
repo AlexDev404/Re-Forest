@@ -36,8 +36,7 @@ console.log(form.data)
 				.insert(trees)
 				.values({
 					treeName: tree_name,
-					// image: tree_image,
-                    image: "https://i.ibb.co/VczSY0xg/blob.jpg",
+					image: tree_image,
 					lat: tree_lat,
 					lng: tree_lng,
 					height: tree_height,
