@@ -2,6 +2,8 @@
 	import { goto } from '$app/navigation';
 	import { Button } from '$lib/components/vendor/ui/button';
 	import IconCard from '$lib/components/vendor/ui/icon-card/icon-card.svelte';
+	import { Input } from '$lib/components/vendor/ui/input';
+	import { Label } from '$lib/components/vendor/ui/label';
 	import { type ReverseGeoJSON } from '$lib/types/GeoJSON';
 	import type { Tree } from '$lib/types/Tree';
 	import { getReverseLoc } from '$lib/utility/utility';
@@ -82,26 +84,55 @@
 </script>
 
 <svelte:head>
-	<title>Re:Forest :: Manage Trees</title>
+	<title>Re:Forest :: Manage Trees &gt; Add Tree</title>
 </svelte:head>
 <page class="block h-fit overflow-y-auto pb-20">
 	<main class="mx-6 my-10 flex flex-col items-start gap-12">
 		<article class="flex items-start self-stretch">
 			<div class="flex w-full items-center justify-between">
-				<h1 class="text-2xl font-semibold">Manage Trees</h1>
-				<a href="/add/manage"><Button>Add Tree</Button></a>
+				<h1 class="text-2xl font-semibold"><a href="/add">Manage Trees</a> &gt; Add Tree</h1>
 			</div>
 		</article>
+
 		<IconCard
-			avatarSrc="/static/edit.svg"
-			avatarFallback="✏️"
-			title="Tree Name"
-			description={`Planted by: Someone`}
+			wants_image
+			srcImgAlt="Tree image"
+			srcImg={treeImageSrc}
+			srcImagePlaceholderText="No image available.<br/>Insert one above.<br/>(you can't click here)"
+			avatarFallback="📸"
+			title={'Click to add a photo'}
+			description={'Add a photo to represent the tree'}
 		>
-			<svelte:fragment slot="content">
-				<Button variant="destructive">Delete</Button>
+			<svelte:fragment slot="content1">
+				<Button class="w-full" onclick={handlePhotoClick}>Select from your gallery</Button>
 			</svelte:fragment>
 		</IconCard>
+
+		<form method="POST" action="?/createTree" class="flex w-full flex-col gap-8 lg:px-12">
+			<div class="grid w-full items-center gap-1.5">
+				<Label for="treeName" class="w-fit">Tree Name</Label>
+				<Input type="text" id="treeName" placeholder="Enter a tree name" class="w-full" />
+			</div>
+			<div class="grid w-full items-center gap-1.5">
+				<Label for="treeHeight" class="w-fit">Height</Label>
+				<Input type="text" id="treeHeight" placeholder="Enter the tree height" class="w-full" />
+			</div>
+			<div class="grid w-full items-center gap-1.5">
+				<Label for="treeAge" class="w-fit">Age</Label>
+				<Input type="number" min="0" id="treeAge" placeholder="Enter the tree age" class="w-full" />
+			</div>
+			<div class="grid w-full items-center gap-1.5">
+				<Label for="treeSpecies" class="w-fit">Species</Label>
+				<Input type="text" id="treeSpecies" placeholder="Enter the tree species" class="w-full" />
+			</div>
+			<a href="/configure/site-location"
+				><Button
+					class="w-full border border-primary bg-transparent text-primary hover:bg-transparent hover:opacity-80"
+					>Set site location</Button
+				></a
+			>
+			<Button type="submit" class="w-full">Submit</Button>
+		</form>
 	</main>
 </page>
 
