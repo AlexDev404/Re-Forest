@@ -8,6 +8,11 @@
 	import type { Tree } from '$lib/types/Tree';
 	import { getReverseLoc } from '$lib/utility/utility';
 	import { onMount } from 'svelte';
+	import { superForm } from 'sveltekit-superforms';
+	import type { PageData } from './$types';
+    
+    const data: PageData = $props();
+    const { form, errors, constraints, enhance } = superForm(data.form?.super_form ?? data.data);
 
 	let submittedTree: Tree = {
 		name: '',
@@ -82,7 +87,7 @@
 		}
 	}
 </script>
-
+<!-- <SuperDebug -->
 <svelte:head>
 	<title>Re:Forest :: Manage Trees &gt; Add Tree</title>
 </svelte:head>
@@ -108,44 +113,71 @@
 			</svelte:fragment>
 		</IconCard>
 
-		<form method="POST" action="?/createTree" class="flex w-full flex-col gap-8 lg:px-12">
+		<form method="POST" action="?/createTree" class="flex w-full flex-col gap-8 lg:px-12"	use:enhance>
+			<input type="hidden" name="tree_lat" value={location?.latitude} />
+			<input type="hidden" name="tree_lng" value={location?.longitude} />
+            <input type="hidden" name="tree_image" value={treeImageSrc}/>
 			<div class="grid w-full items-center gap-1.5">
-				<Label for="treeName" class="w-fit">Tree Name</Label>
-				<Input type="text" id="treeName" placeholder="Enter a tree name" class="w-full" />
+                <Label for="tree_name" class="w-fit">Tree Name</Label>
+				<Input
+                type="text"
+                name="tree_name"
+                id="tree_name"
+                placeholder="Enter a tree name"
+                class="w-full"
+				/>
 			</div>
 			<div class="grid w-full items-center gap-1.5">
-				<Label for="treeHeight" class="w-fit">Height</Label>
-				<Input type="text" id="treeHeight" placeholder="Enter the tree height" class="w-full" />
+				<Label for="tree_height" class="w-fit">Height</Label>
+				<Input
+					type="text"
+					name="tree_height"
+					id="treeHeight"
+					placeholder="Enter the tree height"
+					class="w-full"
+				/>
 			</div>
 			<div class="grid w-full items-center gap-1.5">
-				<Label for="treeAge" class="w-fit">Age</Label>
-				<Input type="number" min="0" id="treeAge" placeholder="Enter the tree age" class="w-full" />
-			</div>
+                <Label for="treeAge" class="w-fit">Age</Label>
+				<Input
+                type="number"
+                name="tree_age"
+                min="0"
+					id="treeAge"
+					placeholder="Enter the tree age"
+					class="w-full"
+                    />
+                </div>
 			<div class="grid w-full items-center gap-1.5">
 				<Label for="treeSpecies" class="w-fit">Species</Label>
-				<Input type="text" id="treeSpecies" placeholder="Enter the tree species" class="w-full" />
-			</div>
-			<a href="/configure/site-location"
+				<Input
+					type="text"
+					name="tree_species"
+					id="treeSpecies"
+					placeholder="Enter the tree species"
+					class="w-full"
+                    />
+                </div>
+                <a href="/configure/site-location"
 				><Button
-					class="w-full border border-primary bg-transparent text-primary hover:bg-transparent hover:opacity-80"
-					>Set site location</Button
+                class="w-full border border-primary bg-transparent text-primary hover:bg-transparent hover:opacity-80"
+                >Set site location</Button
 				></a
-			>
-			<Button type="submit" class="w-full">Submit</Button>
-		</form>
-	</main>
-</page>
-
-<input
-	type="file"
-	accept="image/jpeg,image/png,image/webp"
-	bind:this={fileInput}
-	on:change={handleFileSelect}
-	class="hidden"
-/>
-
+                >
+                <Button type="submit" class="w-full">Submit</Button>
+            </form>
+        </main>
+    </page>
+    <input
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        bind:this={fileInput}
+        on:change={handleFileSelect}
+        class="hidden"
+    />
+    
 <style>
-	:global(body) {
-		overflow: auto;
+    :global(body) {
+        overflow: auto;
 	}
 </style>
