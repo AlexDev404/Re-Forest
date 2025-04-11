@@ -12,7 +12,7 @@ export const trees = pgTable("Trees", {
 	treeName: varchar("tree_name", { length: 255 }),
 	treeSpecies: integer("tree_species"),
 	height: doublePrecision(),
-	health: treehealth(),
+	health: treehealth().default("EXCELLENT"),
 	age: integer(),
 	image: text(),
 	lat: doublePrecision(),
