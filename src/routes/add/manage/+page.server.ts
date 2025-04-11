@@ -23,7 +23,7 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
 	createTree: async (event) => {
 		const form = await superValidate(event, zod(treeSchema));
-
+console.log(form.data)
 		if (!form.valid) {
 			return fail(400, { form });
 		}
@@ -36,12 +36,13 @@ export const actions: Actions = {
 				.insert(trees)
 				.values({
 					treeName: tree_name,
-					image: tree_image,
+					// image: tree_image,
+                    image: "https://i.ibb.co/VczSY0xg/blob.jpg",
 					lat: tree_lat,
 					lng: tree_lng,
 					height: tree_height,
 					age: tree_age,
-					treeSpecies: 0 // Assuming you have a way to get the tree species ID from the name
+					treeSpecies: 1 // Assuming you have a way to get the tree species ID from the name
 				})
 				.returning({ id: trees.id });
 
