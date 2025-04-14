@@ -26,7 +26,7 @@
         lng: 0
     };
 
-    let treeImageSrc: string | null = null;
+    let treeImageSrc: string | null = $state(null);
 
     // Location handling
     let tree_added = false;
