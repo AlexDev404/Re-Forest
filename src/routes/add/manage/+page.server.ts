@@ -1,6 +1,8 @@
+import { DEBUG } from '$env/static/private';
 import { db } from '$lib/server/db/index.js';
-import { trees } from '$lib/server/db/schema';
-import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { Trees } from '$lib/server/db/schema';
+import { typical_development_notice } from '$lib/utility/typicals';
+import { fail, isActionFailure, isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
@@ -21,9 +23,19 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions: Actions = {
-	createTree: async (event) => {
+	default: async (event) => {
 		const form = await superValidate(event, zod(treeSchema));
-console.log(form.data)
+		const user = event.locals.user;
+
+		if (!user) {
+			setError(form, '', 'You must be logged in to create a tree');
+			return fail(401, { form });
+		}
+
+		if (DEBUG) {
+			typical_development_notice();
+			console.log(form.data);
+		}
 		if (!form.valid) {
 			return fail(400, { form });
 		}
@@ -32,23 +44,36 @@ console.log(form.data)
 			form.data;
 
 		try {
-			const new_tree: { id: number }[] = await db
-				.insert(trees)
+			const new_tree = await db
+				.insert(Trees)
 				.values({
-					treeName: tree_name,
-					image: tree_image,
-					lat: tree_lat,
-					lng: tree_lng,
-					height: tree_height,
-					age: tree_age,
-					treeSpecies: 1 // Assuming you have a way to get the tree species ID from the name
+					TreeName: tree_name,
+					Image: tree_image,
+					Lat: tree_lat,
+					Lng: tree_lng,
+					Height: tree_height,
+					Health: 'EXCELLENT', // Assuming you have a way to get the health status from the enum
+					PlantedBy: user.Id,
+					Age: tree_age,
+					TreeSpecies: 1 // Assuming you have a way to get the tree species ID from the name
 				})
-				.returning({ id: trees.id });
+				.returning();
 
-			throw redirect(303, `/explore?tree_id=${new_tree[0].id}`);
+			if (DEBUG) {
+				typical_development_notice();
+				console.log('New tree created:', new_tree[0]);
+			}
+			throw redirect(303, `/explore?tree_id=${new_tree[0].Id}`);
 		} catch (error) {
-			console.error(error);
+			if (isActionFailure(error)) {
+				return error;
+			}
+			if (isRedirect(error)) {
+				throw error;
+			}
+
 			setError(form, 'tree_species', 'Failed to create the tree');
+			console.error(error);
 			return fail(500, { form });
 		}
 	}
