@@ -1,13 +1,14 @@
 import { date, doublePrecision, foreignKey, integer, pgEnum, pgTable, text, varchar } from "drizzle-orm/pg-core";
 export const treehealth = pgEnum("treehealth", ['BAD', 'FAIR', 'GOOD', 'EXCELLENT'])
+export const roleNames = pgEnum("names", ['ADMIN', 'ENVIRONMENTALIST', 'USER'])
 
 
-export const treeSpecies = pgTable("Tree_Species", {
+export const TreeSpecies = pgTable("Tree_Species", {
 	id: integer().primaryKey().generatedByDefaultAsIdentity({ name: "Tree_Species_id_seq", startWith: 1, increment: 1, minValue: 1, maxValue: 2147483647 }),
 	name: varchar({ length: 255 }),
 });
 
-export const trees = pgTable("Trees", {
+export const Trees = pgTable("Trees", {
 	id: integer().primaryKey().generatedByDefaultAsIdentity({ name: "Tree_id_seq", startWith: 1, increment: 1, minValue: 1, maxValue: 2147483647 }),
 	treeName: varchar("tree_name", { length: 255 }),
 	treeSpecies: integer("tree_species"),
@@ -22,22 +23,22 @@ export const trees = pgTable("Trees", {
 }, (table) => [
 	foreignKey({
 			columns: [table.treeSpecies],
-			foreignColumns: [treeSpecies.id],
+			foreignColumns: [TreeSpecies.id],
 			name: "Tree_tree_species_fkey"
 		}),
 	foreignKey({
 			columns: [table.plantedBy],
-			foreignColumns: [user.id],
+			foreignColumns: [User.id],
 			name: "Tree_planted_by_fkey"
 		}),
 ]);
 
-export const role = pgTable("Role", {
+export const Role = pgTable("Role", {
 	id: integer().primaryKey().generatedByDefaultAsIdentity({ name: "Role_id_seq", startWith: 1, increment: 1, minValue: 1, maxValue: 2147483647 }),
-	name: varchar({ length: 255 }),
+	name: roleNames(),
 });
 
-export const user = pgTable("User", {
+export const User = pgTable("User", {
 	id: integer().primaryKey().generatedByDefaultAsIdentity({ name: "User_id_seq", startWith: 1, increment: 1, minValue: 1, maxValue: 2147483647 }),
 	role: integer(),
 	firstName: varchar("first_name", { length: 255 }),
@@ -47,7 +48,7 @@ export const user = pgTable("User", {
 }, (table) => [
 	foreignKey({
 			columns: [table.role],
-			foreignColumns: [role.id],
+			foreignColumns: [Role.id],
 			name: "User_role_fkey"
 		}),
 ]);

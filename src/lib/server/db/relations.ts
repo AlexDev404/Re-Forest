@@ -1,29 +1,29 @@
 import { relations } from "drizzle-orm/relations";
-import { treeSpecies, trees, user, role } from "./schema";
+import { Role, TreeSpecies, Trees, User } from "./schema";
 
-export const treesRelations = relations(trees, ({one}) => ({
-	treeSpecy: one(treeSpecies, {
-		fields: [trees.treeSpecies],
-		references: [treeSpecies.id]
+export const treesRelations = relations(Trees, ({one}) => ({
+	treeSpecy: one(TreeSpecies, {
+		fields: [Trees.treeSpecies],
+		references: [TreeSpecies.id]
 	}),
-	user: one(user, {
-		fields: [trees.plantedBy],
-		references: [user.id]
-	}),
-}));
-
-export const treeSpeciesRelations = relations(treeSpecies, ({many}) => ({
-	trees: many(trees),
-}));
-
-export const userRelations = relations(user, ({one, many}) => ({
-	trees: many(trees),
-	role: one(role, {
-		fields: [user.role],
-		references: [role.id]
+	user: one(User, {
+		fields: [Trees.plantedBy],
+		references: [User.id]
 	}),
 }));
 
-export const roleRelations = relations(role, ({many}) => ({
-	users: many(user),
+export const treeSpeciesRelations = relations(TreeSpecies, ({many}) => ({
+	trees: many(Trees),
+}));
+
+export const userRelations = relations(User, ({one, many}) => ({
+	trees: many(Trees),
+	role: one(Role, {
+		fields: [User.role],
+		references: [Role.id]
+	}),
+}));
+
+export const roleRelations = relations(Role, ({many}) => ({
+	users: many(User),
 }));
