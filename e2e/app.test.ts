@@ -49,8 +49,7 @@ test.describe('Manage Tree page', () => {
 		const imagePreview = page.locator('img[alt="Tree image"]');
 		await expect(imagePreview).toBeVisible();
 		console.log('Image upload capability passed');
-	}
-	);
+	});
 });
 
 test.describe('Tree Explore page', () => {
@@ -64,5 +63,123 @@ test.describe('Tree Explore page', () => {
 		const information_containers = page.locator('information-container');
 		await expect(await information_containers.count()).toBeGreaterThanOrEqual(1);
 		console.log('Tree explore page information container passed');
+	});
+});
+
+test.describe('Authentication', () => {
+	test('login page has expected title and form elements', async ({ page }) => {
+		await page.goto('/auth/login');
+		await expect(await page.title()).toBe('Re:Forest :: Login to the site');
+
+		// Check form elements
+		const emailInput = page.locator('input[name="email"]');
+		const passwordInput = page.locator('input[name="password"]');
+		const loginButton = page.locator('button[type="submit"]');
+		const registerLink = page.locator('a[href="/auth/register"]');
+
+		await expect(emailInput).toBeVisible();
+		await expect(passwordInput).toBeVisible();
+		await expect(loginButton).toBeVisible();
+		await expect(registerLink).toBeVisible();
+	});
+
+	test('register page has expected title and form elements', async ({ page }) => {
+		await page.goto('/auth/register');
+		await expect(await page.title()).toBe('Re:Forest :: Register an account');
+
+		// Check form elements
+		const nameInput = page.locator('input[name="name"]');
+		const emailInput = page.locator('input[name="email"]');
+		const passwordInput = page.locator('input[name="password"]');
+		const confirmPasswordInput = page.locator('input[name="confirmPassword"]');
+		const registerButton = page.locator('button[type="submit"]');
+		const loginLink = page.locator('a[href="/auth/login"]');
+
+		await expect(nameInput).toBeVisible();
+		await expect(emailInput).toBeVisible();
+		await expect(passwordInput).toBeVisible();
+		await expect(confirmPasswordInput).toBeVisible();
+		await expect(registerButton).toBeVisible();
+		await expect(loginLink).toBeVisible();
+	});
+
+	test('login flow with invalid credentials shows error', async ({ page }) => {
+		await page.goto('/auth/login');
+
+		// Fill in invalid credentials
+		await page.fill('input[name="email"]', 'invalid@example.com');
+		await page.fill('input[name="password"]', 'wrongpassword');
+
+		// Submit form
+		await page.click('button[type="submit"]');
+
+		// Check for error message
+		await expect(page.locator('text=Invalid email or password')).toBeVisible();
+	});
+
+	test('register flow with password mismatch shows error', async ({ page }) => {
+		await page.goto('/auth/register');
+
+		// Fill in form with mismatched passwords
+		await page.fill('input[name="name"]', 'Test User');
+		await page.fill('input[name="email"]', 'test@example.com');
+		await page.fill('input[name="password"]', 'password123');
+		await page.fill('input[name="confirmPassword"]', 'differentpassword');
+
+		// Submit form
+		await page.click('button[type="submit"]');
+
+		// Check for error message
+		await expect(page.locator('text=Passwords don\'t match')).toBeVisible();
+	});
+});
+
+test.describe('Add/Manage Tree Page Extended Tests', () => {
+	test('location is required for adding a tree', async ({ page }) => {
+		// Clear localStorage to simulate no location set
+		await page.evaluate(() => localStorage.removeItem('location'));
+
+		await page.goto('/add/manage');
+
+		// Since location is not set, the form should show a warning
+		// and the Set site location button should be present
+		const setLocationButton = page.locator('button:has-text("Set site location")');
+		await expect(setLocationButton).toBeVisible();
+
+		// Check if hidden inputs for lat/lng are empty or not present
+		const hasLocationInputs = await page.evaluate(() => {
+			const latInput = document.querySelector('input[name="tree_lat"]');
+			const lngInput = document.querySelector('input[name="tree_lng"]');
+			return latInput?.value && lngInput?.value;
+		});
+
+		expect(hasLocationInputs).toBeFalsy();
+	});
+
+	test('form validation works on add tree page', async ({ page }) => {
+		// Set mock location in localStorage
+		await page.evaluate(() => {
+			localStorage.setItem('location', JSON.stringify({
+				latitude: 40.7128,
+				longitude: -74.0060
+			}));
+		});
+
+		await page.goto('/add/manage');
+
+		// Set tree image
+		await page.evaluate(() => {
+			const input = document.querySelector('input[type="hidden"][name="tree_image"]');
+			if (input) {
+				(input as HTMLInputElement).value = 'https://example.com/tree.jpg';
+			}
+		});
+
+		// Submit form without filling required fields
+		await page.click('button[type="submit"]');
+
+		// Check for validation errors
+		const errorMessages = await page.locator('p.text-destructive');
+		await expect(errorMessages).toBeVisible();
 	});
 });
