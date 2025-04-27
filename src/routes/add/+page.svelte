@@ -1,16 +1,10 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import * as Alert from '$lib/components/vendor/ui/alert';
 	import { Button } from '$lib/components/vendor/ui/button';
-	import ButtonAlt from '$lib/components/vendor/ui/button/button-span.svelte';
 	import IconCard from '$lib/components/vendor/ui/icon-card/icon-card.svelte';
-	import { Input } from '$lib/components/vendor/ui/input';
-	import { Label } from '$lib/components/vendor/ui/label';
-	import TreeData from '$lib/data/trees.json';
 	import { type ReverseGeoJSON } from '$lib/types/GeoJSON';
 	import type { Tree } from '$lib/types/Tree';
 	import { getReverseLoc } from '$lib/utility/utility';
-	import { MapPin, Zap } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 
 	let submittedTree: Tree = {
@@ -88,136 +82,26 @@
 </script>
 
 <svelte:head>
-	<title>Re:Forest :: Add</title>
+	<title>Re:Forest :: Manage Trees</title>
 </svelte:head>
 <page class="block h-fit overflow-y-auto pb-20">
 	<main class="mx-6 my-10 flex flex-col items-start gap-12">
 		<article class="flex items-start self-stretch">
-			<div class="block w-full space-y-1">
-				<h1 class="text-2xl font-semibold">New Tree</h1>
+			<div class="flex w-full items-center justify-between">
+				<h1 class="text-2xl font-semibold">Manage Trees</h1>
+				<a href="/add/manage"><Button>Add Tree</Button></a>
 			</div>
 		</article>
-		{#if !location}
-			<IconCard
-				avatarFallback="📌"
-				title={'Click to set your location'}
-				description={'You need to add a location first before you can add a tree.'}
-			>
-				<svelte:fragment slot="content1">
-					<ButtonAlt class="w-full" onclick={openMapPicker}>Set a location</ButtonAlt>
-				</svelte:fragment>
-			</IconCard>
-		{/if}
 		<IconCard
-			wants_image
-			srcImgAlt="Tree image"
-			srcImg={treeImageSrc}
-			srcImagePlaceholderText="No image available.<br/>Insert one above.<br/>(you can't click here)"
-			avatarFallback="📸"
-			title={'Click to add a photo'}
-			description={'Add a photo to represent the tree'}
-		>
-			<svelte:fragment slot="content1">
-				<ButtonAlt class="w-full" onclick={handlePhotoClick}>Select from your gallery</ButtonAlt>
-			</svelte:fragment>
-		</IconCard>
-		<IconCard
+			avatarSrc="/static/edit.svg"
 			avatarFallback="✏️"
-			title={'Now, provide some details...'}
-			description={'Provide details about the new tree you want to add.'}
-			dialog_title="Create a new tree"
-			dialog_description="Fill in the details below to create a new tree"
-			wants_dialog
-			disabled_when={tree_added}
+			title="Tree Name"
+			description={`Planted by: Someone`}
 		>
-			<svelte:fragment slot="dialog-trigger">
-				<ButtonAlt data-disabled={tree_added}>
-					{#if tree_added === true}
-						Tree added
-					{:else}
-						Add this tree
-					{/if}</ButtonAlt
-				>
-			</svelte:fragment>
-			<svelte:fragment slot="dialog-content">
-				<div class="grid gap-4 py-4">
-					<div class="grid grid-cols-4 items-center gap-4">
-						<Label for="tree-name" class="text-right">Name</Label>
-						<Input
-							bind:value={submittedTree.name}
-							id="tree-name"
-							placeholder="Beech tree"
-							class="col-span-3 border-slate-800"
-						/>
-					</div>
-					<div class="grid grid-cols-4 items-center gap-4">
-						<Label for="tree-height" class="text-right">Height</Label>
-						<Input
-							bind:value={submittedTree.height}
-							id="tree-height"
-							type="number"
-							placeholder="Units are in meters"
-							class="col-span-3 border-slate-800"
-						/>
-					</div>
-					<p class="text-xs font-light text-red-500" hidden={treeImageSrc !== null}>
-						Image missing. Please go back and insert one.
-					</p>
-					<p class="text-xs font-light text-red-500" hidden={location !== null}>
-						You haven't set a location. Please go back and set one.
-					</p>
-				</div>
-			</svelte:fragment>
-			<svelte:fragment slot="dialog-footer">
-				<Button
-					type="submit"
-					disabled={treeImageSrc === null || location === null || tree_added}
-					class="w-full"
-					on:click={() => {
-						document.querySelector('[data-melt-dialog-overlay]')?.remove();
-						document.getElementById('add-tree')?.remove();
-						submittedTree.lat = (location as GeolocationCoordinates).latitude;
-						submittedTree.lng = (location as GeolocationCoordinates).longitude;
-						if (submittedTree.name === '') submittedTree.name = 'Unnamed tree';
-						const trees__fromstorage = JSON.parse(localStorage.getItem('trees') ?? '[]');
-						if (trees__fromstorage.length > 0) {
-							// Are there trees in storage?
-							localStorage.setItem('trees', JSON.stringify([submittedTree, ...trees__fromstorage]));
-						} else {
-							// No trees in storage
-							localStorage.setItem('trees', JSON.stringify([submittedTree, ...TreeData]));
-						}
-						tree_added = true;
-					}}
-				>
-					{#if tree_added === true}
-						Tree added
-					{:else}
-						Add this tree
-					{/if}
-				</Button>
+			<svelte:fragment slot="content">
+				<Button variant="destructive">Delete</Button>
 			</svelte:fragment>
 		</IconCard>
-		{#if tree_added}
-			<Alert.Root>
-				<Zap />
-				<Alert.Title>Your tree was added.</Alert.Title>
-				<Alert.Description>Go over to the view screen to see it live!</Alert.Description>
-			</Alert.Root>
-		{/if}
-
-		<Alert.Root>
-			<MapPin />
-			<Alert.Title>Your location.</Alert.Title>
-			<Alert.Description
-				>{#if translated_location !== null}
-					{translated_location}
-				{:else}
-					<div>Set a default location</div>
-					<a class="underline" href="/configure/site-location"> in settings.</a>
-				{/if}
-			</Alert.Description>
-		</Alert.Root>
 	</main>
 </page>
 
