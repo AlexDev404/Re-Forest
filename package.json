@@ -65,6 +65,7 @@
 		"@sveltejs/adapter-vercel": "^5.4.7",
 		"argon2": "^0.43.0",
 		"drizzle-orm": "^0.40.0",
+		"jsonwebtoken": "^9.0.2",
 		"lucide-svelte": "^0.456.0",
 		"pg": "^8.14.0",
 		"svelte-inview": "^4.0.4",

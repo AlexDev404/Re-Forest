@@ -3,12 +3,12 @@ import { Role, TreeSpecies, Trees, User } from "./schema";
 
 export const treesRelations = relations(Trees, ({one}) => ({
 	treeSpecy: one(TreeSpecies, {
-		fields: [Trees.treeSpecies],
-		references: [TreeSpecies.id]
+		fields: [Trees.TreeSpecies],
+		references: [TreeSpecies.Id]
 	}),
 	user: one(User, {
-		fields: [Trees.plantedBy],
-		references: [User.id]
+		fields: [Trees.PlantedBy],
+		references: [User.Id]
 	}),
 }));
 
@@ -19,8 +19,8 @@ export const treeSpeciesRelations = relations(TreeSpecies, ({many}) => ({
 export const userRelations = relations(User, ({one, many}) => ({
 	trees: many(Trees),
 	role: one(Role, {
-		fields: [User.role],
-		references: [Role.id]
+		fields: [User.Role],
+		references: [Role.Id]
 	}),
 }));
 
