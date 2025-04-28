@@ -1,0 +1,33 @@
+name: Run Unit (Vitest) Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    environment: default
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
+    - name: Run Playwright tests
+      env:
+        # Setting an environment variable with the value of a configuration variable
+        DEBUG: ${{ vars.DEBUG }}
+        DEVELOPMENT: ${{ vars.DEVELOPMENT }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        VERBOSE: ${{ vars.VERBOSE }}
+        JWT_SECRET: "Nah"
+        JWT_ACTIVATION_SECRET: "Wow"
+        SESSION_SAMESITE: "lax"
+        SESSION_HTTP_ONLY: true
+        SESSION_SECURE: false
+        SESSION_MAX_AGE: 72
+      run: npm run test:unit
