@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: E2E (Playwright) Tests
 on:
   push:
     branches: [ main, master ]
@@ -26,6 +26,12 @@ jobs:
         DEVELOPMENT: ${{ vars.DEVELOPMENT }}
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
         VERBOSE: ${{ vars.VERBOSE }}
+        JWT_SECRET: "Nah"
+        JWT_ACTIVATION_SECRET: "Wow"
+        SESSION_SAMESITE: "lax"
+        SESSION_HTTP_ONLY: true
+        SESSION_SECURE: false
+        SESSION_MAX_AGE: 72
       run: npx playwright test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
