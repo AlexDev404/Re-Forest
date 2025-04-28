@@ -17,7 +17,7 @@ jobs:
         node-version: lts/*
     - name: Install dependencies
       run: npm ci
-    - name: Run Playwright tests
+    - name: Run unit tests
       env:
         # Setting an environment variable with the value of a configuration variable
         DEBUG: ${{ vars.DEBUG }}
