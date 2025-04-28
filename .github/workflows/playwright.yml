@@ -25,6 +25,7 @@ jobs:
         DEBUG: ${{ vars.DEBUG }}
         DEVELOPMENT: ${{ vars.DEVELOPMENT }}
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        VERBOSE: ${{ vars.VERBOSE }}
       run: npx playwright test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
