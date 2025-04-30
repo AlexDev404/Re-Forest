@@ -1,14 +1,46 @@
 <script lang="ts">
 	import * as Alert from '$lib/components/vendor/ui/alert';
 	import * as Dialog from '$lib/components/vendor/ui/dialog';
-	import TreeData from '$lib/data/trees.json';
 	import { type Tree } from '$lib/types/Tree';
-	import { BadgePlus } from 'lucide-svelte';
+	import { BadgePlus, Search, Filter } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { inview } from 'svelte-inview';
-	let trees: Tree[];
+	
+	let trees = [];
+	let filteredTrees = [];
+	let searchQuery = '';
 	let locationElement: HTMLDivElement;
 	let data: any;
+	let showFilters = false;
+	let healthFilter = 'all';
+	let dateFilter = 'all';
+	let heightFilter = 'all';
+
+	async function fetchTrees() {
+		try {
+			const params = new URLSearchParams();
+			if (searchQuery) params.append('q', searchQuery);
+			if (healthFilter !== 'all') params.append('health', healthFilter);
+			if (dateFilter !== 'all') params.append('date', dateFilter);
+			if (heightFilter !== 'all') params.append('height', heightFilter);
+
+			const response = await fetch(`/api/trees?${params.toString()}`);
+			if (!response.ok) throw new Error('Failed to fetch trees');
+			
+			const data = await response.json();
+			trees = data;
+			filteredTrees = trees;
+		} catch (error) {
+			console.error('Error fetching trees:', error);
+			filteredTrees = [];
+		}
+	}
+
+	function searchTrees(query: string) {
+		searchQuery = query;
+		fetchTrees();
+	}
+
 	//this function converts meters to feet
 	function metersToFeet(meters: number) {
 		let height =
@@ -17,18 +49,12 @@
 				: (meters * 3.28084).toFixed(2).toString() + ' ft';
 		return height;
 	}
+	
 	let controller = new AbortController();
 	let signal_ready: boolean = false;
 
-	onMount(() => {
-		let trees__fromstorage: Tree[] = JSON.parse(localStorage.getItem('trees') ?? '[]');
-		if (trees__fromstorage.length > 0) {
-			trees = trees__fromstorage;
-			trees = trees;
-		} else {
-			trees = TreeData;
-		}
-		// console.log(trees);
+	onMount(async () => {
+		await fetchTrees();
 		setTimeout(() => {
 			signal_ready = true;
 		}, 3000);
@@ -38,11 +64,80 @@
 <svelte:head>
 	<title>Re:Forest :: Explore</title>
 </svelte:head>
+
 <page>
 	<div class="h-screen snap-y snap-mandatory overflow-y-scroll">
+		<!-- Search Bar and Filters -->
+		<div class="sticky top-0 z-50 w-full bg-white p-4 shadow-md">
+			<div class="mx-auto max-w-md space-y-4">
+				<div class="relative">
+					<input
+						type="text"
+						bind:value={searchQuery}
+						on:input={() => searchTrees(searchQuery)}
+						placeholder="Search trees by name, planter, or health..."
+						class="w-full rounded-lg border border-gray-300 px-4 py-2 pl-10 focus:border-green-500 focus:outline-none"
+					/>
+					<Search class="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+					<button
+						on:click={() => showFilters = !showFilters}
+						class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+					>
+						<Filter class="h-5 w-5" />
+					</button>
+				</div>
+				
+				{#if showFilters}
+					<div class="grid grid-cols-2 gap-4 rounded-lg border border-gray-200 p-4">
+						<div class="space-y-2">
+							<label class="block text-sm font-medium text-gray-700">Health</label>
+							<select
+								bind:value={healthFilter}
+								on:change={() => searchTrees(searchQuery)}
+								class="w-full rounded-md border border-gray-300 p-2"
+							>
+								<option value="all">All Health</option>
+								<option value="poor">Poor</option>
+								<option value="fair">Fair</option>
+								<option value="good">Good</option>
+								<option value="excellent">Excellent</option>
+							</select>
+						</div>
+						
+						<div class="space-y-2">
+							<label class="block text-sm font-medium text-gray-700">Planted</label>
+							<select
+								bind:value={dateFilter}
+								on:change={() => searchTrees(searchQuery)}
+								class="w-full rounded-md border border-gray-300 p-2"
+							>
+								<option value="all">All Time</option>
+								<option value="week">Last Week</option>
+								<option value="month">Last Month</option>
+								<option value="year">Last Year</option>
+							</select>
+						</div>
+						
+						<div class="space-y-2">
+							<label class="block text-sm font-medium text-gray-700">Height</label>
+							<select
+								bind:value={heightFilter}
+								on:change={() => searchTrees(searchQuery)}
+								class="w-full rounded-md border border-gray-300 p-2"
+							>
+								<option value="all">All Heights</option>
+								<option value="short">Short (&lt; 10m)</option>
+								<option value="medium">Medium (10-20m)</option>
+								<option value="tall">Tall (&gt; 20m)</option>
+							</select>
+						</div>
+					</div>
+				{/if}
+			</div>
+		</div>
 		<main class="flex flex-col">
 			<div class="flex flex-col">
-				{#each trees as tree, index}
+				{#each filteredTrees as tree, index}
 					<tree id="tree__{index}" class="relative h-screen snap-start bg-green-50">
 						<img
 							class="h-full w-full object-cover"
@@ -55,13 +150,11 @@
 								<h1 class="mb-1 text-3xl font-bold">{tree.name}</h1>
 								<p>{tree.description}</p>
 								<div>
-									<!-- <p>Location: {tree.lat} {tree.lng}</p> -->
 									<div
 										class="location-data mb-2 text-sm font-light"
 										use:inview
 										on:inview_enter={(isVisible) => {
 											if (isVisible && !tree.location_readable) {
-												// Do something when the div is visible
 												fetch(
 													`https://geocode.maps.co/reverse?format=jsonv2&lat=${tree.lat}&lon=${tree.lng}&api_key=67383f9b5a5d8533348772gbf5de3c7`,
 													{ signal: controller.signal }
@@ -78,17 +171,13 @@
 															console.error('Fetch error:', err);
 														}
 													});
-												// console.log('This div is currently in view');
 											}
 										}}
 										on:inview_leave={(event) => {
-											// console.log(index);
-											// Check one more time to see if the element is still in view
 											if (
 												document.getElementById(`tree__${index}`)?.getBoundingClientRect().top <
 												window.innerHeight
 											) {
-												// console.log('Still in view');
 												return;
 											}
 											if (
@@ -97,15 +186,13 @@
 											) {
 												return;
 											}
-											// Do something when the div is not visible
 											controller.abort();
-											// Create a new controller
-											controller = new AbortController(); // Weird lol
+											controller = new AbortController();
 											console.log(event, 'This div is not in view');
 										}}
 										bind:this={locationElement}
 									>
-										{#if tree}
+										{#if tree.location_readable}
 											{tree.location_readable}
 										{:else}
 											Location unavailable.
@@ -117,7 +204,7 @@
 								>
 									<!-- Display the health as dots -->
 									<div class="dots flex items-center justify-start space-x-2">
-										{#each Array(Math.round(parseInt(tree.health.replace(/[^0-9]/g, '')) / 20)) as _, i}
+										{#each Array(Math.max(0, Math.round(parseInt(tree.health?.replace(/[^0-9]/g, '') || '0') / 20))) as _, i}
 											<span
 												class="dot h-4 w-4 rounded-full"
 												style="background-color: {`hsl(${i * 30}, 70%, 50%)`}"
@@ -127,8 +214,7 @@
 									<p class="w-full pr-2 text-right font-semibold">
 										{#snippet healthStatus()}
 											{@const healthScore =
-												Math.round(parseInt(tree.health.replace(/[^0-9]/g, '')) / 20) * 30}
-											<!-- {healthScore} -->
+												Math.round(parseInt(tree.health?.replace(/[^0-9]/g, '') || '0') / 20) * 30}
 											{#if healthScore < 90}
 												Poor
 											{:else if healthScore <= 90}
@@ -153,7 +239,7 @@
 											<Dialog.Title>Tree details</Dialog.Title>
 										</Dialog.Header>
 										<div class="text-md">
-											<p>Height: <b>{metersToFeet(JSON.parse(tree.height ?? '0'))}</b></p>
+											<p>Height: <b>{metersToFeet(parseFloat(tree.height))}</b></p>
 											<p>Age: <b>{tree.age}</b></p>
 										</div>
 									</Dialog.Content>
