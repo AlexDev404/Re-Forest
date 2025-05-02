@@ -3,6 +3,10 @@ export interface Tree {
 	health: string;
 	plantedBy: string;
 	plantedOn: string;
-    lat?: number;
-    lng?: number;
+	lat: number;
+	lng: number;
+	image?: string;
+	description?: string;
+	height?: string;
+	age: string;
 }
