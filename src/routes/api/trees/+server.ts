@@ -24,8 +24,14 @@ export async function GET(event: RequestEvent) {
 
         // Apply health filter
         if (healthFilter !== 'all') {
-            const healthValue = healthFilter.toUpperCase() as TreeHealth;
-            if (['BAD', 'FAIR', 'GOOD', 'EXCELLENT'].includes(healthValue)) {
+            const healthMap = {
+                'poor': 'BAD',
+                'fair': 'FAIR',
+                'good': 'GOOD',
+                'excellent': 'EXCELLENT'
+            };
+            const healthValue = healthMap[healthFilter as keyof typeof healthMap];
+            if (healthValue) {
                 conditions.push(eq(Trees.Health, healthValue));
             }
         }
@@ -69,7 +75,13 @@ export async function GET(event: RequestEvent) {
         
         // Transform database trees to match UI format
         const trees = dbTrees.map(tree => {
-            const health = tree.Health || 'EXCELLENT';
+            const healthMap = {
+                'BAD': 'poor',
+                'FAIR': 'fair',
+                'GOOD': 'good',
+                'EXCELLENT': 'excellent'
+            };
+            const health = healthMap[tree.Health || 'EXCELLENT'] || 'excellent';
             const height = tree.Height?.toString() || '0';
             return {
                 name: tree.TreeName,
@@ -82,7 +94,7 @@ export async function GET(event: RequestEvent) {
                 plantedOn: tree.PlantedOn,
                 image: tree.Image || 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2613&q=80',
                 age: tree.Age?.toString() || 'Unknown',
-                description: `A ${health.toLowerCase()} tree that stands ${height} meters tall.`
+                description: `A ${health} tree that stands ${height} meters tall.`
             };
         });
 
