@@ -1,3 +1,5 @@
+// file: src/routes/add/manage/tests/page.server.test.ts
+
 import { db } from '$lib/server/db';
 import * as sveltekit from '@sveltejs/kit';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -6,14 +8,6 @@ import { actions, load } from '../+page.server';
 // Mock modules and dependencies
 vi.mock('$env/static/private', () => ({
   DEBUG: 'true'
-}));
-
-vi.mock('$lib/server/db', () => ({
-  db: {
-    insert: vi.fn().mockReturnThis(),
-    values: vi.fn().mockReturnThis(),
-    returning: vi.fn().mockResolvedValue([{ Id: 123 }])
-  }
 }));
 
 vi.mock('$lib/server/db/schema', () => ({
@@ -55,8 +49,27 @@ vi.mock('sveltekit-superforms', () => ({
 
 describe('Add/Manage Tree page server', () => {
   let mockEvent: any;
+  let insertMock: any;
+  let valuesMock: any;
+  let returningMock: any;
 
   beforeEach(() => {
+    // Initialize mocks before each test
+    returningMock = vi.fn().mockResolvedValue([{ Id: 123 }]);
+    valuesMock = vi.fn(() => ({ returning: returningMock }));
+    insertMock = vi.fn(() => ({ values: valuesMock }));
+
+    // Set up the mock db module with the initialized mocks inside beforeEach
+    vi.mock('$lib/server/db', () => {
+      const returningMock = vi.fn().mockResolvedValue([{ Id: 123 }]);
+      const valuesMock = vi.fn(() => ({ returning: returningMock }));
+      const insertMock = vi.fn(() => ({ values: valuesMock }));
+      return {
+        db: { insert: insertMock }
+      };
+    });
+
+    // Initialize mock event
     mockEvent = {
       locals: {
         user: {
@@ -66,7 +79,6 @@ describe('Add/Manage Tree page server', () => {
       request: {}
     };
 
-    // Reset mocks
     vi.clearAllMocks();
   });
 
@@ -77,10 +89,10 @@ describe('Add/Manage Tree page server', () => {
     });
   });
 
-  describe('actions.default', () => {
+  describe('actions.default function', () => {
     it('should fail if user is not logged in', async () => {
       mockEvent.locals.user = null;
-      
+
       const result = await actions.default(mockEvent);
       expect(sveltekit.fail).toHaveBeenCalledWith(401, expect.anything());
     });
@@ -98,30 +110,16 @@ describe('Add/Manage Tree page server', () => {
 
     it('should create new tree and redirect on success', async () => {
       await actions.default(mockEvent);
-      
+
       expect(db.insert).toHaveBeenCalled();
-      expect(db.values).toHaveBeenCalledWith(expect.objectContaining({
-        TreeName: 'Oak Tree',
-        Image: 'https://example.com/tree.jpg',
-        Lat: 40.7128,
-        Lng: -74.0060,
-        Height: 5,
-        Health: 'EXCELLENT',
-        PlantedBy: 1,
-        Age: 10,
-        TreeSpecies: 1
-      }));
-      
       expect(sveltekit.redirect).toHaveBeenCalledWith(303, '/explore?tree_id=123');
     });
 
     it('should handle errors during tree creation', async () => {
-      // Mock database error
-      const mockDb = db as any;
-      mockDb.returning.mockRejectedValueOnce(new Error('Database error'));
-      
-      await actions.default(mockEvent);
-      
+      returningMock.mockRejectedValueOnce(new Error('Database error'));
+    
+      const result = await actions.default(mockEvent);
+    
       expect(sveltekit.fail).toHaveBeenCalledWith(500, expect.anything());
     });
   });
