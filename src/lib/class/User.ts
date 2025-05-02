@@ -87,6 +87,31 @@ export class User {
 	}
 
 	/**
+	 * Find a user by ID
+	 */
+	static async findById(id: number, sensitive: boolean = false): Promise<User | Error> {
+		const createdUser = new User(id, 0, '', '', '', '');
+		await createdUser.initializeUser();
+		if (!sensitive) {
+			createdUser.Password = 'did_you_really_think';
+			createdUser.Email = 'did_you_really_think@this_would_work.com';
+		}
+		if (JSON.parse(DEBUG) && JSON.parse(VERBOSE)) {
+			typical_development_notice();
+			console.log('Created user:', createdUser);
+		}
+		if (createdUser instanceof Error) {
+			throw createdUser;
+		}
+		if (createdUser instanceof User) {
+			if (!isNaN(createdUser.Id)) {
+				return createdUser;
+			}
+		}
+		throw new Error('User not found');
+	}
+
+	/**
 	 * Find a user by email
 	 */
 	static async findByEmail(email: string): Promise<User | Error> {
