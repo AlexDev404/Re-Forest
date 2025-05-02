@@ -38,7 +38,7 @@
 
 	// Photo handling
 	let fileInput: HTMLInputElement;
-	let uploading = false;
+	let uploading = $state(false);
 
 	function handlePhotoClick() {
 		fileInput?.click();
@@ -64,12 +64,12 @@
 					$form.image = imageUrl;
 					treeImageSrc = imageUrl;
 				} else {
-					console.error('Upload failed:', data);
 					// Optionally show error to user
+					console.error('Upload failed:', data);
 				}
 			} catch (error) {
-				console.error('Error uploading file:', error);
 				// Optionally show error to user
+				console.error('Error uploading file:', error);
 			} finally {
 				uploading = false;
 			}
