@@ -1,5 +1,3 @@
-//file: src/lib/server/db/schema.ts
-
 import { date, doublePrecision, foreignKey, integer, pgEnum, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
 export const treehealth = pgEnum("treehealth", ['BAD', 'FAIR', 'GOOD', 'EXCELLENT'])
 export const roleNames = pgEnum("names", ['ADMIN', 'ENVIRONMENTALIST', 'USER'])
