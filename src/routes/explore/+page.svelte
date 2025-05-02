@@ -88,7 +88,7 @@
 													controller
 												);
 												if (!data) return;
-												locations[tree.Id] = data.display_name ?? 'Unknown location';
+												locations[tree.Id] = data.name ?? 'Unknown location';
 											} catch (err) {
 												if (err instanceof Error ? err.name !== 'AbortError' : err?.toString())
 													console.error(err);
