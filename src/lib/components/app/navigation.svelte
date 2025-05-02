@@ -22,7 +22,7 @@
 	}
 </script>
 
-<Menubar.Root>
+<Menubar.Root class="w-full">
 	<Menubar.Menu>
 		<Menubar.Trigger
 			on:click={() => handleNavigation('')}

@@ -33,8 +33,118 @@ body {
 	z-index: 2;
 }
 
+/* Transitions */
+:root::view-transition-old(root) {
+	animation:
+		90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+		300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+}
+
+:root::view-transition-new(root) {
+	animation:
+		210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+		300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
+}
+
+.slide::view-transition-old(slide) {
+	animation-duration: 0.8s;
+	animation-name: slide-out;
+	mix-blend-mode: normal;
+}
+
+.slide::view-transition-new(slide) {
+	animation-duration: 0.8s;
+	animation-name: slide-in;
+	box-shadow: 0 0 40px #0003;
+	mix-blend-mode: normal;
+}
+
+.slide_back::view-transition-old(slide_back) {
+	animation-duration: 0.8s;
+	animation-name: back-slide-out;
+	box-shadow: 0 0 40px #0003;
+	mix-blend-mode: normal;
+}
+
+.slide_forward::view-transition-new(slide_forward) {
+	animation-duration: 0.8s;
+	animation-name: back-slide-in;
+	mix-blend-mode: normal;
+}
+
+/* Keyframes */
+@keyframes slide-out {
+	from {
+		left: 0%;
+	}
+	to {
+		left: -40%;
+	}
+}
+
+@keyframes slide-in {
+	from {
+		left: 100%;
+	}
+	to {
+		left: 0%;
+	}
+}
+
+@keyframes back-slide-out {
+	from {
+		left: 0%;
+		z-index: 10000;
+	}
+	to {
+		left: 100%;
+		z-index: 10000;
+	}
+}
+
+@keyframes back-slide-in {
+	from {
+		left: -40%;
+	}
+	to {
+		left: 0%;
+	}
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+}
+
+@keyframes fade-out {
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes slide-from-right {
+	from {
+		transform: translateX(30px);
+	}
+}
+
+@keyframes slide-to-left {
+	to {
+		transform: translateX(-30px);
+	}
+}
+
+/* No transition for the navigation bar */
+control {
+	display: flex;
+	justify-content: space-between;
+	view-transition-name: invalid-transition; /* We do this by giving it an invalid transition name */
+}
+
 @layer base {
 	:root {
+		view-transition-name: root;
 		--primary: 126 100% 19%;
 		--secondary: 125 71% 93%;
 		--accent: 86 100% 47%;
