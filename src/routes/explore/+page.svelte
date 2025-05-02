@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { PUBLIC_DEBUG, PUBLIC_GEOCODE_API_KEY } from '$env/static/public';
+	import { PUBLIC_DEBUG } from '$env/static/public';
 	import * as Alert from '$lib/components/vendor/ui/alert';
 	import * as Dialog from '$lib/components/vendor/ui/dialog';
+	import { type ReverseGeoJSON } from '$lib/types/GeoJSON';
 	import { typical_development_notice } from '$lib/utility/typicals';
+	import { formatDate, getReverseLoc, metersToFeet } from '$lib/utility/utility';
 	import { BadgePlus } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { inview } from 'svelte-inview';
@@ -22,12 +24,6 @@
 	// Temporary local location cache
 	let locations: Record<number, string> = $state({});
 
-	function metersToFeet(meters: number) {
-		return localStorage.getItem('units') === 'false'
-			? meters.toFixed(2) + ' metres'
-			: (meters * 3.28084).toFixed(2) + ' ft';
-	}
-
 	function getHealthScore(health: string): number {
 		// Parse numeric value from health string
 		// Attempt to extract any number from the health string
@@ -45,20 +41,6 @@
 		if (score < 90) return 'Fair';
 		if (score < 120) return 'Good';
 		return 'Excellent';
-	}
-
-	// Format date to be more readable
-	function formatDate(dateString: string) {
-		try {
-			const date = new Date(dateString);
-			return date.toLocaleDateString(undefined, {
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric'
-			});
-		} catch (e) {
-			return dateString;
-		}
 	}
 
 	onMount(() => {
@@ -100,11 +82,12 @@
 									oninview_enter={async (isVisible) => {
 										if (isVisible && !locations[tree.Id]) {
 											try {
-												const res = await fetch(
-													`https://geocode.maps.co/reverse?format=jsonv2&lat=${tree.Lat}&lon=${tree.Lng}&api_key=${PUBLIC_GEOCODE_API_KEY}`,
-													{ signal: controller.signal }
+												const data: ReverseGeoJSON | null = await getReverseLoc(
+													tree.Lat,
+													tree.Lng,
+													controller
 												);
-												const data = await res.json();
+												if (!data) return;
 												locations[tree.Id] = data.display_name ?? 'Unknown location';
 											} catch (err) {
 												if (err instanceof Error ? err.name !== 'AbortError' : err?.toString())
@@ -170,7 +153,7 @@
 													>
 												</p>
 											{/if}
-											<p>Planted on: <b>{formatDate(tree.PlantedOn)}</b></p>
+											<p>Planted on: <b>{formatDate(tree.PlantedOn ?? '')}</b></p>
 										</div>
 									</Dialog.Content>
 								</Dialog.Root>
@@ -185,7 +168,7 @@
 											>{tree.PlantedBy !== null &&
 											!('message' in tree.PlantedBy && 'name' in tree.PlantedBy)
 												? `${tree.PlantedBy.FirstName} ${tree.PlantedBy.LastName}`
-												: 'Deleted User'} on {formatDate(tree.PlantedOn)}</Alert.Description
+												: 'Deleted User'} on {formatDate(tree.PlantedOn ?? '')}</Alert.Description
 										>
 									</div>
 								</Alert.Root>
