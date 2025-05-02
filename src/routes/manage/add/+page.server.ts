@@ -18,7 +18,9 @@ const treeSchema = z.object({
 });
 
 export const load: PageServerLoad = async (event) => {
-	return await superValidate(event, zod(treeSchema));
+	return {
+		form: await superValidate(event, zod(treeSchema))
+	}
 };
 
 export const actions: Actions = {

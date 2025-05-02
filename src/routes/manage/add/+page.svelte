@@ -8,10 +8,10 @@
 	import { getReverseLoc } from '$lib/utility/utility';
 	import { onMount } from 'svelte';
 	import { superForm } from 'sveltekit-superforms';
-	import type { PageData } from './$types';
+	import type { PageProps } from './$types';
 
-	const data: PageData = $props();
-	const { form, errors, constraints, enhance } = superForm(data.form?.super_form ?? data.data);
+	const { data }: PageProps = $props();
+	const { form, errors, constraints, enhance } = superForm(data.form);
 	let treeImageSrc: string | null = $state(null);
 
 	// Location handling
@@ -61,7 +61,7 @@
 				const data = await response.json();
 				if (response.ok) {
 					const imageUrl = data.url;
-					$form.image = imageUrl;
+					$form.tree_image = imageUrl;
 					treeImageSrc = imageUrl;
 				} else {
 					// Optionally show error to user

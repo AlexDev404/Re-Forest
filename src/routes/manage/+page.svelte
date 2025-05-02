@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { Button } from '$lib/components/vendor/ui/button';
 	import IconCard from '$lib/components/vendor/ui/icon-card/icon-card.svelte';
-	import type { PageData } from './$types';
+	import type { PageProps } from './$types';
 
-	export let data: PageData;
+	let { data }: PageProps = $props();
 
 	console.log(data);
 
