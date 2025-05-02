@@ -17,8 +17,8 @@
 	});
 
 	function handleNavigation(page: string) {
-		activeButton = page;
-		goto(`/${page}`);
+			activeButton = page;
+			goto(`/${page}`);
 	}
 </script>
 
