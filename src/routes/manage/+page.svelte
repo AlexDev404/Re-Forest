@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/vendor/ui/button';
 	import IconCard from '$lib/components/vendor/ui/icon-card/icon-card.svelte';
+	import { formatDate } from '$lib/utility/utility';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -34,10 +35,21 @@
 					avatarSrc={tree.Image ?? '/static/tree-placeholder.svg'}
 					avatarFallback="🌳"
 					title={tree.TreeName}
-					description={`Planted by: ${tree.PlantedBy ?? 'Unknown'}`}
+					description={`Planted by: ${
+						tree.PlantedBy !== null && !('message' in tree.PlantedBy && 'name' in tree.PlantedBy)
+							? `${tree.PlantedBy.FirstName} ${tree.PlantedBy.LastName}`
+							: 'Deleted User'
+					} on ${formatDate(tree.PlantedOn ?? '')}`}
 				>
 					<svelte:fragment slot="content">
-						<form method="POST" on:submit|preventDefault={confirmDelete} action="?/delete">
+						<form
+							method="POST"
+							onsubmit={(event) => {
+								event.preventDefault();
+								confirmDelete(event);
+							}}
+							action="?/delete"
+						>
 							<input type="hidden" name="treeId" value={tree.Id} />
 							<Button variant="destructive" name="delete" type="submit">Delete</Button>
 						</form>

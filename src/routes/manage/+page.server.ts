@@ -1,11 +1,12 @@
 // file: src/routes/manage/+page.server.ts
-import type { PageServerLoad } from './$types';
 import { Tree } from '$lib/class/Tree';
+import { User } from '$lib/class/User';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
 	const trees = await Tree.getAll();
 
-	const treeData = trees.map((tree) => ({
+	const treePromises = trees.map(async (tree) => ({
 		Id: tree.Id,
 		TreeName: tree.TreeName,
 		TreeSpecies: tree.TreeSpecies,
@@ -15,11 +16,13 @@ export const load: PageServerLoad = async () => {
 		Image: tree.Image,
 		Lat: tree.Lat,
 		Lng: tree.Lng,
-		PlantedBy: tree.PlantedBy,
-		PlantedOn: tree.PlantedOn.toISOString(),
-		CreatedAt: tree.CreatedAt.toISOString(),
-		UpdatedAt: tree.UpdatedAt.toISOString()
+		PlantedBy: tree.PlantedBy ? { ...(await User.findById(tree.PlantedBy)) } : null,
+		PlantedOn: tree.PlantedOn !== null ? tree.PlantedOn.toISOString() : null,
+		CreatedAt: tree.CreatedAt !== null ? tree.CreatedAt.toISOString() : null,
+		UpdatedAt: tree.UpdatedAt !== null ? tree.UpdatedAt.toISOString() : null
 	}));
+
+	const treeData = await Promise.all(treePromises);
 	return { trees: treeData };
 };
 
