@@ -2,11 +2,11 @@
 	import * as Alert from '$lib/components/vendor/ui/alert';
 	import * as Dialog from '$lib/components/vendor/ui/dialog';
 	import { BadgePlus } from 'lucide-svelte';
-	import { inview } from 'svelte-inview';
 	import { onMount } from 'svelte';
+	import { inview } from 'svelte-inview';
 	import type { PageData } from './$types';
 
-	export let data: PageData;
+	const data: PageData = $props();
 	let trees = data.trees;
 
 	let controller = new AbortController();
