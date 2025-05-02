@@ -114,7 +114,7 @@ export class Tree {
                     this.CreatedAt = treeData.CreatedAt ?? new Date();
                     this.UpdatedAt = treeData.UpdatedAt ?? new Date();
                 } else {
-                    return new Error('Tree not found');
+                    throw new Error('Tree not found');
                 }
             })
             .catch((error) => {
