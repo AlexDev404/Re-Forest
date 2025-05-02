@@ -59,6 +59,36 @@
 			signal_ready = true;
 		}, 3000);
 	});
+
+	function getHealthDots(health: string): number {
+		switch (health) {
+			case 'poor':
+				return 1;
+			case 'fair':
+				return 2;
+			case 'good':
+				return 3;
+			case 'excellent':
+				return 4;
+			default:
+				return 1;
+		}
+	}
+
+	function getHealthColor(health: string): string {
+		switch (health) {
+			case 'poor':
+				return 'hsl(0, 70%, 50%)';  // Red
+			case 'fair':
+				return 'hsl(30, 70%, 50%)';  // Orange
+			case 'good':
+				return 'hsl(120, 70%, 50%)';  // Green
+			case 'excellent':
+				return 'hsl(150, 70%, 50%)';  // Emerald
+			default:
+				return 'hsl(0, 70%, 50%)';
+		}
+	}
 </script>
 
 <svelte:head>
@@ -76,25 +106,25 @@
 						bind:value={searchQuery}
 						on:input={() => searchTrees(searchQuery)}
 						placeholder="Search trees by name, planter, or health..."
-						class="w-full rounded-lg border border-gray-300 px-4 py-2 pl-10 focus:border-green-500 focus:outline-none"
+						class="w-full rounded-lg border border-green-200 px-4 py-2 pl-10 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
 					/>
-					<Search class="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+					<Search class="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-green-500" />
 					<button
 						on:click={() => showFilters = !showFilters}
-						class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+						class="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 hover:text-green-600"
 					>
 						<Filter class="h-5 w-5" />
 					</button>
 				</div>
 				
 				{#if showFilters}
-					<div class="grid grid-cols-2 gap-4 rounded-lg border border-gray-200 p-4">
+					<div class="grid grid-cols-2 gap-4 rounded-lg border border-green-100 bg-green-50/50 p-4 shadow-sm">
 						<div class="space-y-2">
-							<label class="block text-sm font-medium text-gray-700">Health</label>
+							<label class="block text-sm font-medium text-green-800">Health</label>
 							<select
 								bind:value={healthFilter}
 								on:change={() => searchTrees(searchQuery)}
-								class="w-full rounded-md border border-gray-300 p-2"
+								class="w-full rounded-md border border-green-200 bg-white p-2 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
 							>
 								<option value="all">All Health</option>
 								<option value="poor">Poor</option>
@@ -105,11 +135,11 @@
 						</div>
 						
 						<div class="space-y-2">
-							<label class="block text-sm font-medium text-gray-700">Planted</label>
+							<label class="block text-sm font-medium text-green-800">Planted</label>
 							<select
 								bind:value={dateFilter}
 								on:change={() => searchTrees(searchQuery)}
-								class="w-full rounded-md border border-gray-300 p-2"
+								class="w-full rounded-md border border-green-200 bg-white p-2 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
 							>
 								<option value="all">All Time</option>
 								<option value="week">Last Week</option>
@@ -119,11 +149,11 @@
 						</div>
 						
 						<div class="space-y-2">
-							<label class="block text-sm font-medium text-gray-700">Height</label>
+							<label class="block text-sm font-medium text-green-800">Height</label>
 							<select
 								bind:value={heightFilter}
 								on:change={() => searchTrees(searchQuery)}
-								class="w-full rounded-md border border-gray-300 p-2"
+								class="w-full rounded-md border border-green-200 bg-white p-2 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
 							>
 								<option value="all">All Heights</option>
 								<option value="short">Short (&lt; 10m)</option>
@@ -137,126 +167,139 @@
 		</div>
 		<main class="flex flex-col">
 			<div class="flex flex-col">
-				{#each filteredTrees as tree, index}
-					<tree id="tree__{index}" class="relative h-screen snap-start bg-green-50">
-						<img
-							class="h-full w-full object-cover"
-							loading="lazy"
-							src={tree.image}
-							alt={tree.name}
-						/>
-						<information-container>
-							<div class="absolute left-0 right-0 top-0 bg-black bg-opacity-50 p-4 text-white">
-								<h1 class="mb-1 text-3xl font-bold">{tree.name}</h1>
-								<p>{tree.description}</p>
-								<div>
-									<div
-										class="location-data mb-2 text-sm font-light"
-										use:inview
-										on:inview_enter={(isVisible) => {
-											if (isVisible && !tree.location_readable) {
-												fetch(
-													`https://geocode.maps.co/reverse?format=jsonv2&lat=${tree.lat}&lon=${tree.lng}&api_key=67383f9b5a5d8533348772gbf5de3c7`,
-													{ signal: controller.signal }
-												)
-													.then((r) => r.json())
-													.then((d) => {
-														data = d;
-														tree.location_readable = data.display_name;
-													})
-													.catch((err) => {
-														if (err.name === 'AbortError') {
-															console.log('Fetch aborted');
-														} else {
-															console.error('Fetch error:', err);
-														}
-													});
-											}
-										}}
-										on:inview_leave={(event) => {
-											if (
-												document.getElementById(`tree__${index}`)?.getBoundingClientRect().top <
-												window.innerHeight
-											) {
-												return;
-											}
-											if (
-												(event.scrollDirection =
-													('down' && index === 1) || index === 0 || !signal_ready || !index)
-											) {
-												return;
-											}
-											controller.abort();
-											controller = new AbortController();
-											console.log(event, 'This div is not in view');
-										}}
-										bind:this={locationElement}
-									>
-										{#if tree.location_readable}
-											{tree.location_readable}
-										{:else}
-											Location unavailable.
-										{/if}
-									</div>
-								</div>
-								<div
-									class="tree_health my-4 flex items-center justify-start space-x-3 rounded-md border border-background px-2 py-2"
+				{#if filteredTrees.length === 0}
+					<div class="flex h-screen flex-col items-center justify-center bg-green-50 p-4 text-center">
+						<div class="rounded-lg bg-white p-8 shadow-lg">
+							<h2 class="mb-4 text-2xl font-semibold text-gray-800">No trees found</h2>
+							<p class="text-gray-600">
+								{#if healthFilter !== 'all' || dateFilter !== 'all' || heightFilter !== 'all' || searchQuery}
+									No trees match your current filters. Try adjusting your search criteria or filters.
+								{:else}
+									There are no trees in the database yet.
+								{/if}
+							</p>
+							{#if healthFilter !== 'all' || dateFilter !== 'all' || heightFilter !== 'all' || searchQuery}
+								<button
+									on:click={() => {
+										healthFilter = 'all';
+										dateFilter = 'all';
+										heightFilter = 'all';
+										searchQuery = '';
+										fetchTrees();
+									}}
+									class="mt-4 rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700"
 								>
-									<!-- Display the health as dots -->
-									<div class="dots flex items-center justify-start space-x-2">
-										{#each Array(Math.max(0, Math.round(parseInt(tree.health?.replace(/[^0-9]/g, '') || '0') / 20))) as _, i}
-											<span
-												class="dot h-4 w-4 rounded-full"
-												style="background-color: {`hsl(${i * 30}, 70%, 50%)`}"
-											/>
-										{/each}
-									</div>
-									<p class="w-full pr-2 text-right font-semibold">
-										{#snippet healthStatus()}
-											{@const healthScore =
-												Math.round(parseInt(tree.health?.replace(/[^0-9]/g, '') || '0') / 20) * 30}
-											{#if healthScore < 90}
-												Poor
-											{:else if healthScore <= 90}
-												Fair
-											{:else if healthScore <= 120}
-												Good
-											{:else if healthScore > 120}
-												Excellent
+									Clear all filters
+								</button>
+							{/if}
+						</div>
+					</div>
+				{:else}
+					{#each filteredTrees as tree, index}
+						<tree id="tree__{index}" class="relative h-screen snap-start bg-green-50">
+							<img
+								class="h-full w-full object-cover"
+								loading="lazy"
+								src={tree.image}
+								alt={tree.name}
+							/>
+							<information-container>
+								<div class="absolute left-0 right-0 top-0 bg-black bg-opacity-50 p-4 text-white">
+									<h1 class="mb-1 text-3xl font-bold">{tree.name}</h1>
+									<p>{tree.description}</p>
+									<div>
+										<div
+											class="location-data mb-2 text-sm font-light"
+											use:inview
+											on:inview_enter={(isVisible) => {
+												if (isVisible && !tree.location_readable) {
+													fetch(
+														`https://geocode.maps.co/reverse?format=jsonv2&lat=${tree.lat}&lon=${tree.lng}&api_key=67383f9b5a5d8533348772gbf5de3c7`,
+														{ signal: controller.signal }
+													)
+														.then((r) => r.json())
+														.then((d) => {
+															data = d;
+															tree.location_readable = data.display_name;
+														})
+														.catch((err) => {
+															if (err.name === 'AbortError') {
+																console.log('Fetch aborted');
+															} else {
+																console.error('Fetch error:', err);
+															}
+														});
+												}
+											}}
+											on:inview_leave={(event) => {
+												if (
+													document.getElementById(`tree__${index}`)?.getBoundingClientRect().top <
+													window.innerHeight
+												) {
+													return;
+												}
+												if (
+													(event.scrollDirection =
+														('down' && index === 1) || index === 0 || !signal_ready || !index)
+												) {
+													return;
+												}
+												controller.abort();
+												controller = new AbortController();
+												console.log(event, 'This div is not in view');
+											}}
+											bind:this={locationElement}
+										>
+											{#if tree.location_readable}
+												{tree.location_readable}
 											{:else}
-												{healthScore}
+												Location unavailable.
 											{/if}
-										{/snippet}
-
-										{@render healthStatus()}
-									</p>
-								</div>
-								<Dialog.Root>
-									<Dialog.Trigger class="font-light underline">More details</Dialog.Trigger>
-
-									<Dialog.Content class="max-w-[250px] rounded-lg" id="add-tree">
-										<Dialog.Header>
-											<Dialog.Title>Tree details</Dialog.Title>
-										</Dialog.Header>
-										<div class="text-md">
-											<p>Height: <b>{metersToFeet(parseFloat(tree.height))}</b></p>
-											<p>Age: <b>{tree.age}</b></p>
 										</div>
-									</Dialog.Content>
-								</Dialog.Root>
-							</div>
-							<div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-25 p-4 pb-20">
-								<Alert.Root>
-									<BadgePlus />
-									<div class="mx-2 mt-1">
-										<Alert.Title>Planted by</Alert.Title>
-										<Alert.Description>{tree.plantedBy} on {tree.plantedOn}</Alert.Description>
 									</div>
-								</Alert.Root>
-							</div>
-						</information-container>
-					</tree>
-				{/each}
+									<div
+										class="tree_health my-4 flex items-center justify-start space-x-3 rounded-md border border-background px-2 py-2"
+									>
+										<!-- Display the health as dots -->
+										<div class="dots flex items-center justify-start space-x-2">
+											{#each Array(getHealthDots(tree.health)) as _, i}
+												<span
+													class="dot h-4 w-4 rounded-full"
+													style="background-color: {getHealthColor(tree.health)}"
+												/>
+											{/each}
+										</div>
+										<p class="w-full pr-2 text-right font-semibold capitalize">
+											{tree.health}
+										</p>
+									</div>
+									<Dialog.Root>
+										<Dialog.Trigger class="font-light underline">More details</Dialog.Trigger>
+
+										<Dialog.Content class="max-w-[250px] rounded-lg" id="add-tree">
+											<Dialog.Header>
+												<Dialog.Title>Tree details</Dialog.Title>
+											</Dialog.Header>
+											<div class="text-md">
+												<p>Height: <b>{metersToFeet(parseFloat(tree.height))}</b></p>
+												<p>Age: <b>{tree.age}</b></p>
+											</div>
+										</Dialog.Content>
+									</Dialog.Root>
+								</div>
+								<div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-25 p-4 pb-20">
+									<Alert.Root>
+										<BadgePlus />
+										<div class="mx-2 mt-1">
+											<Alert.Title>Planted by</Alert.Title>
+											<Alert.Description>{tree.plantedBy} on {tree.plantedOn}</Alert.Description>
+										</div>
+									</Alert.Root>
+								</div>
+							</information-container>
+						</tree>
+					{/each}
+				{/if}
 			</div>
 		</main>
 	</div>
