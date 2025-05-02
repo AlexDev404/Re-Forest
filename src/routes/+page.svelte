@@ -70,7 +70,9 @@
 	// List of trees with original data, and we'll generate coordinates onMount
 	const trees: Tree[] = treesData;
 </script>
-
+<svelte:head>
+    <title>Re:Forest :: Home</title>
+</svelte:head>
 <page>
 	<Map
 		class="mapboxgl-map"
