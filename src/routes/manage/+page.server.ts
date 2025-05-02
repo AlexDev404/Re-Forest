@@ -4,8 +4,8 @@ import { Tree } from '$lib/class/Tree';
 
 export const load: PageServerLoad = async () => {
 	const trees = await Tree.getAll();
-  
-	const treeData = trees.map(tree => ({
+
+	const treeData = trees.map((tree) => ({
 		Id: tree.Id,
 		TreeName: tree.TreeName,
 		TreeSpecies: tree.TreeSpecies,

@@ -11,23 +11,23 @@ vi.mock('$env/static/private', () => ({
 }));
 
 vi.mock('$lib/class/Tree', () => ({
-  Tree: {
-    create: vi.fn().mockResolvedValue({
-      Id: 123,
-      TreeName: 'Oak Tree',
-      TreeSpecies: 'Oak',
-      Height: 5,
-      Health: 'Good',
-      Age: 10,
-      Image: 'https://example.com/tree.jpg',
-      Lat: 40.7128,
-      Lng: -74.006,
-      PlantedBy: 1,
-      PlantedOn: new Date('2023-01-15'),
-      CreatedAt: new Date('2023-01-15T12:30:45Z'),
-      UpdatedAt: new Date('2023-01-15T12:30:45Z')
-    })
-  }
+	Tree: {
+		create: vi.fn().mockResolvedValue({
+			Id: 123,
+			TreeName: 'Oak Tree',
+			TreeSpecies: 'Oak',
+			Height: 5,
+			Health: 'Good',
+			Age: 10,
+			Image: 'https://example.com/tree.jpg',
+			Lat: 40.7128,
+			Lng: -74.006,
+			PlantedBy: 1,
+			PlantedOn: new Date('2023-01-15'),
+			CreatedAt: new Date('2023-01-15T12:30:45Z'),
+			UpdatedAt: new Date('2023-01-15T12:30:45Z')
+		})
+	}
 }));
 
 vi.mock('$lib/utility/typicals', () => ({
