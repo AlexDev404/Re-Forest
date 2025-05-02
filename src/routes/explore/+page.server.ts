@@ -1,6 +1,7 @@
 // file: src/routes/manage/+page.server.ts
-import type { PageServerLoad } from './$types';
+import { DEBUG, VERBOSE } from '$env/static/private';
 import { Tree } from '$lib/class/Tree';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
     const trees = await Tree.getAll();
@@ -20,5 +21,8 @@ export const load: PageServerLoad = async () => {
         CreatedAt: tree.CreatedAt.toISOString(),
         UpdatedAt: tree.UpdatedAt.toISOString()
     }));
+    if (JSON.parse(DEBUG) && JSON.parse(VERBOSE)){
+        console.log('Tree data:', treeData);
+    }
     return { trees: treeData };
 };
