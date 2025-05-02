@@ -181,7 +181,12 @@
 									<BadgePlus />
 									<div class="mx-2 mt-1">
 										<Alert.Title>Planted by</Alert.Title>
-										<Alert.Description>{tree.PlantedBy} on {tree.PlantedOn}</Alert.Description>
+										<Alert.Description
+											>{tree.PlantedBy !== null &&
+											!('message' in tree.PlantedBy && 'name' in tree.PlantedBy)
+												? `${tree.PlantedBy.FirstName} ${tree.PlantedBy.LastName}`
+												: 'Deleted User'} on {formatDate(tree.PlantedOn)}</Alert.Description
+										>
 									</div>
 								</Alert.Root>
 							</div>

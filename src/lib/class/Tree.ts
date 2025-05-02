@@ -4,37 +4,37 @@ import { DEBUG, VERBOSE } from '$env/static/private';
 import { db } from '$lib/server/db/';
 import { Trees as TreeSchema } from '$lib/server/db/schema';
 import { typical_development_notice } from '$lib/utility/typicals';
-import { eq } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 
 export class Tree {
 	Id: number;
 	TreeName: string;
 	TreeSpecies: number;
 	Height: number;
-	Health: string;
+	Health: 'POOR' | 'FAIR' | 'GOOD' | 'EXCELLENT';
 	Age: number;
 	Image: string | null;
 	Lat: number;
 	Lng: number;
-	PlantedBy: number | null;
-	PlantedOn: Date;
-	CreatedAt: Date;
-	UpdatedAt: Date;
+	PlantedBy: number;
+	PlantedOn: Date | null;
+	CreatedAt: Date | null;
+	UpdatedAt: Date | null;
 
 	constructor(
 		id: number,
 		treeName: string,
 		treeSpecies: number,
 		height: number,
-		health: string,
+		health: 'POOR' | 'FAIR' | 'GOOD' | 'EXCELLENT',
 		age: number,
 		image: string | null,
 		lat: number,
 		lng: number,
-		plantedBy: number | null,
-		plantedOn: Date,
-		createdAt: Date,
-		updatedAt: Date
+		plantedBy: number,
+		plantedOn: Date | null,
+		createdAt: Date | null,
+		updatedAt: Date | null
 	) {
 		this.Id = id;
 		this.TreeName = treeName;
@@ -58,12 +58,12 @@ export class Tree {
 		treeName: string,
 		treeSpecies: number,
 		height: number,
-		health: string,
+		health: 'POOR' | 'FAIR' | 'GOOD' | 'EXCELLENT',
 		age: number,
 		image: string | null,
 		lat: number,
 		lng: number,
-		plantedBy: number | null
+		plantedBy: number
 	): Promise<Tree> {
 		const tree = new Tree(
 			0,
@@ -101,16 +101,19 @@ export class Tree {
 			.then((result) => {
 				if (result.length > 0) {
 					const treeData = result[0];
+					if (treeData.PlantedBy === null) {
+						throw new Error('PlantedBy is null');
+					}
 					this.Id = treeData.Id;
-					this.TreeName = treeData.TreeName ?? '';
+					this.TreeName = treeData.TreeName ?? 'Untitled';
 					this.TreeSpecies = treeData.TreeSpecies ?? 0;
 					this.Height = treeData.Height ?? 0;
-					this.Health = treeData.Health ?? '';
+					this.Health = treeData.Health ?? 'EXCELLENT';
 					this.Age = treeData.Age ?? 0;
 					this.Image = treeData.Image ?? null;
 					this.Lat = treeData.Lat ?? 0;
 					this.Lng = treeData.Lng ?? 0;
-					this.PlantedBy = treeData.PlantedBy ?? null;
+					this.PlantedBy = treeData.PlantedBy;
 					this.PlantedOn = treeData.PlantedOn ? new Date(treeData.PlantedOn) : new Date();
 					this.CreatedAt = treeData.CreatedAt ?? new Date();
 					this.UpdatedAt = treeData.UpdatedAt ?? new Date();
@@ -131,13 +134,13 @@ export class Tree {
 			TreeName: this.TreeName,
 			TreeSpecies: this.TreeSpecies,
 			Height: this.Height,
-			Health: this.Health as 'BAD' | 'FAIR' | 'GOOD' | 'EXCELLENT',
+			Health: this.Health,
 			Age: this.Age,
 			Image: this.Image,
 			Lat: this.Lat,
 			Lng: this.Lng,
 			PlantedBy: this.PlantedBy,
-			PlantedOn: this.PlantedOn.toISOString(),
+			PlantedOn: this.PlantedOn !== null ? this.PlantedOn.toISOString() : new Date().toISOString(),
 			CreatedAt: new Date(),
 			UpdatedAt: new Date()
 		};
@@ -187,7 +190,7 @@ export class Tree {
 	}
 
 	static async getAll(): Promise<Tree[]> {
-		const result = await db.select().from(TreeSchema);
+		const result = await db.select().from(TreeSchema).orderBy(desc(TreeSchema.CreatedAt));
 		return result.map(
 			(treeData) =>
 				new Tree(
@@ -201,9 +204,9 @@ export class Tree {
 					treeData.Lat ?? 0,
 					treeData.Lng ?? 0,
 					treeData.PlantedBy ?? null,
-					new Date(treeData.PlantedOn ?? Date.now()),
-					new Date(treeData.CreatedAt ?? Date.now()),
-					new Date(treeData.UpdatedAt ?? Date.now())
+					treeData.PlantedOn !== null ? new Date(treeData.PlantedOn) : null,
+					treeData.CreatedAt !== null ? new Date(treeData.CreatedAt) : null,
+					treeData.UpdatedAt !== null ? new Date(treeData.UpdatedAt) : null
 				)
 		);
 	}
