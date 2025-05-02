@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PUBLIC_DEBUG } from '$env/static/public';
+	import { PUBLIC_DEBUG, PUBLIC_GEOCODE_API_KEY } from '$env/static/public';
 	import * as Alert from '$lib/components/vendor/ui/alert';
 	import * as Dialog from '$lib/components/vendor/ui/dialog';
 	import { typical_development_notice } from '$lib/utility/typicals';
@@ -9,7 +9,7 @@
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
-	if(PUBLIC_DEBUG) {
+	if (PUBLIC_DEBUG) {
 		typical_development_notice();
 		console.log('PageData:', data);
 		console.log(data.trees);
@@ -20,7 +20,7 @@
 	let signal_ready: boolean = false;
 
 	// Temporary local location cache
-	let locations: Record<number, string> = {};
+	let locations: Record<number, string> = $state({});
 
 	function metersToFeet(meters: number) {
 		return localStorage.getItem('units') === 'false'
@@ -29,14 +29,21 @@
 	}
 
 	function getHealthScore(health: string): number {
-		const parsed = parseInt(health.replace(/[^0-9]/g, ''));
+		// Parse numeric value from health string
+		// Attempt to extract any number from the health string
+		let parsed = 0;
+		// Health statuses are now determined by the health score values
+		if (health.toUpperCase().includes('POOR')) parsed = 60;
+		if (health.toUpperCase().includes('FAIR')) parsed = 75;
+		if (health.toUpperCase().includes('GOOD')) parsed = 90;
+		if (health.toUpperCase().includes('EXCELLENT')) parsed = 120;
 		return Number.isFinite(parsed) ? parsed : 0;
 	}
 
 	function getHealthStatus(score: number): string {
 		if (score < 60) return 'Poor';
 		if (score < 90) return 'Fair';
-		if (score <= 120) return 'Good';
+		if (score < 120) return 'Good';
 		return 'Excellent';
 	}
 
@@ -87,8 +94,6 @@
 								class="absolute left-0 right-0 top-0 bg-black bg-opacity-50 p-4 text-white backdrop-blur-sm"
 							>
 								<h1 class="mb-1 text-3xl font-bold">{tree.TreeName}</h1>
-								<p>{tree.Health}</p>
-
 								<div
 									class="location-data mb-2 text-sm font-light"
 									use:inview
@@ -96,7 +101,7 @@
 										if (isVisible && !locations[tree.Id]) {
 											try {
 												const res = await fetch(
-													`https://geocode.maps.co/reverse?format=jsonv2&lat=${tree.Lat}&lon=${tree.Lng}`,
+													`https://geocode.maps.co/reverse?format=jsonv2&lat=${tree.Lat}&lon=${tree.Lng}&api_key=${PUBLIC_GEOCODE_API_KEY}`,
 													{ signal: controller.signal }
 												);
 												const data = await res.json();
@@ -136,7 +141,7 @@
 											></span>
 										{/each}
 									</div>
-									<p class="font-semibold">
+									<p class="w-full pr-2 text-right font-semibold">
 										Health: {getHealthStatus(getHealthScore(tree.Health))}
 									</p>
 								</div>
@@ -157,7 +162,13 @@
 											<p>Age: <b>{tree.Age}</b></p>
 											<p>Health: <b>{tree.Health}</b></p>
 											{#if tree.Lat && tree.Lng}
-												<p>Coordinates: <b>{tree.Lat.toFixed(6)}, {tree.Lng.toFixed(6)}</b></p>
+												<p>
+													Location: <b
+														>{locations[tree.Id]
+															? locations[tree.Id]
+															: '📍 Location unavailable'}</b
+													>
+												</p>
 											{/if}
 											<p>Planted on: <b>{formatDate(tree.PlantedOn)}</b></p>
 										</div>
