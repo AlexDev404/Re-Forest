@@ -18,12 +18,12 @@
 	}
 	
 	let trees = data.trees;
-	let filteredTrees = trees;
-	let searchQuery = '';
-	let showFilters = false;
-	let healthFilter = 'all';
-	let dateFilter = 'all';
-	let heightFilter = 'all';
+	let filteredTrees = $state(trees);
+	let searchQuery = $state('');
+	let showFilters = $state(false);
+	let healthFilter = $state('all');
+	let dateFilter = $state('all');
+	let heightFilter = $state('all');
 
 	let controller = new AbortController();
 	let signal_ready: boolean = false;
