@@ -5,7 +5,7 @@
 	import { type ReverseGeoJSON } from '$lib/types/GeoJSON';
 	import { typical_development_notice } from '$lib/utility/typicals';
 	import { formatDate, getReverseLoc, metersToFeet } from '$lib/utility/utility';
-	import { BadgePlus } from 'lucide-svelte';
+	import { BadgePlus, Filter, Search } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { inview } from 'svelte-inview';
 	import type { PageProps } from './$types';
@@ -16,13 +16,45 @@
 		console.log('PageData:', data);
 		console.log(data.trees);
 	}
+	
 	let trees = data.trees;
+	let filteredTrees = $state(trees);
+	let searchQuery = $state('');
+	let showFilters = $state(false);
+	let healthFilter = $state('all');
+	let dateFilter = $state('all');
+	let heightFilter = $state('all');
 
 	let controller = new AbortController();
 	let signal_ready: boolean = false;
 
 	// Temporary local location cache
 	let locations: Record<number, string> = $state({});
+
+	async function fetchTrees() {
+		try {
+			const params = new URLSearchParams();
+			if (searchQuery) params.append('q', searchQuery);
+			if (healthFilter !== 'all') params.append('health', healthFilter);
+			if (dateFilter !== 'all') params.append('date', dateFilter);
+			if (heightFilter !== 'all') params.append('height', heightFilter);
+
+			const response = await fetch(`/api/trees?${params.toString()}`);
+			if (!response.ok) throw new Error('Failed to fetch trees');
+			
+			const fetchedData = await response.json();
+			trees = fetchedData;
+			filteredTrees = trees;
+		} catch (error) {
+			console.error('Error fetching trees:', error);
+			filteredTrees = [];
+		}
+	}
+
+	function searchTrees(query: string) {
+		searchQuery = query;
+		fetchTrees();
+	}
 
 	function getHealthScore(health: string): number {
 		// Parse numeric value from health string
@@ -43,7 +75,8 @@
 		return 'Excellent';
 	}
 
-	onMount(() => {
+	onMount(async () => {
+		await fetchTrees();
 		setTimeout(() => {
 			signal_ready = true;
 		}, 3000);
@@ -56,126 +89,218 @@
 
 <page>
 	<div class="h-screen snap-y snap-mandatory overflow-y-scroll">
-		<main class="flex flex-col">
-			<div class="flex flex-col">
-				{#if !trees}
-					<div class="flex h-screen items-center justify-center">
-						<p class="text-2xl font-semibold">No trees found</p>
+		<!-- Search Bar and Filters -->
+		<div class="sticky top-0 z-50 w-full bg-white p-4 shadow-md">
+			<div class="mx-auto max-w-md space-y-4">
+				<div class="relative">
+					<input
+						type="text"
+						bind:value={searchQuery}
+						oninput={() => searchTrees(searchQuery)}
+						placeholder="Search trees by name, planter, or health..."
+						class="w-full rounded-lg border border-green-200 px-4 py-2 pl-10 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
+					/>
+					<Search class="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-green-500" />
+					<button
+						onclick={() => showFilters = !showFilters}
+						class="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 hover:text-green-600"
+					>
+						<Filter class="h-5 w-5" />
+					</button>
+				</div>
+				
+				{#if showFilters}
+					<div class="grid grid-cols-2 gap-4 rounded-lg border border-green-100 bg-green-50/50 p-4 shadow-sm">
+						<div class="space-y-2">
+							<label class="block text-sm font-medium text-green-800">Health</label>
+							<select
+								bind:value={healthFilter}
+								onchange={() => searchTrees(searchQuery)}
+								class="w-full rounded-md border border-green-200 bg-white p-2 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
+							>
+								<option value="all">All Health</option>
+								<option value="poor">Poor</option>
+								<option value="fair">Fair</option>
+								<option value="good">Good</option>
+								<option value="excellent">Excellent</option>
+							</select>
+						</div>
+						
+						<div class="space-y-2">
+							<label class="block text-sm font-medium text-green-800">Planted</label>
+							<select
+								bind:value={dateFilter}
+								onchange={() => searchTrees(searchQuery)}
+								class="w-full rounded-md border border-green-200 bg-white p-2 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
+							>
+								<option value="all">All Time</option>
+								<option value="week">Last Week</option>
+								<option value="month">Last Month</option>
+								<option value="year">Last Year</option>
+							</select>
+						</div>
+						
+						<div class="space-y-2">
+							<label class="block text-sm font-medium text-green-800">Height</label>
+							<select
+								bind:value={heightFilter}
+								onchange={() => searchTrees(searchQuery)}
+								class="w-full rounded-md border border-green-200 bg-white p-2 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
+							>
+								<option value="all">All Heights</option>
+								<option value="short">Short (&lt; 10m)</option>
+								<option value="medium">Medium (10-20m)</option>
+								<option value="tall">Tall (&gt; 20m)</option>
+							</select>
+						</div>
 					</div>
 				{/if}
-				{#each trees as tree, index}
-					<tree id="tree__{index}" class="relative h-screen snap-start bg-green-50">
-						<img
-							class="h-full w-full object-cover"
-							loading="lazy"
-							src={tree.Image}
-							alt={tree.TreeName}
-						/>
-						<information-container>
-							<div
-								class="absolute left-0 right-0 top-0 bg-black bg-opacity-50 p-4 text-white backdrop-blur-sm"
-							>
-								<h1 class="mb-1 text-3xl font-bold">{tree.TreeName}</h1>
+			</div>
+		</div>
+		<main class="flex flex-col">
+			<div class="flex flex-col">
+				{#if filteredTrees.length === 0}
+					<div class="flex h-screen flex-col items-center justify-center bg-green-50 p-4 text-center">
+						<div class="rounded-lg bg-white p-8 shadow-lg">
+							<h2 class="mb-4 text-2xl font-semibold text-gray-800">No trees found</h2>
+							<p class="text-gray-600">
+								{#if healthFilter !== 'all' || dateFilter !== 'all' || heightFilter !== 'all' || searchQuery}
+									No trees match your current filters. Try adjusting your search criteria or filters.
+								{:else}
+									There are no trees in the database yet.
+								{/if}
+							</p>
+							{#if healthFilter !== 'all' || dateFilter !== 'all' || heightFilter !== 'all' || searchQuery}
+								<button
+									onclick={() => {
+										healthFilter = 'all';
+										dateFilter = 'all';
+										heightFilter = 'all';
+										searchQuery = '';
+										fetchTrees();
+									}}
+									class="mt-4 rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+								>
+									Clear all filters
+								</button>
+							{/if}
+						</div>
+					</div>
+				{:else}
+					{#each filteredTrees as tree, index}
+						<tree id="tree__{index}" class="relative h-screen snap-start bg-green-50">
+							<img
+								class="h-full w-full object-cover"
+								loading="lazy"
+								src={tree.Image}
+								alt={tree.TreeName}
+							/>
+							<information-container>
 								<div
-									class="location-data mb-2 text-sm font-light"
-									use:inview
-									oninview_enter={async (isVisible) => {
-										if (isVisible && !locations[tree.Id]) {
-											try {
-												const data: ReverseGeoJSON | null = await getReverseLoc(
-													tree.Lat,
-													tree.Lng,
-													controller
-												);
-												if (!data) return;
-												locations[tree.Id] = data.name ?? 'Unknown location';
-											} catch (err) {
-												if (err instanceof Error ? err.name !== 'AbortError' : err?.toString())
-													console.error(err);
+									class="absolute left-0 right-0 top-0 bg-black bg-opacity-50 p-4 text-white backdrop-blur-sm"
+								>
+									<h1 class="mb-1 text-3xl font-bold">{tree.TreeName}</h1>
+									<div
+										class="location-data mb-2 text-sm font-light"
+										use:inview
+										oninview_enter={async (isVisible) => {
+											if (isVisible && !locations[tree.Id]) {
+												try {
+													const data: ReverseGeoJSON | null = await getReverseLoc(
+														tree.Lat,
+														tree.Lng,
+														controller
+													);
+													if (!data) return;
+													locations[tree.Id] = data.name ?? 'Unknown location';
+												} catch (err) {
+													if (err instanceof Error ? err.name !== 'AbortError' : err?.toString())
+														console.error(err);
+												}
 											}
-										}
-									}}
-									oninview_leave={(event) => {
-										const top = document
-											.getElementById(`tree__${index}`)
-											?.getBoundingClientRect().top;
-										if (!top) return;
-										if (top < window.innerHeight || !signal_ready || index <= 1) return;
-										controller.abort();
-										controller = new AbortController();
-									}}
-								>
-									{#if locations[tree.Id]}
-										{locations[tree.Id]}
-									{:else}
-										📍 Location unavailable
-									{/if}
-								</div>
-
-								<!-- Tree Health Indicator -->
-								<div
-									class="tree_health my-4 flex items-center justify-between rounded-md border border-white/20 bg-black/30 px-3 py-2 backdrop-blur-sm"
-								>
-									<div class="dots flex items-center space-x-2">
-										{#each Array(Math.round(getHealthScore(tree.Health) / 20)) as _, i}
-											<span
-												class="dot h-4 w-4 rounded-full"
-												style="background-color: {`hsl(${i * 30}, 70%, 50%)`}"
-											></span>
-										{/each}
-									</div>
-									<p class="w-full pr-2 text-right font-semibold">
-										Health: {getHealthStatus(getHealthScore(tree.Health))}
-									</p>
-								</div>
-
-								<!-- Tree Details Dialog -->
-								<Dialog.Root>
-									<Dialog.Trigger
-										class="rounded-md bg-white/20 px-3 py-1.5 font-medium text-white hover:bg-white/30"
+										}}
+										oninview_leave={(event) => {
+											const top = document
+												.getElementById(`tree__${index}`)
+												?.getBoundingClientRect().top;
+											if (!top) return;
+											if (top < window.innerHeight || !signal_ready || index <= 1) return;
+											controller.abort();
+											controller = new AbortController();
+										}}
 									>
-										More details
-									</Dialog.Trigger>
-									<Dialog.Content class="max-w-[300px] rounded-lg" id="tree-details">
-										<Dialog.Header>
-											<Dialog.Title>{tree.TreeName} details</Dialog.Title>
-										</Dialog.Header>
-										<div class="grid gap-2 py-2">
-											<p>Height: <b>{metersToFeet(tree.Height)}</b></p>
-											<p>Age: <b>{tree.Age}</b></p>
-											<p>Health: <b>{tree.Health}</b></p>
-											{#if tree.Lat && tree.Lng}
-												<p>
-													Location: <b
-														>{locations[tree.Id]
-															? locations[tree.Id]
-															: '📍 Location unavailable'}</b
-													>
-												</p>
-											{/if}
-											<p>Planted on: <b>{formatDate(tree.PlantedOn ?? '')}</b></p>
-										</div>
-									</Dialog.Content>
-								</Dialog.Root>
-							</div>
-
-							<div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-25 p-4 pb-20">
-								<Alert.Root>
-									<BadgePlus />
-									<div class="mx-2 mt-1">
-										<Alert.Title>Planted by</Alert.Title>
-										<Alert.Description
-											>{tree.PlantedBy !== null &&
-											!('message' in tree.PlantedBy && 'name' in tree.PlantedBy)
-												? `${tree.PlantedBy.FirstName} ${tree.PlantedBy.LastName}`
-												: 'Deleted User'} on {formatDate(tree.PlantedOn ?? '')}</Alert.Description
-										>
+										{#if locations[tree.Id]}
+											{locations[tree.Id]}
+										{:else}
+											📍 Location unavailable
+										{/if}
 									</div>
-								</Alert.Root>
-							</div>
-						</information-container>
-					</tree>
-				{/each}
+
+									<!-- Tree Health Indicator -->
+									<div
+										class="tree_health my-4 flex items-center justify-between rounded-md border border-white/20 bg-black/30 px-3 py-2 backdrop-blur-sm"
+									>
+										<div class="dots flex items-center space-x-2">
+											{#each Array(Math.round(getHealthScore(tree.Health) / 20)) as _, i}
+												<span
+													class="dot h-4 w-4 rounded-full"
+													style="background-color: {`hsl(${i * 30}, 70%, 50%)`}"
+												></span>
+											{/each}
+										</div>
+										<p class="w-full pr-2 text-right font-semibold">
+											Health: {getHealthStatus(getHealthScore(tree.Health))}
+										</p>
+									</div>
+
+									<!-- Tree Details Dialog -->
+									<Dialog.Root>
+										<Dialog.Trigger
+											class="rounded-md bg-white/20 px-3 py-1.5 font-medium text-white hover:bg-white/30"
+										>
+											More details
+										</Dialog.Trigger>
+										<Dialog.Content class="max-w-[300px] rounded-lg" id="tree-details">
+											<Dialog.Header>
+												<Dialog.Title>{tree.TreeName} details</Dialog.Title>
+											</Dialog.Header>
+											<div class="grid gap-2 py-2">
+												<p>Height: <b>{metersToFeet(tree.Height)}</b></p>
+												<p>Age: <b>{tree.Age}</b></p>
+												<p>Health: <b>{tree.Health}</b></p>
+												{#if tree.Lat && tree.Lng}
+													<p>
+														Location: <b
+															>{locations[tree.Id]
+																? locations[tree.Id]
+																: '📍 Location unavailable'}</b
+														>
+													</p>
+												{/if}
+												<p>Planted on: <b>{formatDate(tree.PlantedOn ?? '')}</b></p>
+											</div>
+										</Dialog.Content>
+									</Dialog.Root>
+								</div>
+
+								<div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-25 p-4 pb-20">
+									<Alert.Root>
+										<BadgePlus />
+										<div class="mx-2 mt-1">
+											<Alert.Title>Planted by</Alert.Title>
+											<Alert.Description
+												>{tree.PlantedBy !== null &&
+												!('message' in tree.PlantedBy && 'name' in tree.PlantedBy)
+													? `${tree.PlantedBy.FirstName} ${tree.PlantedBy.LastName}`
+													: 'Deleted User'} on {formatDate(tree.PlantedOn ?? '')}</Alert.Description
+											>
+										</div>
+									</Alert.Root>
+								</div>
+							</information-container>
+						</tree>
+					{/each}
+				{/if}
 			</div>
 		</main>
 	</div>
