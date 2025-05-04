@@ -1,6 +1,5 @@
 import { DEBUG } from '$env/static/private';
-import { db } from '$lib/server/db/index.js';
-import { Trees } from '$lib/server/db/schema';
+import { Tree } from '$lib/class/Tree';
 import { typical_development_notice } from '$lib/utility/typicals';
 import { fail, isActionFailure, isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms';
@@ -19,7 +18,9 @@ const treeSchema = z.object({
 });
 
 export const load: PageServerLoad = async (event) => {
-	return await superValidate(event, zod(treeSchema));
+	return {
+		form: await superValidate(event, zod(treeSchema))
+	}
 };
 
 export const actions: Actions = {
@@ -44,26 +45,28 @@ export const actions: Actions = {
 			form.data;
 
 		try {
-			const new_tree = await db
-				.insert(Trees)
-				.values({
-					TreeName: tree_name,
-					Image: tree_image,
-					Lat: tree_lat,
-					Lng: tree_lng,
-					Height: tree_height,
-					Health: 'EXCELLENT', // Assuming you have a way to get the health status from the enum
-					PlantedBy: user.Id,
-					Age: tree_age,
-					TreeSpecies: 1 // Assuming you have a way to get the tree species ID from the name
-				})
-				.returning();
+			const new_tree = await Tree.create(
+				tree_name,
+				1, // Assuming you have a way to get the tree species ID from the name
+				tree_height,
+				'EXCELLENT', // Placeholder health status
+				tree_age,
+				tree_image,
+				tree_lat,
+				tree_lng,
+				user.Id
+			);
 
+			if (new_tree instanceof Error) {
+				console.error('Tree creation failed:', new_tree.message);
+				setError(form, 'tree_name', new_tree.message);
+				return fail(500, { form });
+			}
 			if (DEBUG) {
 				typical_development_notice();
-				console.log('New tree created:', new_tree[0]);
+				console.log('New tree created with ID:', new_tree.Id);
 			}
-			throw redirect(303, `/explore?tree_id=${new_tree[0].Id}`);
+			throw redirect(303, `/explore?tree_id=${new_tree.Id}`);
 		} catch (error) {
 			if (isActionFailure(error)) {
 				return error;

@@ -3,12 +3,9 @@
 	import { Input } from '$lib/components/vendor/ui/input/index.js';
 	import { Label } from '$lib/components/vendor/ui/label/index.js';
 	import { superForm } from 'sveltekit-superforms/client';
-	import type { PageData } from './$types';
-	
-	type PageData2 = {
-		data: PageData;
-	}
-	const { data }: PageData2 = $props()
+	import type { PageProps } from './$types';
+
+	const { data }: PageProps = $props()
 	// Initialize the form
 	const { form, errors, constraints, enhance, message } = superForm(data.form);
 </script>

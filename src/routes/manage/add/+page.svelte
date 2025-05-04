@@ -8,15 +8,14 @@
 	import { getReverseLoc } from '$lib/utility/utility';
 	import { onMount } from 'svelte';
 	import { superForm } from 'sveltekit-superforms';
-	import type { PageData } from './$types';
+	import type { PageProps } from './$types';
 
-	const data: PageData = $props();
-	const { form, errors, constraints, enhance } = superForm(data.form?.super_form ?? data.data);
+	const { data }: PageProps = $props();
+	const { form, errors, constraints, enhance } = superForm(data.form);
 	let treeImageSrc: string | null = $state(null);
 
 	// Location handling
 	let tree_added = false;
-
 	let location: GeolocationCoordinates | (string | null) = null;
 	let translated_location: string | null = null;
 
@@ -39,6 +38,7 @@
 
 	// Photo handling
 	let fileInput: HTMLInputElement;
+	let uploading = $state(false);
 
 	function handlePhotoClick() {
 		fileInput?.click();
@@ -51,6 +51,8 @@
 			const formData = new FormData();
 			formData.append('file', file);
 
+			uploading = true;
+
 			try {
 				const response = await fetch('/api/upload', {
 					method: 'POST',
@@ -59,13 +61,17 @@
 				const data = await response.json();
 				if (response.ok) {
 					const imageUrl = data.url;
-					$form.image = imageUrl;
+					$form.tree_image = imageUrl;
 					treeImageSrc = imageUrl;
 				} else {
+					// Optionally show error to user
 					console.error('Upload failed:', data);
 				}
 			} catch (error) {
+				// Optionally show error to user
 				console.error('Error uploading file:', error);
+			} finally {
+				uploading = false;
 			}
 		}
 	}
@@ -93,7 +99,9 @@
 			description={'Add a photo to represent the tree'}
 		>
 			<svelte:fragment slot="content1">
-				<Button class="w-full" on:click={handlePhotoClick}>Select from your gallery</Button>
+				<Button class="w-full" on:click={handlePhotoClick} disabled={uploading}>
+					{uploading ? 'Uploading...' : 'Select from your gallery'}
+				</Button>
 			</svelte:fragment>
 		</IconCard>
 
@@ -113,6 +121,9 @@
 					class="w-full"
 					required
 				/>
+				{#if $errors.tree_name}
+					<p class="text-sm text-red-500">{$errors.tree_name}</p>
+				{/if}
 			</div>
 
 			<div class="grid w-full items-center gap-1.5">
@@ -128,6 +139,9 @@
 					step="0.01"
 					required
 				/>
+				{#if $errors.tree_height}
+					<p class="text-sm text-red-500">{$errors.tree_height}</p>
+				{/if}
 			</div>
 
 			<div class="grid w-full items-center gap-1.5">
@@ -142,6 +156,9 @@
 					min="0"
 					required
 				/>
+				{#if $errors.tree_age}
+					<p class="text-sm text-red-500">{$errors.tree_age}</p>
+				{/if}
 			</div>
 
 			<div class="grid w-full items-center gap-1.5">
@@ -155,6 +172,9 @@
 					class="w-full"
 					required
 				/>
+				{#if $errors.tree_species}
+					<p class="text-sm text-red-500">{$errors.tree_species}</p>
+				{/if}
 			</div>
 			<p class="text-sm text-destructive">{$errors._errors}</p>
 

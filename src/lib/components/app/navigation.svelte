@@ -35,8 +35,8 @@
 			class={activeButton === 'view' ? 'bg-accent' : ''}><MapPin /></Menubar.Trigger
 		>
 		<Menubar.Trigger
-			on:click={() => handleNavigation('add')}
-			class="{activeButton === 'add' ? 'bg-accent' : ''} w-20 justify-center"
+			on:click={() => handleNavigation('manage')}
+			class="{activeButton === 'manage' ? 'bg-accent' : ''} w-20 justify-center"
 			><CirclePlus /></Menubar.Trigger
 		>
 		<Menubar.Trigger
