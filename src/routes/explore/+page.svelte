@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { PUBLIC_DEBUG } from '$env/static/public';
 	import * as Alert from '$lib/components/vendor/ui/alert';
 	import * as Dialog from '$lib/components/vendor/ui/dialog';
@@ -17,13 +18,32 @@
 		console.log(data.trees);
 	}
 	
-	let trees = data.trees;
-	let filteredTrees = $state(trees);
+	// Store the original SSR data
+	const originalTrees = data.trees;
+	// Current filtered or searched trees
+	let filteredTrees = $state(originalTrees);
+	
+	// Search state
 	let searchQuery = $state('');
 	let showFilters = $state(false);
 	let healthFilter = $state('all');
 	let dateFilter = $state('all');
 	let heightFilter = $state('all');
+	let isSearching = $state(false);
+
+	// Initialize search parameters from URL query params if they exist
+	function initSearchFromURL() {
+		if (browser) {
+			const url = new URL(window.location.href);
+			searchQuery = url.searchParams.get('q') || '';
+			healthFilter = url.searchParams.get('health') || 'all';
+			dateFilter = url.searchParams.get('date') || 'all';
+			heightFilter = url.searchParams.get('height') || 'all';
+			
+			// If any search params exist, we should start with search mode active
+			isSearching = !!(searchQuery || healthFilter !== 'all' || dateFilter !== 'all' || heightFilter !== 'all');
+		}
+	}
 
 	let controller = new AbortController();
 	let signal_ready: boolean = false;
@@ -31,8 +51,57 @@
 	// Temporary local location cache
 	let locations: Record<number, string> = $state({});
 
+	// Update URL without triggering navigation
+	function updateURL() {
+		if (browser) {
+			const url = new URL(window.location.href);
+			
+			// Update URL parameters
+			if (searchQuery) {
+				url.searchParams.set('q', searchQuery);
+			} else {
+				url.searchParams.delete('q');
+			}
+			
+			if (healthFilter !== 'all') {
+				url.searchParams.set('health', healthFilter);
+			} else {
+				url.searchParams.delete('health');
+			}
+			
+			if (dateFilter !== 'all') {
+				url.searchParams.set('date', dateFilter);
+			} else {
+				url.searchParams.delete('date');
+			}
+			
+			if (heightFilter !== 'all') {
+				url.searchParams.set('height', heightFilter);
+			} else {
+				url.searchParams.delete('height');
+			}
+			
+			// Replace URL without navigation
+			window.history.replaceState({}, '', url.toString());
+		}
+	}
+
 	async function fetchTrees() {
 		try {
+			// Check if we have any active filters
+			const hasActiveFilters = searchQuery || healthFilter !== 'all' || dateFilter !== 'all' || heightFilter !== 'all';
+			
+			// If no active filters, restore original SSR data
+			if (!hasActiveFilters) {
+				filteredTrees = originalTrees;
+				isSearching = false;
+				updateURL();
+				return;
+			}
+			
+			isSearching = true;
+			
+			// Build params for API request
 			const params = new URLSearchParams();
 			if (searchQuery) params.append('q', searchQuery);
 			if (healthFilter !== 'all') params.append('health', healthFilter);
@@ -43,17 +112,24 @@
 			if (!response.ok) throw new Error('Failed to fetch trees');
 			
 			const fetchedData = await response.json();
-			trees = fetchedData;
-			filteredTrees = trees;
+			filteredTrees = fetchedData;
+			
+			// Update URL to reflect current search state
+			updateURL();
 		} catch (error) {
 			console.error('Error fetching trees:', error);
 			filteredTrees = [];
 		}
 	}
 
-	function searchTrees(query: string) {
-		searchQuery = query;
-		fetchTrees();
+	function clearFilters() {
+		searchQuery = '';
+		healthFilter = 'all';
+		dateFilter = 'all';
+		heightFilter = 'all';
+		isSearching = false;
+		filteredTrees = originalTrees;
+		updateURL();
 	}
 
 	function getHealthScore(health: string): number {
@@ -61,10 +137,10 @@
 		// Attempt to extract any number from the health string
 		let parsed = 0;
 		// Health statuses are now determined by the health score values
-		if (health.toUpperCase().includes('POOR')) parsed = 60;
-		if (health.toUpperCase().includes('FAIR')) parsed = 75;
-		if (health.toUpperCase().includes('GOOD')) parsed = 90;
-		if (health.toUpperCase().includes('EXCELLENT')) parsed = 120;
+		if (health?.toUpperCase().includes('POOR')) parsed = 60;
+		if (health?.toUpperCase().includes('FAIR')) parsed = 75;
+		if (health?.toUpperCase().includes('GOOD')) parsed = 90;
+		if (health?.toUpperCase().includes('EXCELLENT')) parsed = 120;
 		return Number.isFinite(parsed) ? parsed : 0;
 	}
 
@@ -75,8 +151,25 @@
 		return 'Excellent';
 	}
 
+	// Debounce function to limit API calls
+	function debounce(func: Function, timeout = 300) {
+		let timer: ReturnType<typeof setTimeout>;
+		return (...args: any[]) => {
+			clearTimeout(timer);
+			timer = setTimeout(() => { func.apply(this, args); }, timeout);
+		};
+	}
+	
+	const debouncedSearch = debounce(() => fetchTrees(), 500);
+
 	onMount(async () => {
-		await fetchTrees();
+		initSearchFromURL();
+		
+		// If search parameters exist in URL, perform search
+		if (searchQuery || healthFilter !== 'all' || dateFilter !== 'all' || heightFilter !== 'all') {
+			await fetchTrees();
+		}
+		
 		setTimeout(() => {
 			signal_ready = true;
 		}, 3000);
@@ -96,13 +189,13 @@
 					<input
 						type="text"
 						bind:value={searchQuery}
-						oninput={() => searchTrees(searchQuery)}
+						on:input={debouncedSearch}
 						placeholder="Search trees by name, planter, or health..."
 						class="w-full rounded-lg border border-green-200 px-4 py-2 pl-10 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
 					/>
 					<Search class="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-green-500" />
 					<button
-						onclick={() => showFilters = !showFilters}
+						on:click={() => showFilters = !showFilters}
 						class="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 hover:text-green-600"
 					>
 						<Filter class="h-5 w-5" />
@@ -115,7 +208,7 @@
 							<label class="block text-sm font-medium text-green-800">Health</label>
 							<select
 								bind:value={healthFilter}
-								onchange={() => searchTrees(searchQuery)}
+								on:change={fetchTrees}
 								class="w-full rounded-md border border-green-200 bg-white p-2 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
 							>
 								<option value="all">All Health</option>
@@ -130,7 +223,7 @@
 							<label class="block text-sm font-medium text-green-800">Planted</label>
 							<select
 								bind:value={dateFilter}
-								onchange={() => searchTrees(searchQuery)}
+								on:change={fetchTrees}
 								class="w-full rounded-md border border-green-200 bg-white p-2 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
 							>
 								<option value="all">All Time</option>
@@ -144,7 +237,7 @@
 							<label class="block text-sm font-medium text-green-800">Height</label>
 							<select
 								bind:value={heightFilter}
-								onchange={() => searchTrees(searchQuery)}
+								on:change={fetchTrees}
 								class="w-full rounded-md border border-green-200 bg-white p-2 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
 							>
 								<option value="all">All Heights</option>
@@ -172,13 +265,7 @@
 							</p>
 							{#if healthFilter !== 'all' || dateFilter !== 'all' || heightFilter !== 'all' || searchQuery}
 								<button
-									onclick={() => {
-										healthFilter = 'all';
-										dateFilter = 'all';
-										heightFilter = 'all';
-										searchQuery = '';
-										fetchTrees();
-									}}
+									on:click={clearFilters}
 									class="mt-4 rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700"
 								>
 									Clear all filters
@@ -192,34 +279,38 @@
 							<img
 								class="h-full w-full object-cover"
 								loading="lazy"
-								src={tree.Image}
-								alt={tree.TreeName}
+								src={isSearching ? tree.image : tree.Image}
+								alt={isSearching ? tree.name : tree.TreeName}
 							/>
 							<information-container>
 								<div
 									class="absolute left-0 right-0 top-0 bg-black bg-opacity-50 p-4 text-white backdrop-blur-sm"
 								>
-									<h1 class="mb-1 text-3xl font-bold">{tree.TreeName}</h1>
+									<h1 class="mb-1 text-3xl font-bold">{isSearching ? tree.name : tree.TreeName}</h1>
 									<div
 										class="location-data mb-2 text-sm font-light"
 										use:inview
-										oninview_enter={async (isVisible) => {
-											if (isVisible && !locations[tree.Id]) {
+										on:inview_enter={async ({ detail: { inView } }) => {
+											if (inView && !locations[isSearching ? tree.id : tree.Id]) {
 												try {
+													const treeId = isSearching ? tree.id : tree.Id;
+													const treeLat = isSearching ? tree.lat : tree.Lat;
+													const treeLng = isSearching ? tree.lng : tree.Lng;
+													
 													const data: ReverseGeoJSON | null = await getReverseLoc(
-														tree.Lat,
-														tree.Lng,
+														treeLat,
+														treeLng,
 														controller
 													);
 													if (!data) return;
-													locations[tree.Id] = data.name ?? 'Unknown location';
+													locations[treeId] = data.name ?? 'Unknown location';
 												} catch (err) {
 													if (err instanceof Error ? err.name !== 'AbortError' : err?.toString())
 														console.error(err);
 												}
 											}
 										}}
-										oninview_leave={(event) => {
+										on:inview_leave={({ detail: { entry } }) => {
 											const top = document
 												.getElementById(`tree__${index}`)
 												?.getBoundingClientRect().top;
@@ -229,8 +320,8 @@
 											controller = new AbortController();
 										}}
 									>
-										{#if locations[tree.Id]}
-											{locations[tree.Id]}
+										{#if locations[isSearching ? tree.id : tree.Id]}
+											{locations[isSearching ? tree.id : tree.Id]}
 										{:else}
 											📍 Location unavailable
 										{/if}
@@ -241,7 +332,7 @@
 										class="tree_health my-4 flex items-center justify-between rounded-md border border-white/20 bg-black/30 px-3 py-2 backdrop-blur-sm"
 									>
 										<div class="dots flex items-center space-x-2">
-											{#each Array(Math.round(getHealthScore(tree.Health) / 20)) as _, i}
+											{#each Array(Math.round(getHealthScore(isSearching ? tree.health : tree.Health) / 20)) as _, i}
 												<span
 													class="dot h-4 w-4 rounded-full"
 													style="background-color: {`hsl(${i * 30}, 70%, 50%)`}"
@@ -249,7 +340,7 @@
 											{/each}
 										</div>
 										<p class="w-full pr-2 text-right font-semibold">
-											Health: {getHealthStatus(getHealthScore(tree.Health))}
+											Health: {getHealthStatus(getHealthScore(isSearching ? tree.health : tree.Health))}
 										</p>
 									</div>
 
@@ -262,22 +353,22 @@
 										</Dialog.Trigger>
 										<Dialog.Content class="max-w-[300px] rounded-lg" id="tree-details">
 											<Dialog.Header>
-												<Dialog.Title>{tree.TreeName} details</Dialog.Title>
+												<Dialog.Title>{isSearching ? tree.name : tree.TreeName} details</Dialog.Title>
 											</Dialog.Header>
 											<div class="grid gap-2 py-2">
-												<p>Height: <b>{metersToFeet(tree.Height)}</b></p>
-												<p>Age: <b>{tree.Age}</b></p>
-												<p>Health: <b>{tree.Health}</b></p>
-												{#if tree.Lat && tree.Lng}
+												<p>Height: <b>{isSearching ? tree.height : metersToFeet(tree.Height)}</b></p>
+												<p>Age: <b>{isSearching ? tree.age : tree.Age}</b></p>
+												<p>Health: <b>{isSearching ? tree.health : tree.Health}</b></p>
+												{#if (isSearching ? tree.lat : tree.Lat) && (isSearching ? tree.lng : tree.Lng)}
 													<p>
 														Location: <b
-															>{locations[tree.Id]
-																? locations[tree.Id]
+															>{locations[isSearching ? tree.id : tree.Id]
+																? locations[isSearching ? tree.id : tree.Id]
 																: '📍 Location unavailable'}</b
 														>
 													</p>
 												{/if}
-												<p>Planted on: <b>{formatDate(tree.PlantedOn ?? '')}</b></p>
+												<p>Planted on: <b>{formatDate(isSearching ? tree.plantedOn : tree.PlantedOn ?? '')}</b></p>
 											</div>
 										</Dialog.Content>
 									</Dialog.Root>
@@ -288,12 +379,16 @@
 										<BadgePlus />
 										<div class="mx-2 mt-1">
 											<Alert.Title>Planted by</Alert.Title>
-											<Alert.Description
-												>{tree.PlantedBy !== null &&
-												!('message' in tree.PlantedBy && 'name' in tree.PlantedBy)
-													? `${tree.PlantedBy.FirstName} ${tree.PlantedBy.LastName}`
-													: 'Deleted User'} on {formatDate(tree.PlantedOn ?? '')}</Alert.Description
-											>
+											<Alert.Description>
+												{#if isSearching}
+													{tree.plantedBy} on {formatDate(tree.plantedOn ?? '')}
+												{:else}
+													{tree.PlantedBy !== null &&
+													!('message' in tree.PlantedBy && 'name' in tree.PlantedBy)
+														? `${tree.PlantedBy.FirstName} ${tree.PlantedBy.LastName}`
+														: 'Deleted User'} on {formatDate(tree.PlantedOn ?? '')}
+												{/if}
+											</Alert.Description>
 										</div>
 									</Alert.Root>
 								</div>
