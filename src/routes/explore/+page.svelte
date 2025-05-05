@@ -207,7 +207,7 @@
 <page>
 	<div class="h-screen snap-y snap-mandatory overflow-y-scroll">
 		<!-- Search Toggle Button -->
-		<div class="fixed right-5 top-5 z-50">
+		<div class="fixed right-5 top-5 z-10 md:z-50">
 			<Button
 				variant="outline"
 				size="icon"
@@ -225,9 +225,9 @@
 		<!-- Search Bar and Filters - Conditional Render -->
 		{#if showSearchBar}
 			<div
-				class="fixed left-0 right-0 top-0 z-40 bg-white/95 p-4 shadow-md backdrop-blur-sm transition-all"
+				class="fixed left-0 right-0 top-0 z-40 flex flex-col gap-2 bg-white/95 p-4 shadow-md backdrop-blur-sm transition-all"
 			>
-				<div class="mx-auto max-w-md space-y-4">
+				<div class="space-y-4 md:mx-auto md:max-w-md">
 					<div class="relative">
 						<Input
 							type="text"
@@ -248,68 +248,77 @@
 					</div>
 
 					{#if showFilters}
-							<div class="grid grid-cols-1 gap-4 rounded-lg border border-green-100 bg-green-50/80 p-4 shadow-sm md:grid-cols-3">
-								<div class="space-y-2">
-									<label for="health-filter" class="block text-sm font-medium text-green-800">Health</label>
-									<select
-										id="health-filter"
-										bind:value={healthFilter}
-										onchange={() => fetchTrees()}
-										class="w-full rounded-md border border-green-200 bg-white p-2 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
-									>
-										<option value="all">All Health</option>
-										<option value="poor">Poor</option>
-										<option value="fair">Fair</option>
-										<option value="good">Good</option>
-										<option value="excellent">Excellent</option>
-									</select>
-								</div>
-								
-								<div class="space-y-2">
-									<label for="date-filter" class="block text-sm font-medium text-green-800">Planted</label>
-									<select
-										id="date-filter"
-										bind:value={dateFilter}
-										onchange={() => fetchTrees()}
-										class="w-full rounded-md border border-green-200 bg-white p-2 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
-									>
-										<option value="all">All Time</option>
-										<option value="week">Last Week</option>
-										<option value="month">Last Month</option>
-										<option value="year">Last Year</option>
-									</select>
-								</div>
-								
-								<div class="space-y-2">
-									<label for="height-filter" class="block text-sm font-medium text-green-800">Height</label>
-									<select
-										id="height-filter"
-										bind:value={heightFilter}
-										onchange={() => fetchTrees()}
-										class="w-full rounded-md border border-green-200 bg-white p-2 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
-									>
-										<option value="all">All Heights</option>
-										<option value="short">Short (&lt; 10m)</option>
-										<option value="medium">Medium (10-20m)</option>
-										<option value="tall">Tall (&gt; 20m)</option>
-									</select>
-								</div>
-
-								{#if searchQuery || healthFilter !== 'all' || dateFilter !== 'all' || heightFilter !== 'all'}
-									<div class="col-span-full flex justify-center mt-2">
-										<Button 
-											variant="outline" 
-											size="sm"
-											class="text-green-700 border-green-300 hover:bg-green-50"
-											onclick={clearFilters}
-										>
-											Clear all filters
-										</Button>
-									</div>
-								{/if}
+						<div
+							class="grid grid-cols-1 gap-4 rounded-lg border border-green-100 bg-green-50/80 p-4 shadow-sm md:grid-cols-3"
+						>
+							<div class="space-y-2">
+								<label for="health-filter" class="block text-sm font-medium text-green-800"
+									>Health</label
+								>
+								<select
+									id="health-filter"
+									bind:value={healthFilter}
+									onchange={() => fetchTrees()}
+									class="w-full rounded-md border border-green-200 bg-white p-2 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
+								>
+									<option value="all">All Health</option>
+									<option value="poor">Poor</option>
+									<option value="fair">Fair</option>
+									<option value="good">Good</option>
+									<option value="excellent">Excellent</option>
+								</select>
 							</div>
+
+							<div class="space-y-2">
+								<label for="date-filter" class="block text-sm font-medium text-green-800"
+									>Planted</label
+								>
+								<select
+									id="date-filter"
+									bind:value={dateFilter}
+									onchange={() => fetchTrees()}
+									class="w-full rounded-md border border-green-200 bg-white p-2 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
+								>
+									<option value="all">All Time</option>
+									<option value="week">Last Week</option>
+									<option value="month">Last Month</option>
+									<option value="year">Last Year</option>
+								</select>
+							</div>
+
+							<div class="space-y-2">
+								<label for="height-filter" class="block text-sm font-medium text-green-800"
+									>Height</label
+								>
+								<select
+									id="height-filter"
+									bind:value={heightFilter}
+									onchange={() => fetchTrees()}
+									class="w-full rounded-md border border-green-200 bg-white p-2 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
+								>
+									<option value="all">All Heights</option>
+									<option value="short">Short (&lt; 10m)</option>
+									<option value="medium">Medium (10-20m)</option>
+									<option value="tall">Tall (&gt; 20m)</option>
+								</select>
+							</div>
+
+							{#if searchQuery || healthFilter !== 'all' || dateFilter !== 'all' || heightFilter !== 'all'}
+								<div class="col-span-full mt-2 flex justify-center">
+									<Button
+										variant="outline"
+										size="sm"
+										class="border-green-300 text-green-700 hover:bg-green-50"
+										onclick={clearFilters}
+									>
+										Clear all filters
+									</Button>
+								</div>
+							{/if}
+						</div>
 					{/if}
 				</div>
+				<Button class="w-full md:hidden" onclick={toggleSearchUI}>Close</Button>
 			</div>
 		{/if}
 		<main class="flex flex-col">
@@ -351,7 +360,9 @@
 								<div
 									class="absolute left-0 right-0 top-0 bg-black bg-opacity-50 p-4 text-white backdrop-blur-sm"
 								>
-									<h1 class="mb-1 text-3xl font-bold">{isSearching && 'name' in tree ? tree.name : tree.TreeName}</h1>
+									<h1 class="mb-1 text-3xl font-bold">
+										{isSearching && 'name' in tree ? tree.name : tree.TreeName}
+									</h1>
 									<div
 										class="location-data mb-2 text-sm font-light"
 										use:inview
@@ -359,7 +370,7 @@
 											const treeId = isSearching && 'id' in tree ? tree.id : tree.Id;
 											const treeLat = isSearching && 'lat' in tree ? tree.lat : tree.Lat;
 											const treeLng = isSearching && 'lng' in tree ? tree.lng : tree.Lng;
-											
+
 											if (inView && !locations[treeId]) {
 												try {
 													const data: ReverseGeoJSON | null = await getReverseLoc(
@@ -405,7 +416,9 @@
 											{/each}
 										</div>
 										<p class="w-full pr-2 text-right font-semibold">
-											Health: {getHealthStatus(getHealthScore(isSearching && 'health' in tree ? tree.health : tree.Health))}
+											Health: {getHealthStatus(
+												getHealthScore(isSearching && 'health' in tree ? tree.health : tree.Health)
+											)}
 										</p>
 									</div>
 
@@ -418,12 +431,24 @@
 										</Dialog.Trigger>
 										<Dialog.Content class="max-w-[300px] rounded-lg" id="tree-details">
 											<Dialog.Header>
-												<Dialog.Title>{isSearching && 'name' in tree ? tree.name : tree.TreeName} details</Dialog.Title>
+												<Dialog.Title
+													>{isSearching && 'name' in tree ? tree.name : tree.TreeName} details</Dialog.Title
+												>
 											</Dialog.Header>
 											<div class="grid gap-2 py-2">
-												<p>Height: <b>{isSearching && 'height' in tree ? tree.height : metersToFeet(tree.Height)}</b></p>
+												<p>
+													Height: <b
+														>{isSearching && 'height' in tree
+															? tree.height
+															: metersToFeet(tree.Height)}</b
+													>
+												</p>
 												<p>Age: <b>{isSearching && 'age' in tree ? tree.age : tree.Age}</b></p>
-												<p>Health: <b>{isSearching && 'health' in tree ? tree.health : tree.Health}</b></p>
+												<p>
+													Health: <b
+														>{isSearching && 'health' in tree ? tree.health : tree.Health}</b
+													>
+												</p>
 												{#if (isSearching && 'lat' in tree ? tree.lat : tree.Lat) && (isSearching && 'lng' in tree ? tree.lng : tree.Lng)}
 													<p>
 														Location: <b
@@ -433,7 +458,15 @@
 														>
 													</p>
 												{/if}
-												<p>Planted on: <b>{formatDate((isSearching && 'plantedOn' in tree ? tree.plantedOn : tree.PlantedOn) ?? '')}</b></p>
+												<p>
+													Planted on: <b
+														>{formatDate(
+															(isSearching && 'plantedOn' in tree
+																? tree.plantedOn
+																: tree.PlantedOn) ?? ''
+														)}</b
+													>
+												</p>
 											</div>
 										</Dialog.Content>
 									</Dialog.Root>
