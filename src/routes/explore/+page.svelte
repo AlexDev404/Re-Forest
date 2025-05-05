@@ -308,7 +308,7 @@
 									<Button
 										variant="outline"
 										size="sm"
-										class="border-green-300 text-green-700 hover:bg-green-50"
+										class="border-green-300 text-green-700 hover:bg-green-50 w-full"
 										onclick={clearFilters}
 									>
 										Clear all filters
