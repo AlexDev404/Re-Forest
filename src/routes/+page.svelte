@@ -1,22 +1,12 @@
 <script lang="ts">
-	import TreeData from '$lib/data/trees.json';
-	import { type Tree } from '$lib/types/Tree';
+	import { formatDate, metersToFeet } from '$lib/utility/utility';
 	import { Map, Marker, controls } from '@beyonk/svelte-mapbox';
 	import { onMount } from 'svelte';
-	// custom component
+	import type { PageProps } from './$types';
 
-	let trees: Tree[];
-	// let oldDate: string;
-
-	onMount(() => {
-		let trees__fromstorage: Tree[] = JSON.parse(localStorage.getItem('trees') ?? '[]');
-		if (trees__fromstorage.length > 0) {
-			trees = trees__fromstorage;
-			trees = trees;
-		} else {
-			trees = TreeData;
-		}
-	});
+	// Get tree data from server-side load function
+	const { data }: PageProps = $props();
+	let trees = data.trees;
 
 	const { GeolocateControl, NavigationControl, ScaleControl } = controls;
 	let mapComponent;
@@ -27,58 +17,29 @@
 		mapComponent.setCenter([-88.768579, 17.25118]); // zoom is optional
 		mapComponent.setZoom(10.5);
 		mapComponent.flyTo({ center: [-88.768579, 17.25118] }); // documentation (https://docs.mapbox.com/mapbox-gl-js/example/flyto)
-
-		// trees.forEach((tree) => {
-		// 	const distance = Math.random() * (15 - 1) + 1; // Random distance between 1 and 15 miles
-		// 	const angle = Math.random() * 360; // Random angle in degrees
-		// 	const { newLat, newLng } = calculateNewCoordinates(originalLat, originalLng, distance, angle);
-		// 	tree.lat = newLat;
-		// 	tree.lng = newLng;
-		// });
 	});
+
 	// Define this to handle `eventname` events - see [GeoLocate Events](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol-events)
 	function eventHandler(e: CustomEvent) {
 		const data = e.detail;
 		// do something with `data`, it's the result returned from the mapbox event
 	}
 
-	// Tree information data
-	// Original coordinates for the main marker
-	// const originalLat = 17.25118;
-	// const originalLng = -88.768579;
+	// Helper function to convert health status to display class
+	function getHealthClass(health: string): string {
+		health = health.toUpperCase();
+		if (health === 'EXCELLENT' || health === 'GOOD') return 'text-green-600';
+		if (health === 'FAIR') return 'text-orange-600';
+		return 'text-red-600';
+	}
 
-	// Distance between two points formula
-	// function calculateNewCoordinates(
-	// 	lat: number,
-	// 	lng: number,
-	// 	distanceInMiles: number,
-	// 	angleInDegrees: number
-	// ) {
-	// 	const earthRadius = 3958.8; // Radius of Earth in miles
-	// 	const angleInRadians = angleInDegrees * (Math.PI / 180);
-
-	// 	const newLat =
-	// 		Math.asin(
-	// 			Math.sin(lat * (Math.PI / 180)) * Math.cos(distanceInMiles / earthRadius) +
-	// 				Math.cos(lat * (Math.PI / 180)) *
-	// 					Math.sin(distanceInMiles / earthRadius) *
-	// 					Math.cos(angleInRadians)
-	// 		) *
-	// 		(180 / Math.PI);
-
-	// 	const newLng =
-	// 		lng +
-	// 		Math.atan2(
-	// 			Math.sin(angleInRadians) *
-	// 				Math.sin(distanceInMiles / earthRadius) *
-	// 				Math.cos(lat * (Math.PI / 180)),
-	// 			Math.cos(distanceInMiles / earthRadius) -
-	// 				Math.sin(lat * (Math.PI / 180)) * Math.sin(newLat * (Math.PI / 180))
-	// 		) *
-	// 			(180 / Math.PI);
-
-	// 	return { newLat, newLng };
-	// }
+	// Helper function to get display text for health status
+	function getHealthDisplay(health: string): string {
+		health = health.toUpperCase();
+		if (health === 'EXCELLENT' || health === 'GOOD') return 'Good';
+		if (health === 'FAIR') return 'Fair';
+		return 'Poor';
+	}
 </script>
 
 <svelte:head>
@@ -94,26 +55,26 @@
 	>
 		{#each trees as tree}
 			<Marker
-				lat={tree.lat}
-				lng={tree.lng}
+				lat={tree.Lat}
+				lng={tree.Lng}
 				label="Tree Marker"
 				popupClassName="bg-transparent text-lg"
 			>
 				<div class="content text-black" slot="popup">
-					<h3 class="font-semibold">{tree.name}</h3>
+					<h3 class="font-semibold">{tree.TreeName}</h3>
 					<p class="text-sm font-light">This is a pin with the following information:</p>
 					<p class="text-sm font-light">
 						Overall Tree Health:
-						{#if parseInt(tree.health.replace(/[^0-9]/g, '')) > 80}
-							<span class="font-bold text-green-600">Good</span>
-						{:else if parseInt(tree.health.replace(/[^0-9]/g, '')) > 70}
-							<span class="font-bold text-orange-600">Fair</span>
-						{:else}
-							<span class="font-bold text-red-600">Poor</span>
-						{/if}
+						<span class="font-bold {getHealthClass(tree.Health)}">
+							{getHealthDisplay(tree.Health)}
+						</span>
 					</p>
-					<p class="text-sm font-light">Planted by: {tree.plantedBy}</p>
-					<p class="text-sm font-light">Planted on: {tree.plantedOn}</p>
+					<p class="text-sm font-light">Height: {metersToFeet(tree.Height)}</p>
+					<p class="text-sm font-light">Age: {tree.Age} years</p>
+					<p class="text-sm font-light">
+						Planted by: {tree.PlantedBy ? `${tree.PlantedBy.FirstName} ${tree.PlantedBy.LastName}` : 'Unknown'}
+					</p>
+					<p class="text-sm font-light">Planted on: {formatDate(tree.PlantedOn ?? '')}</p>
 				</div>
 			</Marker>
 		{/each}
