@@ -11,7 +11,7 @@ export const load: PageServerLoad = async (event) => {
     const user = event.locals.user;
 
     // Check if user is admin
-    if (!user || !user.isAdmin) {
+    if (!user || user.Role !== 1) {
         throw redirect(303, '/');
     }
 
@@ -35,7 +35,7 @@ export const actions: Actions = {
         const user = event.locals.user;
 
         // Check if user is admin
-        if (!user || !user.isAdmin) {
+        if (!user || user.Role !== 1) {
             return fail(403, { message: 'Unauthorized' });
         }
 
@@ -73,7 +73,7 @@ export const actions: Actions = {
         const user = event.locals.user;
 
         // Check if user is admin
-        if (!user || !user.isAdmin) {
+        if (!user || user.Role !== 1) {
             return fail(403, { message: 'Unauthorized' });
         }
 
@@ -130,7 +130,7 @@ async function updateTreeStatus(treeId: number, status: 'PENDING' | 'APPROVED' |
             .update(TreeSchema)
             .set({ 
                 Status: status,
-                UpdatedAt: new Date().toISOString()
+                UpdatedAt: new Date() 
             })
             .where(eq(TreeSchema.Id, treeId));
         
