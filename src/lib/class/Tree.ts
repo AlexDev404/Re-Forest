@@ -12,6 +12,7 @@ export class Tree {
 	TreeSpecies: number;
 	Height: number;
 	Health: 'POOR' | 'FAIR' | 'GOOD' | 'EXCELLENT';
+	Status: 'PENDING' | 'APPROVED' | 'DECLINED';
 	Age: number;
 	Image: string | null;
 	Lat: number;
@@ -21,12 +22,14 @@ export class Tree {
 	CreatedAt: Date | null;
 	UpdatedAt: Date | null;
 
+
 	constructor(
 		id: number,
 		treeName: string,
 		treeSpecies: number,
 		height: number,
 		health: 'POOR' | 'FAIR' | 'GOOD' | 'EXCELLENT',
+		status: 'PENDING' | 'APPROVED' | 'DECLINED',
 		age: number,
 		image: string | null,
 		lat: number,
@@ -41,6 +44,7 @@ export class Tree {
 		this.TreeSpecies = treeSpecies;
 		this.Height = height;
 		this.Health = health;
+		this.Status = status;
 		this.Age = age;
 		this.Image = image;
 		this.Lat = lat;
@@ -71,6 +75,7 @@ export class Tree {
 			treeSpecies,
 			height,
 			health,
+			'PENDING', // Default status
 			age,
 			image,
 			lat,
@@ -109,6 +114,7 @@ export class Tree {
 					this.TreeSpecies = treeData.TreeSpecies ?? 0;
 					this.Height = treeData.Height ?? 0;
 					this.Health = treeData.Health ?? 'EXCELLENT';
+					this.Status = treeData.Status ?? 'PENDING';
 					this.Age = treeData.Age ?? 0;
 					this.Image = treeData.Image ?? null;
 					this.Lat = treeData.Lat ?? 0;
@@ -135,6 +141,7 @@ export class Tree {
 			TreeSpecies: this.TreeSpecies,
 			Height: this.Height,
 			Health: this.Health,
+			Status: this.Status,
 			Age: this.Age,
 			Image: this.Image,
 			Lat: this.Lat,
@@ -180,6 +187,7 @@ export class Tree {
 		if (details.TreeSpecies !== undefined) this.TreeSpecies = details.TreeSpecies;
 		if (details.Height !== undefined) this.Height = details.Height;
 		if (details.Health !== undefined) this.Health = details.Health;
+		if (details.Status !== undefined) this.Status = details.Status;
 		if (details.Age !== undefined) this.Age = details.Age;
 		if (details.Image !== undefined) this.Image = details.Image;
 		if (details.Lat !== undefined) this.Lat = details.Lat;
@@ -199,6 +207,7 @@ export class Tree {
 					treeData.TreeSpecies ?? 0,
 					treeData.Height ?? 0,
 					treeData.Health ?? '',
+					treeData.Status ?? 'PENDING',
 					treeData.Age ?? 0,
 					treeData.Image ?? null,
 					treeData.Lat ?? 0,
@@ -210,6 +219,7 @@ export class Tree {
 				)
 		);
 	}
+	
 
 	static async delete(treeId: number): Promise<boolean> {
 		await db.delete(TreeSchema).where(eq(TreeSchema.Id, treeId));

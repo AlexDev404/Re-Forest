@@ -31,8 +31,8 @@
 			><House /></Menubar.Trigger
 		>
 		<Menubar.Trigger
-			on:click={() => handleNavigation('view')}
-			class={activeButton === 'view' ? 'bg-accent' : ''}><MapPin /></Menubar.Trigger
+			on:click={() => handleNavigation('verify')}
+			class={activeButton === 'verify' ? 'bg-accent' : ''}><MapPin /></Menubar.Trigger
 		>
 		<Menubar.Trigger
 			on:click={() => handleNavigation('manage')}
