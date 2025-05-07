@@ -127,7 +127,7 @@
 						</div>
 					</svelte:fragment>
 
-					<svelte:fragment slot="footer">
+					<svelte:fragment slot="dialog-footer">
 						<div class="flex justify-between w-full gap-4 mt-4">
 							<Button 
 								variant="destructive" 
