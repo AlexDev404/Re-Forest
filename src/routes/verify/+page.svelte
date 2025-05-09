@@ -1,16 +1,14 @@
 <script lang="ts">
-	import IconCard from '$lib/components/vendor/ui/icon-card/icon-card.svelte';
-	import { Button } from '$lib/components/vendor/ui/button';
-	import { CheckCircle, XCircle, Calendar } from 'lucide-svelte';
-	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
 	import type { Tree } from '$lib/class/Tree';
+	import { Button } from '$lib/components/vendor/ui/button';
+	import IconCard from '$lib/components/vendor/ui/icon-card/icon-card.svelte';
+	import { Calendar, CheckCircle, XCircle } from 'lucide-svelte';
+	import type { PageProps } from './$types';
 
-	
-	export let data;
-	let pendingTrees: Tree[] = data.pendingTrees || [];
+	const { data }: PageProps = $props();
+	let pendingTrees: Tree[] = $state(data.pendingTrees);
 	let oldDate: string;
-	let loading = false;
+	let loading = $state(false);
 
 	async function handleVerifyTree(treeId: number, approved: boolean) {
 		loading = true;
@@ -18,17 +16,17 @@
 			const formData = new FormData();
 			formData.append('tree_id', treeId.toString());
 			formData.append('approved', approved.toString());
-			
+
 			const response = await fetch('?/verify', {
 				method: 'POST',
 				body: formData
 			});
 
 			const result = await response.json();
-			
+
 			if (result.success) {
 				// Remove the tree from the list after successful verification
-				pendingTrees = pendingTrees.filter(tree => tree.Id !== treeId);
+				pendingTrees = pendingTrees.filter((tree) => tree.Id !== treeId);
 			} else {
 				console.error('Verification failed:', result.message);
 			}
@@ -41,7 +39,7 @@
 
 	const getRelativeDay = (tree: Tree) => {
 		if (!tree.CreatedAt) return '';
-		
+
 		const today = new Date();
 		const createdDate = new Date(tree.CreatedAt);
 
@@ -106,41 +104,57 @@
 					avatarSrc="/static/tree.svg"
 					avatarFallback="🌲"
 					title={tree.TreeName}
-					description={`Planted by: User ${tree.PlantedBy}`}
+					description={`Planted by: ${typeof tree.PlantedBy === 'object' ? tree.PlantedBy.FirstName : ''} ${typeof tree.PlantedBy === 'object' ? tree.PlantedBy.LastName : ''}`}
 				>
 					<svelte:fragment slot="content">
 						<Calendar class="mr-2 h-4 w-4 opacity-70" />
 						<span class="text-xs text-muted-foreground">
-							Planted on <b>{tree.PlantedOn ? new Date(tree.PlantedOn).toLocaleDateString() : 'Unknown date'}</b>
+							Planted on <b
+								>{tree.PlantedOn
+									? new Date(tree.PlantedOn).toLocaleDateString()
+									: 'Unknown date'}</b
+							>
 						</span>
 					</svelte:fragment>
-					
+
 					<svelte:fragment slot="content1">
-						<div class="flex gap-2 mt-4">
+						<div class="mt-4 flex gap-2">
 							<div class="grid w-full gap-1.5">
-								<div class="text-sm font-medium">Species ID: <span class="font-normal">{tree.TreeSpecies}</span></div>
-								<div class="text-sm font-medium">Height: <span class="font-normal">{tree.Height} meters</span></div>
-								<div class="text-sm font-medium">Age: <span class="font-normal">{tree.Age} years</span></div>
-								<div class="text-sm font-medium">Health: <span class="font-normal">{tree.Health}</span></div>
-								<div class="text-sm font-medium">Location: <span class="font-normal">{tree.Lat.toFixed(6)}, {tree.Lng.toFixed(6)}</span></div>
+								<div class="text-sm font-medium">
+									Species ID: <span class="font-normal">{tree.TreeSpecies}</span>
+								</div>
+								<div class="text-sm font-medium">
+									Height: <span class="font-normal">{tree.Height} meters</span>
+								</div>
+								<div class="text-sm font-medium">
+									Age: <span class="font-normal">{tree.Age} years</span>
+								</div>
+								<div class="text-sm font-medium">
+									Health: <span class="font-normal">{tree.Health}</span>
+								</div>
+								<div class="text-sm font-medium">
+									Location: <span class="font-normal"
+										>{tree.Lat.toFixed(6)}, {tree.Lng.toFixed(6)}</span
+									>
+								</div>
 							</div>
 						</div>
 					</svelte:fragment>
 
 					<svelte:fragment slot="dialog-footer">
-						<div class="flex justify-between w-full gap-4 mt-4">
-							<Button 
-								variant="destructive" 
-								class="flex-1" 
+						<div class="mt-4 flex w-full justify-between gap-4">
+							<Button
+								variant="destructive"
+								class="flex-1"
 								on:click={() => handleVerifyTree(tree.Id, false)}
 								disabled={loading}
 							>
 								<XCircle class="mr-2 h-4 w-4" />
 								Decline
 							</Button>
-							<Button 
-								variant="default" 
-								class="flex-1" 
+							<Button
+								variant="default"
+								class="flex-1"
 								on:click={() => handleVerifyTree(tree.Id, true)}
 								disabled={loading}
 							>
@@ -152,7 +166,7 @@
 				</IconCard>
 			{/each}
 		{/if}
-		
+
 		{#if pendingTrees.length > 0}
 			<article class="w-full pb-12 text-center text-sm font-light text-slate-600">
 				No more pending submissions to verify.
