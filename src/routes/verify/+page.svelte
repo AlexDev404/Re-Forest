@@ -85,7 +85,7 @@
 	<main class="mx-6 my-10 flex flex-col items-start gap-12">
 		<article class="flex items-start self-stretch">
 			<div class="flex w-full items-center justify-between">
-				<h1 class="text-2xl font-semibold">Verify Tree Submissions</h1>
+				<h1 class="text-2xl font-semibold">Verify Submissions</h1>
 			</div>
 		</article>
 

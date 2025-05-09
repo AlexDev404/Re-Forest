@@ -1,4 +1,4 @@
-import { DEBUG, VERBOSE } from '$env/static/private';
+import { DEBUG, DEVELOPMENT } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { Trees as TreeSchema } from '$lib/server/db/schema';
 import { typical_development_notice } from '$lib/utility/typicals';
@@ -19,8 +19,10 @@ export const load: PageServerLoad = async (event) => {
 		const pendingTrees = await getPendingTrees();
 		const pojoTrees = JSON.parse(JSON.stringify(pendingTrees));
 
-		console.log('Pending trees:', pojoTrees);
-
+		if (JSON.parse(DEBUG) && JSON.parse(DEVELOPMENT)) {
+			typical_development_notice();
+			console.log('Pending trees:', pojoTrees);
+		}
 		return {
 			pendingTrees: pojoTrees
 		};
@@ -54,7 +56,7 @@ export const actions: Actions = {
 			const result = await updateTreeStatus(parseInt(treeId), status);
 
 			if (result instanceof Error) {
-				if (JSON.parse(DEBUG) && JSON.parse(VERBOSE)) {
+				if (JSON.parse(DEBUG) && JSON.parse(DEVELOPMENT)) {
 					typical_development_notice();
 					console.error(`Failed to ${approved ? 'approve' : 'decline'} tree:`, result.message);
 				}
@@ -63,7 +65,7 @@ export const actions: Actions = {
 
 			return { success: true };
 		} catch (error) {
-			if (JSON.parse(DEBUG) && JSON.parse(VERBOSE)) {
+			if (JSON.parse(DEBUG) && JSON.parse(DEVELOPMENT)) {
 				typical_development_notice();
 				console.error('Error processing tree verification:', error);
 			}
@@ -83,7 +85,7 @@ export const actions: Actions = {
 			const pendingTrees = await getPendingTrees();
 			return { pendingTrees };
 		} catch (error) {
-			if (JSON.parse(DEBUG) && JSON.parse(VERBOSE)) {
+			if (JSON.parse(DEBUG) && JSON.parse(DEVELOPMENT)) {
 				typical_development_notice();
 				console.error('Error fetching pending trees:', error);
 			}
