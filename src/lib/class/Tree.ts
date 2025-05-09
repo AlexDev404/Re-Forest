@@ -17,11 +17,10 @@ export class Tree {
 	Image: string | null;
 	Lat: number;
 	Lng: number;
-	PlantedBy: number;
+	PlantedBy: number | App.Locals['user'];
 	PlantedOn: Date | null;
 	CreatedAt: Date | null;
 	UpdatedAt: Date | null;
-
 
 	constructor(
 		id: number,
@@ -219,7 +218,6 @@ export class Tree {
 				)
 		);
 	}
-	
 
 	static async delete(treeId: number): Promise<boolean> {
 		await db.delete(TreeSchema).where(eq(TreeSchema.Id, treeId));
