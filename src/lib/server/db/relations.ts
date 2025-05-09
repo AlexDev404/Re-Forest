@@ -2,7 +2,7 @@ import { relations } from "drizzle-orm/relations";
 import { Role, TreeSpecies, Trees, User } from "./schema";
 
 export const treesRelations = relations(Trees, ({one}) => ({
-	treeSpecy: one(TreeSpecies, {
+	treeSpecies: one(TreeSpecies, {
 		fields: [Trees.TreeSpecies],
 		references: [TreeSpecies.Id]
 	}),
