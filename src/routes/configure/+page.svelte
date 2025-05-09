@@ -4,10 +4,12 @@
 	import { Label } from '$lib/components/vendor/ui/label/index';
 	import MenuItem from '$lib/components/vendor/ui/menuitem/menuitem.svelte';
 	import { Switch } from '$lib/components/vendor/ui/switch/index';
-	import { ChevronRight, HelpCircle, Map, Thermometer } from 'lucide-svelte';
+	import { ChevronRight, DoorOpen, HelpCircle, Map, Shield, Thermometer } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import type { PageProps } from './$types';
 	let Units: Switch;
-	let checked: boolean;
+	let checked: boolean = $state(false);
+	const { data }: PageProps = $props();
 
 	onMount(() => {
 		const unitcheck: boolean = JSON.parse(localStorage.getItem('units') ?? 'false');
@@ -60,6 +62,22 @@
 				</svelte:fragment>
 				<ChevronRight class="h-4 w-4" />
 			</MenuItem>
+
+			{#if data.authenticated === false}
+				<MenuItem onclick={() => goto('/auth/login')} title="Sign In">
+					<svelte:fragment slot="start-icon">
+						<Shield class="h-4 w-4" />
+					</svelte:fragment>
+					<ChevronRight class="h-4 w-4" />
+				</MenuItem>
+			{:else}
+				<MenuItem onclick={() => goto('/auth/logout')} title="Sign Out" class="text-destructive">
+					<svelte:fragment slot="start-icon">
+						<DoorOpen class="h-4 w-4" />
+					</svelte:fragment>
+					<ChevronRight class="h-4 w-4" />
+				</MenuItem>
+			{/if}
 		</optionsList>
 		<div class="flex w-full flex-1 flex-col items-end justify-end">
 			<Button variant="link" href="/configure/help" class="flex w-full border border-primary px-0">
