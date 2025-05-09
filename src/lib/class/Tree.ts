@@ -145,7 +145,7 @@ export class Tree {
 			Image: this.Image,
 			Lat: this.Lat,
 			Lng: this.Lng,
-			PlantedBy: this.PlantedBy,
+			PlantedBy: this.PlantedBy as number,
 			PlantedOn: this.PlantedOn !== null ? this.PlantedOn.toISOString() : new Date().toISOString(),
 			CreatedAt: new Date(),
 			UpdatedAt: new Date()
@@ -197,7 +197,11 @@ export class Tree {
 	}
 
 	static async getAll(): Promise<Tree[]> {
-		const result = await db.select().from(TreeSchema).orderBy(desc(TreeSchema.CreatedAt));
+		const result = await db
+			.select()
+			.from(TreeSchema)
+			.where(eq(TreeSchema.Status, 'APPROVED'))
+			.orderBy(desc(TreeSchema.CreatedAt));
 		return result.map(
 			(treeData) =>
 				new Tree(
@@ -205,7 +209,7 @@ export class Tree {
 					treeData.TreeName ?? '',
 					treeData.TreeSpecies ?? 0,
 					treeData.Height ?? 0,
-					treeData.Health ?? '',
+					treeData.Health ?? 'EXCELLENT',
 					treeData.Status ?? 'PENDING',
 					treeData.Age ?? 0,
 					treeData.Image ?? null,

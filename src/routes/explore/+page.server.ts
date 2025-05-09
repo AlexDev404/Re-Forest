@@ -18,7 +18,7 @@ export const load: PageServerLoad = async () => {
 		Image: tree.Image,
 		Lat: tree.Lat,
 		Lng: tree.Lng,
-		PlantedBy: tree.PlantedBy ? { ...(await User.findById(tree.PlantedBy)) } : null,
+		PlantedBy: tree.PlantedBy ? { ...(await User.findById(tree.PlantedBy as number)) } : null,
 		PlantedOn: tree.PlantedOn !== null ? tree.PlantedOn.toISOString() : null,
 		CreatedAt: tree.CreatedAt !== null ? tree.CreatedAt.toISOString() : null,
 		UpdatedAt: tree.UpdatedAt !== null ? tree.UpdatedAt.toISOString() : null
