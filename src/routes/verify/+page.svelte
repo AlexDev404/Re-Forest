@@ -22,7 +22,8 @@
 				body: formData
 			});
 
-			const result = await response.json();
+			const res = await response.json();
+			const result = JSON.parse(res.data)[0];
 
 			if (result.success) {
 				// Remove the tree from the list after successful verification
@@ -98,6 +99,9 @@
 
 				<IconCard
 					wants_image
+					wants_dialog
+					dialog_title="Verify Tree Submission"
+					dialog_description="You cannot undo this."
 					srcImgAlt="Tree image"
 					srcImg={tree.Image}
 					srcImagePlaceholderText="No image available"
@@ -115,6 +119,10 @@
 									: 'Unknown date'}</b
 							>
 						</span>
+					</svelte:fragment>
+
+					<svelte:fragment slot="dialog-trigger">
+						<Button variant="outline" class="w-full">Verify</Button>
 					</svelte:fragment>
 
 					<svelte:fragment slot="content1">
