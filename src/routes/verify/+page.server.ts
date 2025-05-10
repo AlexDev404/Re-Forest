@@ -1,10 +1,11 @@
 import { DEBUG, DEVELOPMENT } from '$env/static/private';
 import { db } from '$lib/server/db';
-import { Trees as TreeSchema } from '$lib/server/db/schema';
+import { Trees as TreeSchema} from '$lib/server/db/schema';
 import { typical_development_notice } from '$lib/utility/typicals';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
+import { sendNotification } from '$lib/server/notifications/sendNotification';
 
 export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user;
@@ -51,6 +52,12 @@ export const actions: Actions = {
 			return fail(400, { message: 'Tree ID is required' });
 		}
 
+		const tree = await db.query.Trees.findFirst({
+			where: eq(TreeSchema.Id, parseInt(treeId))
+		});
+
+		if (!tree) return fail(404, { message: 'Tree not found' });
+
 		try {
 			const status = approved ? 'APPROVED' : 'DECLINED';
 			const result = await updateTreeStatus(parseInt(treeId), status);
@@ -63,6 +70,13 @@ export const actions: Actions = {
 				return fail(500, { message: result.message });
 			}
 
+			// Create notification
+			await sendNotification(
+			tree.PlantedBy ?? 0,
+			tree.Id,
+			'status_change',
+			`Your tree submission for ${tree.TreeName} has been ${status.toLowerCase()}.`
+			);
 			return { success: true };
 		} catch (error) {
 			if (JSON.parse(DEBUG) && JSON.parse(DEVELOPMENT)) {

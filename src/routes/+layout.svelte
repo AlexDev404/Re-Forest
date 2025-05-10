@@ -4,6 +4,7 @@
 	import type { OnNavigate } from '@sveltejs/kit';
 	import { onMount } from 'svelte';
 	import '../app.css';
+	import { requestNotificationPermission } from '$lib/firebase';
 
 	let loadingBar: HTMLDivElement;
 
@@ -49,6 +50,45 @@
 			splashScreen?.remove();
 		}, 2000);
 	});
+
+	onMount(() => {
+	loadingBar.style.opacity = '0';
+	const splashScreen = document.getElementById('splash-screen');
+	setTimeout(() => {
+		splashScreen?.classList.add('animate-fade-out');
+	}, 1000);
+	setTimeout(() => {
+		splashScreen?.remove();
+	}, 2000);
+
+	// Register Firebase service worker
+	if ('serviceWorker' in navigator) {
+		navigator.serviceWorker
+			.register('/firebase-messaging-sw.js')
+			.then((registration) => {
+				console.log('Firebase service worker registered with scope:', registration.scope);
+			})
+			.catch((error) => {
+				console.error('Service worker registration failed:', error);
+			});
+	}
+
+	// Request notification permission
+	requestNotificationPermission()
+		.then((permission) => {
+			if (permission === 'granted') {
+				console.log('Notification permission granted.');
+			} else if (permission === 'denied') {
+				console.log('Notification permission denied.');
+			} else {
+				console.log('Notification permission dismissed.');
+			}
+		})
+		.catch((error) => {
+			console.error('Error requesting notification permission:', error);
+		});
+});
+
 </script>
 
 <app class="h-full w-full">
