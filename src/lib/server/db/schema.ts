@@ -58,3 +58,20 @@ export const User = pgTable("User", {
 			name: "User_role_fkey"
 		}),
 ]);
+
+export const Notifications = pgTable("Notifications", {
+	id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+	userId: integer("user_id").notNull().references(() => User.Id, { onDelete: "cascade" }),
+	treeId: integer("tree_id").notNull().references(() => Trees.Id, { onDelete: "cascade" }),
+	type: varchar("type", { length: 50 }).notNull(),
+	message: text("message").notNull(),
+	createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const UserTokens = pgTable("User_Tokens", {
+	id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+	userId: integer("user_id").notNull().references(() => User.Id, { onDelete: "cascade" }),
+	fcmToken: text("fcm_token").notNull(),
+	deviceInfo: varchar("device_info", { length: 255 }), // optional
+	lastUpdated: timestamp("last_updated").defaultNow(),
+});
