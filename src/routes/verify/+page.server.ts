@@ -71,12 +71,16 @@ export const actions: Actions = {
 			}
 
 			// Create notification
-			await sendNotification(
-			tree.PlantedBy ?? 0,
-			tree.Id,
-			'status_change',
-			`Your tree submission for ${tree.TreeName} has been ${status.toLowerCase()}.`
-			);
+			if (tree.PlantedBy == null) {
+				console.error(`Missing 'PlantedBy' field for tree ID ${tree.Id}. Notification not sent.`);
+			} else {
+				await sendNotification(
+					tree.PlantedBy,
+					tree.Id,
+					'status_change',
+					`Your tree submission for ${tree.TreeName} has been ${status.toLowerCase()}.`
+				);
+			}
 			return { success: true };
 		} catch (error) {
 			if (JSON.parse(DEBUG) && JSON.parse(DEVELOPMENT)) {
