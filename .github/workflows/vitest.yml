@@ -24,6 +24,7 @@ jobs:
         DEVELOPMENT: ${{ vars.DEVELOPMENT }}
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
         VERBOSE: ${{ vars.VERBOSE }}
+        PUBLIC_DEEP_DEBUG: ${{ vars.PUBLIC_DEEP_DEBUG }}
         JWT_SECRET: "Nah"
         JWT_ACTIVATION_SECRET: "Wow"
         SESSION_SAMESITE: "lax"

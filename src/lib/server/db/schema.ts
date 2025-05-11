@@ -1,6 +1,7 @@
 import { date, doublePrecision, foreignKey, integer, pgEnum, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
 export const treehealth = pgEnum("treehealth", ['POOR', 'FAIR', 'GOOD', 'EXCELLENT'])
 export const roleNames = pgEnum("names", ['ADMIN', 'ENVIRONMENTALIST', 'USER'])
+export const treeStatus = pgEnum("treestatus", ['PENDING', 'APPROVED', 'DECLINED'])
 
 
 export const TreeSpecies = pgTable("Tree_Species", {
@@ -15,6 +16,7 @@ export const Trees = pgTable("Trees", {
 	TreeSpecies: integer("tree_species"),
 	Height: doublePrecision("height"),
 	Health: treehealth("health").default("EXCELLENT"),
+	Status: treeStatus("status").default("PENDING"),
 	Age: integer("age"),
 	Image: text("image"),
 	Lat: doublePrecision("lat"),

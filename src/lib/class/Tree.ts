@@ -12,11 +12,12 @@ export class Tree {
 	TreeSpecies: number;
 	Height: number;
 	Health: 'POOR' | 'FAIR' | 'GOOD' | 'EXCELLENT';
+	Status: 'PENDING' | 'APPROVED' | 'DECLINED';
 	Age: number;
 	Image: string | null;
 	Lat: number;
 	Lng: number;
-	PlantedBy: number;
+	PlantedBy: number | App.Locals['user'];
 	PlantedOn: Date | null;
 	CreatedAt: Date | null;
 	UpdatedAt: Date | null;
@@ -27,6 +28,7 @@ export class Tree {
 		treeSpecies: number,
 		height: number,
 		health: 'POOR' | 'FAIR' | 'GOOD' | 'EXCELLENT',
+		status: 'PENDING' | 'APPROVED' | 'DECLINED',
 		age: number,
 		image: string | null,
 		lat: number,
@@ -41,6 +43,7 @@ export class Tree {
 		this.TreeSpecies = treeSpecies;
 		this.Height = height;
 		this.Health = health;
+		this.Status = status;
 		this.Age = age;
 		this.Image = image;
 		this.Lat = lat;
@@ -71,6 +74,7 @@ export class Tree {
 			treeSpecies,
 			height,
 			health,
+			'PENDING', // Default status
 			age,
 			image,
 			lat,
@@ -109,6 +113,7 @@ export class Tree {
 					this.TreeSpecies = treeData.TreeSpecies ?? 0;
 					this.Height = treeData.Height ?? 0;
 					this.Health = treeData.Health ?? 'EXCELLENT';
+					this.Status = treeData.Status ?? 'PENDING';
 					this.Age = treeData.Age ?? 0;
 					this.Image = treeData.Image ?? null;
 					this.Lat = treeData.Lat ?? 0;
@@ -135,11 +140,12 @@ export class Tree {
 			TreeSpecies: this.TreeSpecies,
 			Height: this.Height,
 			Health: this.Health,
+			Status: this.Status,
 			Age: this.Age,
 			Image: this.Image,
 			Lat: this.Lat,
 			Lng: this.Lng,
-			PlantedBy: this.PlantedBy,
+			PlantedBy: this.PlantedBy as number,
 			PlantedOn: this.PlantedOn !== null ? this.PlantedOn.toISOString() : new Date().toISOString(),
 			CreatedAt: new Date(),
 			UpdatedAt: new Date()
@@ -180,6 +186,7 @@ export class Tree {
 		if (details.TreeSpecies !== undefined) this.TreeSpecies = details.TreeSpecies;
 		if (details.Height !== undefined) this.Height = details.Height;
 		if (details.Health !== undefined) this.Health = details.Health;
+		if (details.Status !== undefined) this.Status = details.Status;
 		if (details.Age !== undefined) this.Age = details.Age;
 		if (details.Image !== undefined) this.Image = details.Image;
 		if (details.Lat !== undefined) this.Lat = details.Lat;
@@ -190,7 +197,11 @@ export class Tree {
 	}
 
 	static async getAll(): Promise<Tree[]> {
-		const result = await db.select().from(TreeSchema).orderBy(desc(TreeSchema.CreatedAt));
+		const result = await db
+			.select()
+			.from(TreeSchema)
+			.where(eq(TreeSchema.Status, 'APPROVED'))
+			.orderBy(desc(TreeSchema.CreatedAt));
 		return result.map(
 			(treeData) =>
 				new Tree(
@@ -198,7 +209,8 @@ export class Tree {
 					treeData.TreeName ?? '',
 					treeData.TreeSpecies ?? 0,
 					treeData.Height ?? 0,
-					treeData.Health ?? '',
+					treeData.Health ?? 'EXCELLENT',
+					treeData.Status ?? 'PENDING',
 					treeData.Age ?? 0,
 					treeData.Image ?? null,
 					treeData.Lat ?? 0,

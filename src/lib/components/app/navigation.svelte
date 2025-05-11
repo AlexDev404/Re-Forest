@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import * as Menubar from '$lib/components/vendor/ui/navigator';
-	import { CirclePlus, Cog, House, MapPin, Trees } from 'lucide-svelte';
+	import { BadgeCheck, CirclePlus, Cog, House, Trees } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 // Import SvelteKit's navigator
 	import { goto } from '$app/navigation';
@@ -31,8 +31,8 @@
 			><House /></Menubar.Trigger
 		>
 		<Menubar.Trigger
-			on:click={() => handleNavigation('view')}
-			class={activeButton === 'view' ? 'bg-accent' : ''}><MapPin /></Menubar.Trigger
+			on:click={() => handleNavigation('verify')}
+			class={activeButton === 'verify' ? 'bg-accent' : ''}><BadgeCheck /></Menubar.Trigger
 		>
 		<Menubar.Trigger
 			on:click={() => handleNavigation('manage')}
