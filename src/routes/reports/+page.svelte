@@ -242,7 +242,7 @@
 													type="line"
 													data={chartData.data}
 													title={chartData.title}
-													xAxisLabel="Date"
+													xAxisLabel={chartData.columns[0]}
 													yAxisLabel="Trees Planted"
 												/>
 											</div>

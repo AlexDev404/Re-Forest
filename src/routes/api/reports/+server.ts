@@ -4,12 +4,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import { json } from '@sveltejs/kit';
 import { and, count, desc, eq, gte, sql } from 'drizzle-orm';
 
-// Store the event in a variable that will be available to all functions
-let currentEvent: RequestEvent;
-
 export async function GET(event: RequestEvent) {
-    // Store the event for use in other functions
-    currentEvent = event;
     // Check authentication
     const user = event.locals.user;
     if (!user) {
@@ -132,14 +127,11 @@ async function getPlantingActivityReport(startDate: Date | null) {
     // Create date range for the report
     let periodStartDate = startDate;
     if (!periodStartDate) {
-        // Default to 1 year if no start date specified
-        periodStartDate = new Date();
-        periodStartDate.setFullYear(periodStartDate.getFullYear() - 1);
+        // Default to epoch (January 1, 1970) if no start date specified
+        periodStartDate = new Date(0); // 0 milliseconds since the epoch
     }
     
-    // Determine the grouping period (monthly is default)
-    const dateTrunc = 'month'; // We'll use monthly by default for simplicity
-    
+    // Determine the grouping period (monthly is default for simplicity)    
     // Query approved trees grouped by month
     const plantingActivity = await db
         .select({
@@ -225,7 +217,7 @@ async function getTreeGrowthReport(startDate: Date | null) {
         { label: '10+ years', min: 11, max: 1000 }
     ];
 
-    let result = [];
+    const result = [];
     
     for (const range of ageRanges) {
         const ageCondition = and(
@@ -265,5 +257,8 @@ function formatDate(dateString: string | null): string {
     if (!dateString) return 'Unknown';
     
     const date = new Date(dateString);
-    return date.toLocaleString('default', { month: 'short', year: 'numeric' });
+    
+    // Use consistent format: shortened month name + space + full year
+    // This matches the regex pattern we're looking for in the Chart component
+    return date.toLocaleString('en-US', { month: 'short', year: 'numeric' });
 }
