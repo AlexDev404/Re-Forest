@@ -14,7 +14,7 @@ const treeSchema = z.object({
 	tree_lng: z.number().min(-180).max(180),
 	tree_height: z.number().min(0).max(100),
 	tree_age: z.number().min(0).max(100),
-	tree_species: z.string().min(1).max(50)
+	tree_species: z.string().min(1) // Will contain the species ID
 });
 
 export const load: PageServerLoad = async (event) => {
@@ -45,9 +45,17 @@ export const actions: Actions = {
 			form.data;
 
 		try {
+			// Convert the tree species ID from string to number
+			const speciesId = parseInt(tree_species, 10);
+			
+			if (isNaN(speciesId)) {
+				setError(form, 'tree_species', 'Invalid species selection');
+				return fail(400, { form });
+			}
+			
 			const new_tree = await Tree.create(
 				tree_name,
-				1, // Assuming you have a way to get the tree species ID from the name
+				speciesId, // Use the parsed species ID
 				tree_height,
 				'EXCELLENT', // Placeholder health status
 				tree_age,

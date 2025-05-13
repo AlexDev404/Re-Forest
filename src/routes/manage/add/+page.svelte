@@ -1,11 +1,15 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { Button } from '$lib/components/vendor/ui/button';
+	import Button2 from '$lib/components/vendor/ui/button/button.svelte';
+	import * as Command from '$lib/components/vendor/ui/command';
+	import CommandItem2 from '$lib/components/vendor/ui/command/command-item2.svelte';
 	import IconCard from '$lib/components/vendor/ui/icon-card/icon-card.svelte';
 	import { Input } from '$lib/components/vendor/ui/input';
 	import { Label } from '$lib/components/vendor/ui/label';
 	import { type ReverseGeoJSON } from '$lib/types/GeoJSON';
 	import { getReverseLoc } from '$lib/utility/utility';
+	import { Leaf } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { superForm } from 'sveltekit-superforms';
 	import type { PageProps } from './$types';
@@ -13,13 +17,36 @@
 	const { data }: PageProps = $props();
 	const { form, errors, constraints, enhance } = superForm(data.form);
 	let treeImageSrc: string | null = $state(null);
+	let speciesData = $state<{ id: number; name: string }[] | null>(null);
+	let selectedSpeciesName = $state<string | null>(null);
 
 	// Location handling
 	let tree_added = false;
 	let location: GeolocationCoordinates | (string | null) = null;
 	let translated_location: string | null = null;
+	let timeout: ReturnType<typeof setTimeout>;
+	let backoff = 500;
+
+	// Function to fetch tree species
+	async function querySpecies(query: string = ''): Promise<void> {
+		try {
+			const response = await fetch(`/api/tree-species?q=${query}&limit=10`);
+			if (!response.ok) {
+				throw new Error('Failed to fetch species data');
+			}
+			const data = await response.json();
+			speciesData = data.species;
+		} catch (error) {
+			console.error('Error fetching species:', error);
+			speciesData = null;
+		}
+	}
 
 	onMount(async () => {
+		// Fetch initial species list
+		await querySpecies();
+
+		// Get location data
 		location = localStorage.getItem('location') ?? null;
 		if (location === null) return;
 		location = JSON.parse(location);
@@ -163,15 +190,83 @@
 
 			<div class="grid w-full items-center gap-1.5">
 				<Label for="tree_species" class="w-fit">Species</Label>
-				<Input
-					type="text"
+				<input
+					type="hidden"
 					name="tree_species"
 					id="tree_species"
 					bind:value={$form.tree_species}
-					placeholder="Enter the tree species"
-					class="w-full"
-					required
 				/>
+
+				{#if selectedSpeciesName}
+					<div class="mb-2 flex items-center justify-between rounded-lg border p-3">
+						<div class="flex items-center gap-2">
+							<Leaf class="h-4 w-4" />
+							<span>{selectedSpeciesName}</span>
+						</div>
+						<Button2
+							variant="ghost"
+							size="sm"
+							class="h-8 px-2 lg:px-3"
+							onclick={() => {
+								selectedSpeciesName = null;
+								$form.tree_species = '';
+							}}
+						>
+							Change
+						</Button2>
+					</div>
+				{/if}
+
+				{#if !selectedSpeciesName}
+					<Command.Root class="w-full rounded-lg border">
+						<Command.Input
+							class="w-full"
+							placeholder="Search for a tree species..."
+							onkeydown={(e) => {
+								if (e.key === 'Enter') {
+									const target = e.target as HTMLInputElement;
+									clearTimeout(timeout);
+									timeout = setTimeout(async () => {
+										await querySpecies(target.value);
+									}, backoff);
+								}
+							}}
+							oninput={async (e: Event) => {
+								const target = e.target as HTMLInputElement;
+								if (target === null || target.value === '') {
+									await querySpecies('');
+									return;
+								}
+								clearTimeout(timeout);
+								timeout = setTimeout(async () => {
+									await querySpecies(target.value);
+								}, backoff);
+							}}
+						/>
+
+						{#if speciesData}
+							{#if speciesData.length > 0}
+								<Command.List title="Available species">
+									{#each speciesData as species}
+										<CommandItem2
+											onclick={() => {
+												$form.tree_species = species.id.toString();
+												selectedSpeciesName = species.name;
+											}}
+										>
+											<Leaf class="mr-2 h-4 w-4" />
+											<div>{species.name}</div>
+											<Command.Shortcut>ID: {species.id}</Command.Shortcut>
+										</CommandItem2>
+									{/each}
+								</Command.List>
+							{:else}
+								<Command.Empty>No species found.</Command.Empty>
+							{/if}
+						{/if}
+					</Command.Root>
+				{/if}
+
 				{#if $errors.tree_species}
 					<p class="text-sm text-red-500">{$errors.tree_species}</p>
 				{/if}
