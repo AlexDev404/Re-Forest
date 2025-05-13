@@ -27,9 +27,13 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions = {
-	delete: async ({ request }) => {
+	delete: async ({ request, locals }) => {
+		if (!locals.user || locals.user.Role === 3) {
+			return { success: false, error: 'Unauthorized' };
+		}
 		const formData = await request.formData();
 		const treeId = formData.get('treeId');
+
 
 		if (!treeId) {
 			return { success: false, error: 'Tree ID is required' };

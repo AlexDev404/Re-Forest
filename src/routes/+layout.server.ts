@@ -8,13 +8,20 @@ export const load: LayoutServerLoad = async ({ request, locals }) => {
 		return redirect(307, '/auth/login');
 	}
 
-    return {
-        authenticated: !!user,
-        user: user ? {
-            Id: user.Id,
-            FirstName: user.FirstName,
-            LastName: user.LastName,
-            Role: user.Role
-        } : null
-    }
+	return {
+		authenticated: !!user,
+		user: user
+			? {
+					Id: user.Id,
+					FirstName: user.FirstName,
+					LastName: user.LastName,
+					Role: user.Role
+				}
+			: {
+					Id: null,
+					FirstName: 'Guest',
+					LastName: '',
+					Role: 3
+				}
+	};
 };
