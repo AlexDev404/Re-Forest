@@ -1,5 +1,4 @@
 <script lang="ts">
-	
 	import Chart from '$lib/components/charts/chart.svelte';
 	import { Button } from '$lib/components/vendor/ui/button/index.js';
 	import {
@@ -12,6 +11,7 @@
 	} from '$lib/components/vendor/ui/card/index.js';
 	import { Label } from '$lib/components/vendor/ui/label/index.js';
 	import { Progress } from '$lib/components/vendor/ui/progress/index.js';
+	import { ScrollArea } from '$lib/components/vendor/ui/scroll-area/index.js';
 	import {
 		Select,
 		SelectContent,
@@ -218,7 +218,7 @@
 								<p>Loading report data...</p>
 							</div>
 						{:else if chartData}
-							<Tabs value="chart" class="w-full">
+							<Tabs value="chart" class="h-full w-full">
 								<TabsList class="grid w-full grid-cols-2">
 									<TabsTrigger value="chart">Chart</TabsTrigger>
 									<TabsTrigger value="table">Table</TabsTrigger>
@@ -253,22 +253,24 @@
 
 								<TabsContent value="table">
 									<div class="overflow-x-auto">
-										<table class="w-full border-collapse">
-											<thead>
-												<tr>
-													<th class="border-b px-4 py-2 text-left">{chartData.columns[0]}</th>
-													<th class="border-b px-4 py-2 text-right">{chartData.columns[1]}</th>
-												</tr>
-											</thead>
-											<tbody>
-												{#each chartData.data as item}
+										<ScrollArea class="h-[400px] w-full">
+											<table class="w-full border-collapse">
+												<thead>
 													<tr>
-														<td class="border-b px-4 py-2 text-left">{item.label}</td>
-														<td class="border-b px-4 py-2 text-right">{item.value}</td>
+														<th class="border-b px-4 py-2 text-left">{chartData.columns[0]}</th>
+														<th class="border-b px-4 py-2 text-right">{chartData.columns[1]}</th>
 													</tr>
-												{/each}
-											</tbody>
-										</table>
+												</thead>
+												<tbody>
+													{#each chartData.data as item}
+														<tr>
+															<td class="border-b px-4 py-2 text-left">{item.label}</td>
+															<td class="border-b px-4 py-2 text-right">{item.value}</td>
+														</tr>
+													{/each}
+												</tbody>
+											</table>
+										</ScrollArea>
 									</div>
 								</TabsContent>
 							</Tabs>
