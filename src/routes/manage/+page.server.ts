@@ -34,7 +34,6 @@ export const actions = {
 		const formData = await request.formData();
 		const treeId = formData.get('treeId');
 
-
 		if (!treeId) {
 			return { success: false, error: 'Tree ID is required' };
 		}

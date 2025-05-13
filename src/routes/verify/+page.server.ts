@@ -1,6 +1,6 @@
 import { DEBUG, DEVELOPMENT } from '$env/static/private';
 import { db } from '$lib/server/db';
-import { Trees as TreeSchema} from '$lib/server/db/schema';
+import { Trees as TreeSchema } from '$lib/server/db/schema';
 import { typical_development_notice } from '$lib/utility/typicals';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';

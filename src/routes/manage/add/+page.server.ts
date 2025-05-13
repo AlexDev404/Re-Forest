@@ -20,7 +20,7 @@ const treeSchema = z.object({
 export const load: PageServerLoad = async (event) => {
 	return {
 		form: await superValidate(event, zod(treeSchema))
-	}
+	};
 };
 
 export const actions: Actions = {
@@ -47,12 +47,12 @@ export const actions: Actions = {
 		try {
 			// Convert the tree species ID from string to number
 			const speciesId = parseInt(tree_species, 10);
-			
+
 			if (isNaN(speciesId)) {
 				setError(form, 'tree_species', 'Invalid species selection');
 				return fail(400, { form });
 			}
-			
+
 			const new_tree = await Tree.create(
 				tree_name,
 				speciesId, // Use the parsed species ID

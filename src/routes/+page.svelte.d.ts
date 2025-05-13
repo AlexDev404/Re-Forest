@@ -1,1 +1,1 @@
-declare module '@beyonk/svelte-mapbox'
+declare module '@beyonk/svelte-mapbox';

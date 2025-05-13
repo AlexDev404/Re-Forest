@@ -1,9 +1,9 @@
 name: Run Unit (Vitest) Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
   workflow_dispatch:
 jobs:
   test:
@@ -11,24 +11,24 @@ jobs:
     runs-on: ubuntu-latest
     environment: default
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm ci
-    - name: Run unit tests
-      env:
-        # Setting an environment variable with the value of a configuration variable
-        DEBUG: ${{ vars.DEBUG }}
-        DEVELOPMENT: ${{ vars.DEVELOPMENT }}
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        VERBOSE: ${{ vars.VERBOSE }}
-        PUBLIC_DEEP_DEBUG: ${{ vars.PUBLIC_DEEP_DEBUG }}
-        JWT_SECRET: "Nah"
-        JWT_ACTIVATION_SECRET: "Wow"
-        SESSION_SAMESITE: "lax"
-        SESSION_HTTP_ONLY: true
-        SESSION_SECURE: false
-        SESSION_MAX_AGE: 72
-      run: npm run test:unit
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Run unit tests
+        env:
+          # Setting an environment variable with the value of a configuration variable
+          DEBUG: ${{ vars.DEBUG }}
+          DEVELOPMENT: ${{ vars.DEVELOPMENT }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          VERBOSE: ${{ vars.VERBOSE }}
+          PUBLIC_DEEP_DEBUG: ${{ vars.PUBLIC_DEEP_DEBUG }}
+          JWT_SECRET: 'Nah'
+          JWT_ACTIVATION_SECRET: 'Wow'
+          SESSION_SAMESITE: 'lax'
+          SESSION_HTTP_ONLY: true
+          SESSION_SECURE: false
+          SESSION_MAX_AGE: 72
+        run: npm run test:unit

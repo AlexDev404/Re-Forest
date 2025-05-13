@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	if (!user) {
 		throw redirect(307, '/auth/login');
 	}
-	
+
 	// Check if user is admin or environmentalist (roles 1 and 2)
 	if (user.Role !== 1 && user.Role !== 2) {
 		throw redirect(307, '/');
@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const totalSpecies = totalSpeciesResult[0].count;
 
 	const activeContributorsResult = await db
-		.select({ count: count(User.Id, { distinct: true }) })
+		.select({ count: count(User.Id) })
 		.from(Trees)
 		.innerJoin(User, eq(Trees.PlantedBy, User.Id))
 		.where(eq(Trees.Status, 'APPROVED'));
@@ -34,14 +34,16 @@ export const load: PageServerLoad = async ({ locals }) => {
 	// Get trees planted in the current month
 	const today = new Date();
 	const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-	
+
 	const treesThisMonthResult = await db
 		.select({ count: count() })
 		.from(Trees)
-		.where(and(
-			gte(Trees.PlantedOn, firstDayOfMonth.toISOString().split('T')[0]),
-			eq(Trees.Status, 'APPROVED')
-		));
+		.where(
+			and(
+				gte(Trees.PlantedOn, firstDayOfMonth.toISOString().split('T')[0]),
+				eq(Trees.Status, 'APPROVED')
+			)
+		);
 	const treesThisMonth = treesThisMonthResult[0].count;
 
 	// Calculate overall health score (percentage of trees in good or excellent health)
@@ -53,17 +55,17 @@ export const load: PageServerLoad = async ({ locals }) => {
 		.from(Trees)
 		.where(eq(Trees.Status, 'APPROVED'))
 		.groupBy(Trees.Health);
-	
+
 	let healthyCount = 0;
 	let totalCount = 0;
-	
-	healthDistributionResult.forEach(result => {
+
+	healthDistributionResult.forEach((result) => {
 		totalCount += result.count;
 		if (result.health === 'GOOD' || result.health === 'EXCELLENT') {
 			healthyCount += result.count;
 		}
 	});
-	
+
 	const healthScore = totalCount > 0 ? Math.round((healthyCount / totalCount) * 100) : 0;
 
 	return {

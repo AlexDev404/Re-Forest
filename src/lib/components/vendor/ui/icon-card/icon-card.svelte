@@ -37,7 +37,9 @@
 			</div>
 			<slot name="content1" />
 			{#if wants_dialog}
-				<Dialog.Trigger class="w-full" disabled={disabled_when}><slot name="dialog-trigger" /></Dialog.Trigger>
+				<Dialog.Trigger class="w-full" disabled={disabled_when}
+					><slot name="dialog-trigger" /></Dialog.Trigger
+				>
 			{/if}
 		</div>
 		{#if wants_image}

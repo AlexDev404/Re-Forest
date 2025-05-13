@@ -2,12 +2,12 @@ import { initializeApp } from 'firebase/app';
 
 // Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyDOqj153oV9vP5cfXx9stQSKXnQxjy1JuQ",
-  authDomain: "refores-71a01.firebaseapp.com",
-  projectId: "refores-71a01",
-  storageBucket: "refores-71a01.appspot.com",
-  messagingSenderId: "796033762691",
-  appId: "1:796033762691:web:3a53543dc6c58eeb6c22b6"
+	apiKey: 'AIzaSyDOqj153oV9vP5cfXx9stQSKXnQxjy1JuQ',
+	authDomain: 'refores-71a01.firebaseapp.com',
+	projectId: 'refores-71a01',
+	storageBucket: 'refores-71a01.appspot.com',
+	messagingSenderId: '796033762691',
+	appId: '1:796033762691:web:3a53543dc6c58eeb6c22b6'
 };
 
 // Initialize only once (safe for both SSR and CSR)
@@ -26,7 +26,7 @@ export async function initMessaging() {
 
 		// ✅ Listen for foreground messages
 		onMessage(messaging, (payload) => {
-			console.log("Message received: ", payload);
+			console.log('Message received: ', payload);
 
 			const { title, body, icon } = payload.notification || {};
 			if (Notification.permission === 'granted') {
@@ -44,8 +44,6 @@ export async function initMessaging() {
 	}
 }
 
-
-
 // Handles request and token logic client-side
 export async function requestNotificationPermission() {
 	try {
@@ -59,7 +57,8 @@ export async function requestNotificationPermission() {
 
 		const { getToken } = await import('firebase/messaging');
 		const token = await getToken(messaging, {
-			vapidKey: 'BA4wrqh7jf14Tfu9jUl6Q9FH7bAtpM8tWew4lwpZYb5hZXCXWn8UhWcJpTb6QXTEPf0EKjb2cDJFv-8NMC8c_2k'
+			vapidKey:
+				'BA4wrqh7jf14Tfu9jUl6Q9FH7bAtpM8tWew4lwpZYb5hZXCXWn8UhWcJpTb6QXTEPf0EKjb2cDJFv-8NMC8c_2k'
 		});
 
 		console.log('FCM Token:', token);

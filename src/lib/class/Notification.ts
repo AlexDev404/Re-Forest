@@ -1,6 +1,5 @@
 import { db } from '$lib/server/db';
 import { Notifications } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
 
 export class Notification {
 	id: number;
@@ -26,7 +25,12 @@ export class Notification {
 		this.createdAt = createdAt;
 	}
 
-	static async create(userId: number, treeId: number, type: string, message: string): Promise<Notification | undefined> {
+	static async create(
+		userId: number,
+		treeId: number,
+		type: string,
+		message: string
+	): Promise<Notification | undefined> {
 		try {
 			const newNotification = await db
 				.insert(Notifications)
@@ -40,15 +44,20 @@ export class Notification {
 
 			if (newNotification.length > 0) {
 				const created = newNotification[0];
-				return new Notification(created.id, created.userId, created.treeId, created.type, created.message, created.createdAt);
+				return new Notification(
+					created.id,
+					created.userId,
+					created.treeId,
+					created.type,
+					created.message,
+					created.createdAt
+				);
 			}
 
 			return undefined;
-
 		} catch (error) {
 			console.error('Error creating notification:', error);
 			return undefined;
 		}
-        
 	}
 }

@@ -14,13 +14,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (!jwt) return await resolve(event);
 
 		// Get the user's raw data from the database
-		const temp_user = await User.findByEmail(jwt['email']).catch((error) => {
+		const temp_user = (await User.findByEmail(jwt['email']).catch((error) => {
 			if (JSON.parse(DEBUG)) {
 				typical_development_notice();
 				console.error('[HOOK_AUTH]: Error finding user:', error);
 			}
 			throw new Error('User not found');
-		}) as User;
+		})) as User;
 
 		// Cast the raw data to the User type
 		const new_user: App.Locals['user'] = temp_user as unknown as App.Locals['user'];
@@ -34,7 +34,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		// response = await handleI18n({ event, resolve });
 	} catch (e) {
-		console.error("[HOOK_AUTH_CATCH]: " + e);
+		console.error('[HOOK_AUTH_CATCH]: ' + e);
 		return await resolve(event);
 	}
 

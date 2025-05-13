@@ -4,7 +4,15 @@
 	import { Label } from '$lib/components/vendor/ui/label/index';
 	import MenuItem from '$lib/components/vendor/ui/menuitem/menuitem.svelte';
 	import { Switch } from '$lib/components/vendor/ui/switch/index';
-	import { BarChart, ChevronRight, DoorOpen, HelpCircle, Map, Shield, Thermometer } from 'lucide-svelte';
+	import {
+		BarChart,
+		ChevronRight,
+		DoorOpen,
+		HelpCircle,
+		Map,
+		Shield,
+		Thermometer
+	} from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import type { PageProps } from './$types';
 	let Units: Switch;
@@ -62,7 +70,7 @@
 				</svelte:fragment>
 				<ChevronRight class="h-4 w-4" />
 			</MenuItem>
-			
+
 			{#if data.user && (data.user.Role === 1 || data.user.Role === 2)}
 				<MenuItem onclick={() => goto('/reports')} title="Reports Dashboard">
 					<svelte:fragment slot="start-icon">

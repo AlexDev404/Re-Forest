@@ -1,11 +1,11 @@
 import {
-    DEBUG,
-    JWT_SECRET,
-    SESSION_HTTP_ONLY,
-    SESSION_MAX_AGE,
-    SESSION_SAMESITE,
-    SESSION_SECURE,
-    VERBOSE
+	DEBUG,
+	JWT_SECRET,
+	SESSION_HTTP_ONLY,
+	SESSION_MAX_AGE,
+	SESSION_SAMESITE,
+	SESSION_SECURE,
+	VERBOSE
 } from '$env/static/private';
 import { User } from '$lib/class/User';
 import { typical_development_notice } from '$lib/utility/typicals';

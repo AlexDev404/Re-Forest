@@ -22,7 +22,7 @@
 
 	// Location handling
 	let tree_added = false;
-	let location: GeolocationCoordinates | (string | null) = null;
+	let location: GeolocationCoordinates | (string | null) = $state(null);
 	let translated_location: string | null = null;
 	let timeout: ReturnType<typeof setTimeout>;
 	let backoff = 500;

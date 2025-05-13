@@ -3,7 +3,7 @@
 	import * as Menubar from '$lib/components/vendor/ui/navigator';
 	import { BadgeCheck, ChartColumn, CirclePlus, Cog, House, Trees } from 'lucide-svelte';
 	import { onMount } from 'svelte';
-// Import SvelteKit's navigator
+	// Import SvelteKit's navigator
 	import { goto } from '$app/navigation';
 	let activeButton: string = $state('home');
 

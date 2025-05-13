@@ -10,6 +10,7 @@ export {
 	//
 	Root as Menubar,
 	Menu as MenubarMenu,
-	Trigger as MenubarTrigger, Root, Trigger
+	Trigger as MenubarTrigger,
+	Root,
+	Trigger
 };
-

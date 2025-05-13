@@ -468,6 +468,6 @@ if (SEED_TYPE == 'species') {
 		});
 } else {
 	console.error('❌ Invalid SEED_TYPE. Use "species" or "trees".');
-  console.error('Usage: npm run seed <species|trees>');
+	console.error('Usage: npm run seed <species|trees>');
 	process.exit(1);
 }

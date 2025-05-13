@@ -130,7 +130,7 @@ test.describe('Authentication', () => {
 		await page.click('button[type="submit"]');
 
 		// Check for error message
-		await expect(page.locator('text=Passwords don\'t match')).toBeVisible();
+		await expect(page.locator("text=Passwords don't match")).toBeVisible();
 	});
 });
 
@@ -159,10 +159,13 @@ test.describe('Add/Manage Tree Page Extended Tests', () => {
 	test('form validation works on add tree page', async ({ page }) => {
 		// Set mock location in localStorage
 		await page.evaluate(() => {
-			localStorage.setItem('location', JSON.stringify({
-				latitude: 40.7128,
-				longitude: -74.0060
-			}));
+			localStorage.setItem(
+				'location',
+				JSON.stringify({
+					latitude: 40.7128,
+					longitude: -74.006
+				})
+			);
 		});
 
 		await page.goto('/add/manage');

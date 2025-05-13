@@ -72,7 +72,9 @@
 					<p class="text-sm font-light">Height: {metersToFeet(tree.Height)}</p>
 					<p class="text-sm font-light">Age: {tree.Age} years</p>
 					<p class="text-sm font-light">
-						Planted by: {tree.PlantedBy ? `${tree.PlantedBy.FirstName} ${tree.PlantedBy.LastName}` : 'Unknown'}
+						Planted by: {tree.PlantedBy
+							? `${tree.PlantedBy.FirstName} ${tree.PlantedBy.LastName}`
+							: 'Unknown'}
 					</p>
 					<p class="text-sm font-light">Planted on: {formatDate(tree.PlantedOn ?? '')}</p>
 				</div>

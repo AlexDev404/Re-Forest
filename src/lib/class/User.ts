@@ -12,7 +12,7 @@ export class User {
 	LastName: string;
 	Email: string;
 	Password: string;
-    CreatedAt: Date;
+	CreatedAt: Date;
 
 	constructor(
 		id: number,
@@ -21,15 +21,15 @@ export class User {
 		lastName: string,
 		email: string,
 		password: string,
-        created_at: Date = new Date()
+		created_at: Date = new Date()
 	) {
-        this.Id = id;
-        this.Role = role;
-        this.FirstName = firstName;
-        this.LastName = lastName;
-        this.Email = email;
-        this.Password = password;
-        this.CreatedAt = created_at;
+		this.Id = id;
+		this.Role = role;
+		this.FirstName = firstName;
+		this.LastName = lastName;
+		this.Email = email;
+		this.Password = password;
+		this.CreatedAt = created_at;
 
 		if (this.Email) {
 			this.Email = this.Email.toLowerCase();
@@ -69,17 +69,17 @@ export class User {
 			.from(UserSchema)
 			.where(this.Email ? eq(UserSchema.Email, this.Email) : eq(UserSchema.Id, this.Id))
 			.then((result) => {
-                if (result.length > 0) {
-                    this.Id = result[0].Id;
-                    this.Role = result[0].Role as number;
-                    this.FirstName = result[0].FirstName as string;
-                    this.LastName = result[0].LastName as string;
-                    this.Email = result[0].Email as string;
-                    this.Password = result[0].Password as string;
-                    this.CreatedAt = result[0].CreatedAt as Date;
-                } else {
-                    return new Error('User not found');
-                }
+				if (result.length > 0) {
+					this.Id = result[0].Id;
+					this.Role = result[0].Role as number;
+					this.FirstName = result[0].FirstName as string;
+					this.LastName = result[0].LastName as string;
+					this.Email = result[0].Email as string;
+					this.Password = result[0].Password as string;
+					this.CreatedAt = result[0].CreatedAt as Date;
+				} else {
+					return new Error('User not found');
+				}
 			})
 			.catch((error) => {
 				throw Error('Error initializing user: ' + error);
@@ -153,7 +153,8 @@ export class User {
 		};
 
 		// Insert the new user into the database
-		await db.insert(UserSchema)
+		await db
+			.insert(UserSchema)
 			.values(newUser)
 			.returning()
 			.then((result) => {
@@ -193,12 +194,12 @@ export class User {
 					throw new Error('Invalid password');
 				}
 
-                this.Id = user.Id;
-                this.Role = user.Role as number;
-                this.FirstName = user.FirstName as string;
-                this.LastName = user.LastName as string;
-                this.Email = user.Email as string;
-                this.CreatedAt = user.CreatedAt as Date;
+				this.Id = user.Id;
+				this.Role = user.Role as number;
+				this.FirstName = user.FirstName as string;
+				this.LastName = user.LastName as string;
+				this.Email = user.Email as string;
+				this.CreatedAt = user.CreatedAt as Date;
 			})
 			.catch((error) => {
 				throw Error('Error logging in: ' + error);

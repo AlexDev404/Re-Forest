@@ -7,7 +7,12 @@ import { UserTokens } from '$lib/server/db/schema';
 /**
  * Creates a DB notification and attempts to send a Firebase push notification
  */
-export async function sendNotification(userId: number, treeId: number, type: string, message: string) {
+export async function sendNotification(
+	userId: number,
+	treeId: number,
+	type: string,
+	message: string
+) {
 	// Create DB notification
 	await Notification.create(userId, treeId, type, message);
 
@@ -34,12 +39,14 @@ export async function sendNotification(userId: number, treeId: number, type: str
 	try {
 		await Promise.all(
 			tokenList.map((token) =>
-				messaging.send({
-					token,
-					...payload
-				}).catch((err) => {
-					console.warn(`Failed to send push to token ${token}`, err);
-				})
+				messaging
+					.send({
+						token,
+						...payload
+					})
+					.catch((err) => {
+						console.warn(`Failed to send push to token ${token}`, err);
+					})
 			)
 		);
 	} catch (error) {

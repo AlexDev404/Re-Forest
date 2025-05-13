@@ -13,10 +13,7 @@ export async function POST({ request, locals }) {
 		return json({ error: 'Missing data' }, { status: 400 });
 	}
 
-	const existing = await db
-		.select()
-		.from(UserTokens)
-		.where(eq(UserTokens.userId, userId));
+	const existing = await db.select().from(UserTokens).where(eq(UserTokens.userId, userId));
 
 	if (existing.length) {
 		await db
@@ -36,4 +33,3 @@ export async function POST({ request, locals }) {
 
 	return json({ success: true });
 }
-
