@@ -10,9 +10,9 @@
 		type: 'line' | 'bar' | 'pie';
 		data: { label: string; value: number }[];
 		title: string;
-		xAxisLabel: string;
-		yAxisLabel: string;
-		colors: string[];
+		xAxisLabel?: string;
+		yAxisLabel?: string;
+		colors?: string[];
 	}
 
 	let { type, data, title, xAxisLabel, yAxisLabel, colors }: PropData = $props();
