@@ -154,7 +154,7 @@
 							<Button
 								variant="destructive"
 								class="flex-1"
-								on:click={() => handleVerifyTree(tree.Id, false)}
+								onclick={() => handleVerifyTree(tree.Id, false)}
 								disabled={loading}
 							>
 								<XCircle class="mr-2 h-4 w-4" />
@@ -163,7 +163,7 @@
 							<Button
 								variant="default"
 								class="flex-1"
-								on:click={() => handleVerifyTree(tree.Id, true)}
+								onclick={() => handleVerifyTree(tree.Id, true)}
 								disabled={loading}
 							>
 								<CheckCircle class="mr-2 h-4 w-4" />

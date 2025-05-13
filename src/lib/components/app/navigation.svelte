@@ -17,34 +17,33 @@
 	});
 
 	function handleNavigation(page: string) {
-			activeButton = page;
-			goto(`/${page}`);
+		activeButton = page;
+		goto(`/${page}`);
 	}
 </script>
 
 <Menubar.Root class="w-full">
 	<Menubar.Menu>
 		<Menubar.Trigger
-			on:click={() => handleNavigation('')}
-			on:click={() => activeButton === 'home'}
+			onclick={() => handleNavigation('')}
 			class={activeButton === 'home' || activeButton === '' ? 'bg-accent' : ''}
 			><House /></Menubar.Trigger
 		>
 		<Menubar.Trigger
-			on:click={() => handleNavigation('verify')}
+			onclick={() => handleNavigation('verify')}
 			class={activeButton === 'verify' ? 'bg-accent' : ''}><BadgeCheck /></Menubar.Trigger
 		>
 		<Menubar.Trigger
-			on:click={() => handleNavigation('manage')}
+			onclick={() => handleNavigation('manage')}
 			class="{activeButton === 'manage' ? 'bg-accent' : ''} w-20 justify-center"
 			><CirclePlus /></Menubar.Trigger
 		>
 		<Menubar.Trigger
-			on:click={() => handleNavigation('explore')}
+			onclick={() => handleNavigation('explore')}
 			class={activeButton === 'explore' ? 'bg-accent' : ''}><Trees /></Menubar.Trigger
 		>
 		<Menubar.Trigger
-			on:click={() => handleNavigation('configure')}
+			onclick={() => handleNavigation('configure')}
 			class={activeButton === 'configure' ? 'bg-accent' : ''}><Cog /></Menubar.Trigger
 		>
 	</Menubar.Menu>

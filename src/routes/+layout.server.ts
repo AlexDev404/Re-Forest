@@ -10,5 +10,11 @@ export const load: LayoutServerLoad = async ({ request, locals }) => {
 
     return {
         authenticated: !!user,
+        user: user ? {
+            Id: user.Id,
+            FirstName: user.FirstName,
+            LastName: user.LastName,
+            Role: user.Role
+        } : null
     }
 };

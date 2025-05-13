@@ -1,27 +1,28 @@
 <script lang="ts">
-	import { cn, flyAndScale } from "$lib/components/vendor/shadcn/utils";
 	import { LinkPreview as HoverCardPrimitive } from "bits-ui";
+	import { cn } from "$lib/components/vendor/shadcn/utils.js";
 
-	type $$Props = HoverCardPrimitive.ContentProps;
-
-	let className: $$Props["class"] = undefined;
-	export let align: $$Props["align"] = "center";
-	export let sideOffset: $$Props["sideOffset"] = 4;
-	export let transition: $$Props["transition"] = flyAndScale;
-	export let transitionConfig: $$Props["transitionConfig"] = undefined;
-	export { className as class };
+	let {
+		ref = $bindable(null),
+		class: className,
+		align = "center",
+		sideOffset = 4,
+		portalProps,
+		...restProps
+	}: HoverCardPrimitive.ContentProps & {
+		portalProps?: HoverCardPrimitive.PortalProps;
+	} = $props();
 </script>
 
-<HoverCardPrimitive.Content
-	{transition}
-	{transitionConfig}
-	{sideOffset}
-	{align}
-	class={cn(
-		"bg-popover text-popover-foreground z-50 w-64 rounded-md border p-4 shadow-md outline-none",
-		className
-	)}
-	{...$$restProps}
->
-	<slot />
-</HoverCardPrimitive.Content>
+<HoverCardPrimitive.Portal {...portalProps}>
+	<HoverCardPrimitive.Content
+		bind:ref
+		{sideOffset}
+		{align}
+		class={cn(
+			"bg-popover text-popover-foreground z-50 w-64 rounded-md border p-4 shadow-md outline-none",
+			className
+		)}
+		{...restProps}
+	/>
+</HoverCardPrimitive.Portal>

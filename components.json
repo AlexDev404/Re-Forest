@@ -9,7 +9,7 @@
 	"aliases": {
 		"components": "$lib/components/vendor",
 		"utils": "$lib/components/vendor/shadcn/utils",
-		"ui": "$lib/components/vendor/shadcn/ui",
+		"ui": "$lib/components/vendor/ui",
 		"hooks": "$lib/components/vendor/shadcn/hooks"
 	},
 	"typescript": true,

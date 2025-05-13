@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 	import { initializeApp } from 'firebase/app';
+	import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
 	const firebaseConfig = {
   apiKey: "AIzaSyDOqj153oV9vP5cfXx9stQSKXnQxjy1JuQ",
@@ -37,7 +37,7 @@
 	});
 </script>
 
-<button on:click={getFcmToken} class="bg-blue-600 text-white px-4 py-2 rounded">
+<button onclick={getFcmToken} class="bg-blue-600 text-white px-4 py-2 rounded">
 	Get Notification Token
 </button>
 

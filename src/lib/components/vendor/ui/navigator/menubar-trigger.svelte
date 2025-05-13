@@ -2,11 +2,10 @@
 	import { cn } from "$lib/components/vendor/shadcn/utils";
 	import { Menubar as MenubarPrimitive } from "bits-ui";
 
-	type $$Props = MenubarPrimitive.TriggerProps;
-	type $$Events = MenubarPrimitive.TriggerEvents;
-
-	let className: $$Props["class"] = undefined;
-	export { className as class };
+	let {
+		class: className = undefined as string | undefined,
+		...rest
+	} = $props();
 </script>
 
 <MenubarPrimitive.Trigger
@@ -14,10 +13,7 @@
 		"focus:bg-accent flex cursor-default self-stretch select-none items-center rounded-sm px-3.5 py-2.5 text-sm font-medium outline-none",
 		className
 	)}
-	{...$$restProps}
-	on:click
-	on:keydown
-	on:pointerenter
+	{...rest}
 >
 	<slot />
 </MenubarPrimitive.Trigger>

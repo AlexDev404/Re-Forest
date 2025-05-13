@@ -99,7 +99,7 @@
 			description={'Add a photo to represent the tree'}
 		>
 			<svelte:fragment slot="content1">
-				<Button class="w-full" on:click={handlePhotoClick} disabled={uploading}>
+				<Button class="w-full" onclick={handlePhotoClick} disabled={uploading}>
 					{uploading ? 'Uploading...' : 'Select from your gallery'}
 				</Button>
 			</svelte:fragment>
