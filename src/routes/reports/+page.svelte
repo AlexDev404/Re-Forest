@@ -89,7 +89,7 @@
 						<CardContent class="space-y-4">
 							<div class="space-y-2">
 								<Label for="report-type">Report Type</Label>
-								<Select bind:selected={selectedReport}>
+								<Select type="single" bind:value={selectedReport}>
 									<SelectTrigger id="report-type">
 										<span
 											>{selectedReport === 'tree-health'
@@ -117,7 +117,7 @@
 
 							<div class="space-y-2">
 								<Label for="time-frame">Time Frame</Label>
-								<Select bind:selected={selectedTimeFrame}>
+								<Select type="single" bind:value={selectedTimeFrame}>
 									<SelectTrigger id="time-frame">
 										<span
 											>{selectedTimeFrame === 'week'
