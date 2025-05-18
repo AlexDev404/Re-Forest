@@ -283,7 +283,7 @@
 						{/if}
 					</CardContent>
 					<CardFooter class="flex justify-between">
-						<div class="space-x-2">
+						<div class="md:space-x-2">
 							<Button variant="outline" onclick={() => window.print()}>Print Report</Button>
 							<Button
 								variant="outline"

@@ -63,7 +63,7 @@
 			</h1>
 			<p class="mb-4 text-muted-foreground">Historical tree planting data analysis</p>
 		</div>
-		<Card>
+		<Card class="w-full">
 			<CardHeader>
 				<CardTitle>Tree Planting Trend</CardTitle>
 				<CardDescription>View tree planting activity over time</CardDescription>
