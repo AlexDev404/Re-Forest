@@ -62,14 +62,13 @@
 	<title>Re:Forest :: Reports</title>
 </svelte:head>
 
-<page class="pb-20">
-	<main class="container mx-auto p-4">
-		<div class="mb-6 flex flex-col items-start justify-between sm:flex-row">
+<page class="block h-fit overflow-y-auto pb-20">
+	<main class="mx-6 my-10 flex flex-col items-start gap-12">
+		<div class="mb-6 flex flex-col items-start justify-between self-stretch sm:flex-row">
 			<div>
 				<h1 class="text-2xl font-semibold">
 					<a href="/configure">Settings</a> <span> &gt; Reports Dashboard</span>
 				</h1>
-				<br />
 				<p class="text-muted-foreground">
 					This dashboard is available to administrators and environmentalists only.
 				</p>

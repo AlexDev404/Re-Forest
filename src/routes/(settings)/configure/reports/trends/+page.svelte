@@ -53,15 +53,16 @@
 	<title>Re:Forest :: Trend Analysis</title>
 </svelte:head>
 
-<page class="pb-20">
-	<main class="container mx-auto p-4">
-		<h1 class="text-2xl font-semibold">
-			<a href="/configure">Settings</a>
-			<span> &gt; <a href="/configure/reports">Reports Dashboard</a></span>
-			<span> &gt; Trend Analysis</span>
-		</h1>
-		<p class="mb-4 text-muted-foreground">Historical tree planting data analysis</p>
-
+<page class="block h-fit overflow-y-auto pb-20">
+	<main class="mx-6 my-10 flex flex-col items-start gap-12">
+		<div>
+			<h1 class="text-2xl font-semibold">
+				<a href="/configure">Settings</a>
+				<span> &gt; <a href="/configure/reports">Reports Dashboard</a></span>
+				<span> &gt; Trend Analysis</span>
+			</h1>
+			<p class="mb-4 text-muted-foreground">Historical tree planting data analysis</p>
+		</div>
 		<Card>
 			<CardHeader>
 				<CardTitle>Tree Planting Trend</CardTitle>
