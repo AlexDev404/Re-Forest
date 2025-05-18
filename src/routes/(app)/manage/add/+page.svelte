@@ -112,7 +112,7 @@
 	<main class="mx-6 my-10 flex flex-col items-start gap-12">
 		<article class="flex items-start self-stretch">
 			<div class="flex w-full items-center justify-between">
-				<h1 class="text-2xl font-semibold"><a href="/add">Manage Trees</a> &gt; Add Tree</h1>
+				<h1 class="text-2xl font-semibold"><a href="/manage">Manage Trees</a> &gt; Add Tree</h1>
 			</div>
 		</article>
 

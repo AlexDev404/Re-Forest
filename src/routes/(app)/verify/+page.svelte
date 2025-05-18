@@ -81,7 +81,7 @@
 	<title>Re:Forest :: Verify Trees</title>
 </svelte:head>
 
-<page class="overflow-y-auto">
+<page class="block h-fit overflow-y-auto pb-20">
 	<main class="mx-6 my-10 flex flex-col items-start gap-12">
 		<article class="flex items-start self-stretch">
 			<div class="flex w-full items-center justify-between">
