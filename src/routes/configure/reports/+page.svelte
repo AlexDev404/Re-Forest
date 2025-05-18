@@ -66,13 +66,16 @@
 	<main class="container mx-auto p-4">
 		<div class="mb-6 flex flex-col items-start justify-between sm:flex-row">
 			<div>
-				<h1 class="text-3xl font-bold text-primary">Reports Dashboard</h1>
+				<h1 class="text-2xl font-semibold">
+					<a href="/configure">Settings</a> <span> &gt; Reports Dashboard</span>
+				</h1>
+				<br />
 				<p class="text-muted-foreground">
 					This dashboard is available to administrators and environmentalists only.
 				</p>
 			</div>
 			<div class="mt-4 sm:mt-0">
-				<Button variant="outline" href="/reports/trends">View Trends Analysis</Button>
+				<Button variant="outline" href="/configure/reports/trends">View Trends Analysis</Button>
 			</div>
 		</div>
 

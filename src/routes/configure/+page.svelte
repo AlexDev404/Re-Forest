@@ -72,7 +72,7 @@
 			</MenuItem>
 
 			{#if data.user && (data.user.Role === 1 || data.user.Role === 2)}
-				<MenuItem onclick={() => goto('/reports')} title="Reports Dashboard">
+				<MenuItem onclick={() => goto('/configure/reports')} title="Reports Dashboard">
 					<svelte:fragment slot="start-icon">
 						<BarChart class="h-4 w-4" />
 					</svelte:fragment>
