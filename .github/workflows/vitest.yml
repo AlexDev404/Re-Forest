@@ -57,4 +57,4 @@ jobs:
           SESSION_HTTP_ONLY: true
           SESSION_SECURE: false
           SESSION_MAX_AGE: 72
-        run: npm run test:unit -- --coverage --reporter=lcov --reporter=text-summary --reporter=html
+        run: npm run test:unit -- --coverage
