@@ -18,6 +18,7 @@ vi.mock('$lib/class/Tree', () => ({
 			TreeSpecies: 'Oak',
 			Height: 5,
 			Health: 'Good',
+			Status: 'PENDING',
 			Age: 10,
 			Image: 'https://example.com/tree.jpg',
 			Lat: 40.7128,
@@ -57,7 +58,7 @@ vi.mock('sveltekit-superforms', () => ({
 			tree_lng: -74.006,
 			tree_height: 5,
 			tree_age: 10,
-			tree_species: 'Oak'
+			tree_species: 1
 		}
 	}),
 	setError: vi.fn()
@@ -109,7 +110,7 @@ describe('Add/Manage Tree page server', () => {
 		it('should fail if user is not logged in', async () => {
 			mockEvent.locals.user = null;
 
-			const result = await actions.default(mockEvent);
+			await actions.default(mockEvent);
 			expect(sveltekit.fail).toHaveBeenCalledWith(401, expect.anything());
 		});
 
@@ -120,7 +121,7 @@ describe('Add/Manage Tree page server', () => {
 				data: {}
 			});
 
-			const result = await actions.default(mockEvent);
+			await actions.default(mockEvent);
 			expect(sveltekit.fail).toHaveBeenCalledWith(400, expect.anything());
 		});
 
@@ -134,7 +135,7 @@ describe('Add/Manage Tree page server', () => {
 		it('should handle errors during tree creation', async () => {
 			returningMock.mockRejectedValueOnce(new Error('Database error'));
 
-			const result = await actions.default(mockEvent);
+			await actions.default(mockEvent);
 
 			expect(sveltekit.fail).toHaveBeenCalledWith(500, expect.anything());
 		});
