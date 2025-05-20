@@ -1,8 +1,9 @@
 // file: src/routes/manage/add/tests/page.server.test.ts
 
 import { Tree } from '$lib/class/Tree';
+import type { User } from '$lib/class/User';
 import * as sveltekit from '@sveltejs/kit';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { actions, load } from '../+page.server';
 
 // Mock modules and dependencies
@@ -65,10 +66,10 @@ vi.mock('sveltekit-superforms', () => ({
 }));
 
 describe('Add/Manage Tree page server', () => {
-	let mockEvent: any;
-	let insertMock: any;
-	let valuesMock: any;
-	let returningMock: any;
+	let mockEvent: sveltekit.ServerLoadEvent;
+	let insertMock: Mock;
+	let valuesMock: Mock;
+	let returningMock: Mock;
 
 	beforeEach(() => {
 		// Initialize mocks before each test
@@ -78,9 +79,6 @@ describe('Add/Manage Tree page server', () => {
 
 		// Set up the mock db module with the initialized mocks inside beforeEach
 		vi.mock('$lib/server/db', () => {
-			const returningMock = vi.fn().mockResolvedValue([{ Id: 123 }]);
-			const valuesMock = vi.fn(() => ({ returning: returningMock }));
-			const insertMock = vi.fn(() => ({ values: valuesMock }));
 			return {
 				db: { insert: insertMock }
 			};
@@ -90,17 +88,24 @@ describe('Add/Manage Tree page server', () => {
 		mockEvent = {
 			locals: {
 				user: {
-					Id: 1
-				}
+					Id: 1,
+					Role: 1,
+					FirstName: 'Test',
+					LastName: 'User',
+					Email: 'test@example.com',
+					Password: 'password',
+					CreatedAt: new Date()
+				} as unknown as User
 			},
-			request: {}
-		};
+			request: new Request('http://localhost')
+		} as unknown as sveltekit.ServerLoadEvent;
 
 		vi.clearAllMocks();
 	});
 
 	describe('load function', () => {
 		it('should return form data', async () => {
+			// @ts-expect-error Forcing the type to match the expected structure
 			const result = await load(mockEvent);
 			expect(result).toBeDefined();
 		});
@@ -108,7 +113,7 @@ describe('Add/Manage Tree page server', () => {
 
 	describe('actions.default function', () => {
 		it('should fail if user is not logged in', async () => {
-			mockEvent.locals.user = null;
+			mockEvent.locals.user = undefined;
 
 			await actions.default(mockEvent);
 			expect(sveltekit.fail).toHaveBeenCalledWith(401, expect.anything());
@@ -116,7 +121,7 @@ describe('Add/Manage Tree page server', () => {
 
 		it('should fail validation if form is invalid', async () => {
 			const { superValidate } = await import('sveltekit-superforms');
-			(superValidate as any).mockResolvedValueOnce({
+			(superValidate as Mock).mockResolvedValueOnce({
 				valid: false,
 				data: {}
 			});
