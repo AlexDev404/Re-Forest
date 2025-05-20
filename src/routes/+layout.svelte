@@ -1,14 +1,17 @@
 <script lang="ts">
 	import { afterNavigate, beforeNavigate, onNavigate } from '$app/navigation';
 	import Navigation from '$lib/components/app/navigation.svelte';
+	import { Button } from '$lib/components/vendor/ui/button';
 	import { requestNotificationPermission } from '$lib/firebase';
 	import type { OnNavigate } from '@sveltejs/kit';
+	import { CircleX } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import '../app.css';
 	import type { PageProps } from './$types';
 	const { data }: PageProps = $props();
 
 	let loadingBar: HTMLDivElement;
+	let mobile: boolean = $state(false);
 
 	function delayNavigation(navigation: OnNavigate) {
 		if (!document.startViewTransition) return new Promise((res) => setTimeout(res, 500));
@@ -90,6 +93,12 @@
 				console.error('Error requesting notification permission:', error);
 			});
 	});
+
+	onMount(() => {
+		if (typeof window !== 'undefined') {
+			mobile = window.localStorage.getItem('mobile') === 'true';
+		}
+	});
 </script>
 
 <app class="h-full w-full">
@@ -105,6 +114,29 @@
 			></div>
 		</div>
 	</div>
-	<content><slot /></content>
-	<control class="fixed bottom-2 z-10 w-full px-3"><Navigation user={data.user} /></control>
+	<content class="block {mobile ? '' : 'lg:hidden'}"><slot /></content>
+	<control class="fixed bottom-2 z-10 w-full px-3 {mobile ? '' : 'lg:hidden'}"
+		><Navigation user={data.user} /></control
+	>
+	<content class="hidden {mobile ? '' : 'lg:block'}">
+		<div class="flex h-screen w-full items-center justify-center">
+			<div class="max-w-md p-8 text-center">
+				<CircleX size={48} class="mx-auto mb-4" />
+				<h1 class="mb-2 text-2xl font-bold">Nope!</h1>
+				<p class="text-gray-600">
+					This app is designed for mobile devices. Please use a mobile device or open the device
+					emulator in your browser.
+				</p>
+				<Button
+					class="mt-4"
+					onclick={() => {
+						window.localStorage.setItem('mobile', 'true');
+						window.location.reload();
+					}}
+					color="primary"
+					size="lg">Whatever</Button
+				>
+			</div>
+		</div>
+	</content>
 </app>
