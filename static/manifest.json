@@ -13,5 +13,12 @@
       "type": "image/png",
       "purpose": "any"
     }
-  ]
+  ],
+  "screenshots": [
+  {
+    "src": "/pwa-screenshot/screenshot.png",
+    "sizes": "389x847",
+    "type": "image/png"
+  }
+]
 }
