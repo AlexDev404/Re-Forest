@@ -1,0 +1,17 @@
+{
+  "name": "Re:forest",
+  "short_name": "Re:forest",
+  "description": "Track and monitor trees planted in reforestation and conservation areas",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#10b981",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
