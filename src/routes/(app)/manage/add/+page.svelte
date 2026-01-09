@@ -7,7 +7,7 @@
 	import { Label } from '$lib/components/vendor/ui/label';
 	import { type ReverseGeoJSON } from '$lib/types/GeoJSON';
 	import { getReverseLoc } from '$lib/utility/utility';
-	import { AlertTriangle, CheckCircle2, ImageUp, Leaf, MapPin, UploadCloud, X } from 'lucide-svelte';
+	import { AlertTriangle, CheckCircle2, ImageUp, Leaf, MapPin, UploadCloud, X, Building2, User } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { superForm } from 'sveltekit-superforms';
 	import type { PageProps } from './$types';
@@ -17,6 +17,9 @@
 	let treeImageSrc: string | null = $state(null);
 	let speciesData = $state<{ id: number; name: string }[] | null>(null);
 	let selectedSpeciesName = $state<string | null>(null);
+	
+	// New: Planter type selection
+	let planterType: 'INDIVIDUAL' | 'ORGANIZATION' | null = $state(null);
 
 	// Location handling
 	let tree_added = $state(false); // Svelte 5 rune
@@ -123,10 +126,78 @@
 				Return to Tree Management
 			</a>
 			<h1 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight">
-				Register New Tree Asset
+				Register New Tree Planting
 			</h1>
-			<p class="text-sm text-muted-foreground">Provide the necessary details for the new tree asset record.</p>
+			<p class="text-sm text-muted-foreground">Provide details about your tree planting activity.</p>
 		</header>
+
+		<!-- Planter Type Selection -->
+		{#if !planterType}
+		<div class="bg-card shadow rounded-xl border border-border p-8 flex flex-col gap-6">
+			<div class="text-center">
+				<h2 class="text-lg font-semibold text-foreground mb-2">Who is planting?</h2>
+				<p class="text-sm text-muted-foreground">Select whether you are planting as an individual or on behalf of an organization.</p>
+			</div>
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+				<button
+					type="button"
+					onclick={() => { planterType = 'INDIVIDUAL'; $form.planter_type = 'INDIVIDUAL'; }}
+					class="flex flex-col items-center gap-4 p-6 rounded-lg border-2 border-border bg-background hover:border-primary hover:bg-primary/5 transition-all duration-200 cursor-pointer group"
+				>
+					<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+						<User class="w-8 h-8 text-primary" />
+					</div>
+					<div class="text-center">
+						<h3 class="font-semibold text-foreground mb-1">Individual</h3>
+						<p class="text-xs text-muted-foreground">Planting trees on your own or as a personal effort</p>
+					</div>
+				</button>
+				<button
+					type="button"
+					onclick={() => { planterType = 'ORGANIZATION'; $form.planter_type = 'ORGANIZATION'; }}
+					class="flex flex-col items-center gap-4 p-6 rounded-lg border-2 border-border bg-background hover:border-primary hover:bg-primary/5 transition-all duration-200 cursor-pointer group"
+				>
+					<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+						<Building2 class="w-8 h-8 text-primary" />
+					</div>
+					<div class="text-center">
+						<h3 class="font-semibold text-foreground mb-1">Organization</h3>
+						<p class="text-xs text-muted-foreground">Planting as part of a school, NGO, company, or community group</p>
+					</div>
+				</button>
+			</div>
+		</div>
+		{:else}
+		<!-- Selected Planter Type Display -->
+		<div class="bg-card shadow rounded-xl border border-border p-4 flex items-center justify-between">
+			<div class="flex items-center gap-3">
+				{#if planterType === 'INDIVIDUAL'}
+					<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+						<User class="w-5 h-5 text-primary" />
+					</div>
+					<div>
+						<p class="text-sm font-medium text-foreground">Planting as Individual</p>
+						<p class="text-xs text-muted-foreground">Personal tree planting effort</p>
+					</div>
+				{:else}
+					<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+						<Building2 class="w-5 h-5 text-primary" />
+					</div>
+					<div>
+						<p class="text-sm font-medium text-foreground">Planting as Organization</p>
+						<p class="text-xs text-muted-foreground">Organization or group planting effort</p>
+					</div>
+				{/if}
+			</div>
+			<Button
+				variant="ghost"
+				size="sm"
+				onclick={() => { planterType = null; $form.planter_type = 'INDIVIDUAL'; }}
+				class="text-xs"
+			>
+				Change
+			</Button>
+		</div>
 
 		<!-- Image Upload Card -->
 		<div class="bg-card shadow rounded-xl border border-border p-8 flex flex-col items-center gap-6 text-center">
@@ -165,21 +236,41 @@
 			{/if}
 		</div>
 
+		{#if planterType}
 		<form method="POST" class="flex w-full flex-col gap-6 bg-card shadow rounded-xl border border-border p-8 sm:p-10" use:enhance>
 			<input type="hidden" name="tree_lat" value={typeof location === 'object' && location?.latitude} />
 			<input type="hidden" name="tree_lng" value={typeof location === 'object' && location?.longitude} />
 			<input type="hidden" name="tree_image" bind:value={$form.tree_image} />
+			<input type="hidden" name="planter_type" bind:value={$form.planter_type} />
 
-			<!-- Tree Name -->
+			<!-- Organization Name (only for organizations) -->
+			{#if planterType === 'ORGANIZATION'}
+			<div class="grid w-full items-center gap-2">
+				<Label for="organization_name" class="text-sm font-medium text-foreground flex items-center gap-1.5">
+					<Building2 class="h-4 w-4 text-primary/80" /> Organization Name <span class="text-destructive text-xs">*</span>
+				</Label>
+				<Input
+					type="text"
+					name="organization_name"
+					id="organization_name"
+					placeholder="e.g., Belize Forest Department, Green Earth NGO"
+					bind:value={$form.organization_name}
+					class="w-full text-sm px-3 py-2 rounded-md border-input focus:ring-ring focus:border-ring shadow-sm transition-colors duration-200"
+					required={planterType === 'ORGANIZATION'}
+				/>
+			</div>
+			{/if}
+
+			<!-- Tree Name / Description -->
 			<div class="grid w-full items-center gap-2">
 				<Label for="tree_name" class="text-sm font-medium text-foreground flex items-center gap-1.5">
-					<Leaf class="h-4 w-4 text-primary/80" /> Asset Name <span class="text-destructive text-xs">*</span>
+					<Leaf class="h-4 w-4 text-primary/80" /> {planterType === 'INDIVIDUAL' ? 'Tree/Plant Name' : 'Planting Description'} <span class="text-destructive text-xs">*</span>
 				</Label>
 				<Input
 					type="text"
 					name="tree_name"
 					id="tree_name"
-					placeholder="e.g., Old Oaky, Piney McPineface"
+					placeholder={planterType === 'INDIVIDUAL' ? 'e.g., Mahogany Tree, Coconut Palm' : 'e.g., Reforestation Project 2026'}
 					bind:value={$form.tree_name}
 					class="w-full text-sm px-3 py-2 rounded-md border-input focus:ring-ring focus:border-ring shadow-sm transition-colors duration-200 { $errors.tree_name ? 'border-destructive focus:ring-destructive focus:border-destructive' : '' }"
 					required
@@ -193,22 +284,59 @@
 				{/if}
 			</div>
 
-			<!-- Tree Height -->
+			<!-- Quantity (for individuals) or Area (for organizations) -->
+			{#if planterType === 'INDIVIDUAL'}
+			<div class="grid w-full items-center gap-2">
+				<Label for="quantity" class="text-sm font-medium text-foreground flex items-center gap-1.5">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary/80"><text x="12" y="18" text-anchor="middle" font-size="14" fill="currentColor">#</text></svg>
+					Quantity (number of trees/plants)
+				</Label>
+				<Input
+					type="number"
+					name="quantity"
+					id="quantity"
+					placeholder="e.g., 1, 50"
+					bind:value={$form.quantity}
+					class="w-full text-sm px-3 py-2 rounded-md border-input focus:ring-ring focus:border-ring shadow-sm transition-colors duration-200"
+					min="1"
+				/>
+				<p class="text-xs text-muted-foreground">If planting multiple trees of the same type (e.g., 50 hedges), enter the quantity here.</p>
+			</div>
+			{:else}
+			<div class="grid w-full items-center gap-2">
+				<Label for="area_hectares" class="text-sm font-medium text-foreground flex items-center gap-1.5">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary/80"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+					Area (hectares)
+				</Label>
+				<Input
+					type="number"
+					name="area_hectares"
+					id="area_hectares"
+					placeholder="e.g., 2.5"
+					bind:value={$form.area_hectares}
+					class="w-full text-sm px-3 py-2 rounded-md border-input focus:ring-ring focus:border-ring shadow-sm transition-colors duration-200"
+					min="0.01"
+					step="0.01"
+				/>
+				<p class="text-xs text-muted-foreground">1 hectare = 2.47 acres. Enter the approximate area being planted/reforested.</p>
+			</div>
+			{/if}
+
+			<!-- Tree Height (optional for both) -->
 			<div class="grid w-full items-center gap-2">
 				<Label for="tree_height" class="text-sm font-medium text-foreground flex items-center gap-1.5">
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary/80"><line x1="12" y1="2" x2="12" y2="22"></line><polyline points="18 6 12 2 6 6"></polyline><polyline points="18 18 12 22 6 18"></polyline></svg>
-					Height (meters) <span class="text-destructive text-xs">*</span>
+					Height (meters) <span class="text-muted-foreground text-xs">(optional)</span>
 				</Label>
 				<Input
 					type="number"
 					name="tree_height"
 					id="tree_height"
-					placeholder="e.g., 15.5"
+					placeholder="e.g., 1.5"
 					bind:value={$form.tree_height}
 					class="w-full text-sm px-3 py-2 rounded-md border-input focus:ring-ring focus:border-ring shadow-sm transition-colors duration-200 { $errors.tree_height ? 'border-destructive focus:ring-destructive focus:border-destructive' : '' }"
 					min="0.1"
 					step="0.01"
-					required
 					aria-invalid={$errors.tree_height ? true : undefined}
 					aria-describedby={$errors.tree_height ? 'tree_height-error' : undefined}
 				/>
@@ -219,21 +347,20 @@
 				{/if}
 			</div>
 
-			<!-- Tree Age -->
+			<!-- Tree Age (optional) -->
 			<div class="grid w-full items-center gap-2">
 				<Label for="tree_age" class="text-sm font-medium text-foreground flex items-center gap-1.5">
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary/80"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-					Age (years) <span class="text-destructive text-xs">*</span>
+					Age (years) <span class="text-muted-foreground text-xs">(optional)</span>
 				</Label>
 				<Input
 					type="number"
 					name="tree_age"
 					id="tree_age"
 					bind:value={$form.tree_age}
-					placeholder="e.g., 25"
+					placeholder="e.g., 1"
 					class="w-full text-sm px-3 py-2 rounded-md border-input focus:ring-ring focus:border-ring shadow-sm transition-colors duration-200 { $errors.tree_age ? 'border-destructive focus:ring-destructive focus:border-destructive' : '' }"
 					min="0"
-					required
 					aria-invalid={$errors.tree_age ? true : undefined}
 					aria-describedby={$errors.tree_age ? 'tree_age-error' : undefined}
 				/>
@@ -244,10 +371,10 @@
 				{/if}
 			</div>
 
-			<!-- Tree Species -->
+			<!-- Tree Species (Common Name) -->
 			<div class="grid w-full items-center gap-2">
 				<Label for="tree_species_search" class="text-sm font-medium text-foreground flex items-center gap-1.5">
-					<Leaf class="h-4 w-4 text-primary/80" /> Species <span class="text-destructive text-xs">*</span>
+					<Leaf class="h-4 w-4 text-primary/80" /> Tree Species (Common Name) <span class="text-destructive text-xs">*</span>
 				</Label>
 				<input type="hidden" name="tree_species" id="tree_species" bind:value={$form.tree_species} />
 
@@ -322,10 +449,45 @@
 				{/if}
 			</div>
 
+			<!-- Planting Reason -->
+			<div class="grid w-full items-center gap-2">
+				<Label for="planting_reason" class="text-sm font-medium text-foreground flex items-center gap-1.5">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary/80"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+					Reason for Planting <span class="text-muted-foreground text-xs">(optional)</span>
+				</Label>
+				<textarea
+					name="planting_reason"
+					id="planting_reason"
+					bind:value={$form.planting_reason}
+					placeholder="e.g., Reforestation effort, beautification, climate action"
+					class="w-full text-sm px-3 py-2 rounded-md border-input focus:ring-ring focus:border-ring shadow-sm transition-colors duration-200 min-h-[80px] resize-y"
+					maxlength="1000"
+				></textarea>
+				<p class="text-xs text-muted-foreground">Share why you're planting these trees.</p>
+			</div>
+
+			<!-- Hashtags -->
+			<div class="grid w-full items-center gap-2">
+				<Label for="hashtags" class="text-sm font-medium text-foreground flex items-center gap-1.5">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary/80"><line x1="4" y1="9" x2="20" y2="9"></line><line x1="4" y1="15" x2="20" y2="15"></line><line x1="10" y1="3" x2="8" y2="21"></line><line x1="16" y1="3" x2="14" y2="21"></line></svg>
+					Tags <span class="text-muted-foreground text-xs">(optional)</span>
+				</Label>
+				<Input
+					type="text"
+					name="hashtags"
+					id="hashtags"
+					bind:value={$form.hashtags}
+					placeholder="e.g., #climateaction #reforestation #belize"
+					class="w-full text-sm px-3 py-2 rounded-md border-input focus:ring-ring focus:border-ring shadow-sm transition-colors duration-200"
+					maxlength="500"
+				/>
+				<p class="text-xs text-muted-foreground">Add relevant tags to categorize your planting (separate with spaces or commas).</p>
+			</div>
+
 			<!-- Location Info & Picker -->
 			<div class="grid w-full items-center gap-3 rounded-xl border border-border bg-muted/30 dark:bg-slate-800/30 p-6 shadow">
 				<Label class="text-sm font-medium text-foreground flex items-center gap-1.5">
-					<MapPin class="h-4 w-4 text-primary/80" /> Asset Location
+					<MapPin class="h-4 w-4 text-primary/80" /> Planting Location
 				</Label>
 				{#if translated_location}
 					<p class="text-xs text-muted-foreground">
@@ -338,7 +500,7 @@
 					{/if}
 				{:else}
 					<p class="text-xs text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/30 border border-orange-200 dark:border-orange-500/30 p-2.5 rounded-md flex items-center gap-1.5">
-						<AlertTriangle class="h-4 w-4" /> Location not set. Please specify asset location.
+						<AlertTriangle class="h-4 w-4" /> Location not set. Please specify location.
 					</p>
 				{/if}
 				<Button
@@ -360,11 +522,12 @@
 			<Button 
 				type="submit" 
 				class="w-full mt-4 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-md px-5 py-2.5 text-sm shadow hover:shadow-md transition-all duration-200 ease-out flex items-center justify-center gap-2 group disabled:opacity-60 disabled:cursor-not-allowed"
-				disabled={uploading || (typeof $form.tree_species === 'string' && $form.tree_species.trim() === '') || !location}
+				disabled={uploading || (typeof $form.tree_species === 'string' && $form.tree_species.trim() === '') || !location || !planterType}
 			>
-				<Leaf class="mr-1.5 h-5 w-5 group-hover:scale-110 transition-transform" /> Register Asset
+				<Leaf class="mr-1.5 h-5 w-5 group-hover:scale-110 transition-transform" /> Submit Tree Planting
 			</Button>
 		</form>
+		{/if}
 	</main>
 </page>
 
