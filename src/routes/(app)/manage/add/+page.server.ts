@@ -12,9 +12,15 @@ const treeSchema = z.object({
 	tree_image: z.string().url(),
 	tree_lat: z.number().min(-90).max(90),
 	tree_lng: z.number().min(-180).max(180),
-	tree_height: z.number().min(0).max(100),
-	tree_age: z.number().min(0).max(100),
-	tree_species: z.string().min(1) // Will contain the species ID
+	tree_height: z.number().min(0).max(100).optional(),
+	tree_age: z.number().min(0).max(100).optional(),
+	tree_species: z.string().min(1), // Will contain the species ID
+	planter_type: z.enum(['INDIVIDUAL', 'ORGANIZATION']),
+	organization_name: z.string().max(255).optional(),
+	planting_reason: z.string().max(1000).optional(),
+	hashtags: z.string().max(500).optional(),
+	quantity: z.number().min(1).optional(),
+	area_hectares: z.number().min(0).optional()
 });
 
 export const load: PageServerLoad = async (event) => {
@@ -41,7 +47,7 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const { tree_name, tree_image, tree_lat, tree_lng, tree_height, tree_age, tree_species } =
+		const { tree_name, tree_image, tree_lat, tree_lng, tree_height, tree_age, tree_species, planter_type, organization_name, planting_reason, hashtags, quantity, area_hectares } =
 			form.data;
 
 		try {
@@ -56,13 +62,19 @@ export const actions: Actions = {
 			const new_tree = await Tree.create(
 				tree_name,
 				speciesId, // Use the parsed species ID
-				tree_height,
+				tree_height ?? 0,
 				'EXCELLENT', // Placeholder health status
-				tree_age,
+				tree_age ?? 0,
 				tree_image,
 				tree_lat,
 				tree_lng,
-				user.Id
+				user.Id,
+				planter_type,
+				organization_name ?? null,
+				planting_reason ?? null,
+				hashtags ?? null,
+				quantity ?? 1,
+				area_hectares ?? null
 			);
 
 			if (new_tree instanceof Error) {
