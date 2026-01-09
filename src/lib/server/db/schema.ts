@@ -12,6 +12,7 @@ import {
 export const treehealth = pgEnum('treehealth', ['POOR', 'FAIR', 'GOOD', 'EXCELLENT']);
 export const roleNames = pgEnum('names', ['ADMIN', 'ENVIRONMENTALIST', 'USER']);
 export const treeStatus = pgEnum('treestatus', ['PENDING', 'APPROVED', 'DECLINED']);
+export const planterType = pgEnum('plantertype', ['INDIVIDUAL', 'ORGANIZATION']);
 
 export const TreeSpecies = pgTable('Tree_Species', {
 	Id: integer('id').primaryKey().generatedByDefaultAsIdentity({
@@ -46,6 +47,12 @@ export const Trees = pgTable(
 		Lng: doublePrecision('lng'),
 		PlantedBy: integer('planted_by'),
 		PlantedOn: date('planted_on'),
+		PlanterType: planterType('planter_type').default('INDIVIDUAL'),
+		OrganizationName: varchar('organization_name', { length: 255 }),
+		PlantingReason: text('planting_reason'),
+		Hashtags: text('hashtags'),
+		Quantity: integer('quantity').default(1),
+		AreaHectares: doublePrecision('area_hectares'),
 		CreatedAt: timestamp('created_at').defaultNow(),
 		UpdatedAt: timestamp('updated_at').defaultNow()
 	},
