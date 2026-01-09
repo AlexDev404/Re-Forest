@@ -53,7 +53,7 @@
 			<h1 class="text-3xl font-bold text-foreground mb-4">Re:Forest</h1>
 			<p class="text-muted-foreground mb-6">Tree Planting Tracking Application</p>
 			<p class="text-sm text-muted-foreground mb-8">
-				Map view temporarily disabled. Please use the navigation menu to manage your tree plantings.
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
 			</p>
 			<div class="flex gap-4 justify-center flex-wrap">
 				<a href="/manage/add" class="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
