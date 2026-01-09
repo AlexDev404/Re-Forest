@@ -198,7 +198,9 @@
 				Change
 			</Button>
 		</div>
+		{/if}
 
+		{#if planterType}
 		<!-- Image Upload Card -->
 		<div class="bg-card shadow rounded-xl border border-border p-8 flex flex-col items-center gap-6 text-center">
 			<div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-muted border-2 border-background shadow-inner flex items-center justify-center overflow-hidden mb-2 transition-all duration-300 ease-out {treeImageSrc ? 'ring-2 ring-primary ring-offset-2 ring-offset-background' : 'ring-1 ring-border'}">
@@ -208,9 +210,9 @@
 					<ImageUp class="w-10 h-10 sm:w-12 sm:h-12 text-muted-foreground opacity-60" />
 				{/if}
 			</div>
-			<h2 class="text-md font-medium text-card-foreground">Asset Photograph</h2>
+			<h2 class="text-md font-medium text-card-foreground">Tree Photograph</h2>
 			<p class="text-xs text-muted-foreground/80 max-w-xs">
-				{treeImageSrc ? 'Current photo. Use button below to change.' : 'Upload a clear photograph of the asset.'}
+				{treeImageSrc ? 'Current photo. Use button below to change.' : 'Upload a clear photograph of the tree(s).'}
 			</p>
 			<Button 
 				variant="outline"
@@ -236,7 +238,6 @@
 			{/if}
 		</div>
 
-		{#if planterType}
 		<form method="POST" class="flex w-full flex-col gap-6 bg-card shadow rounded-xl border border-border p-8 sm:p-10" use:enhance>
 			<input type="hidden" name="tree_lat" value={typeof location === 'object' && location?.latitude} />
 			<input type="hidden" name="tree_lng" value={typeof location === 'object' && location?.longitude} />
