@@ -7,7 +7,7 @@
 	import { Label } from '$lib/components/vendor/ui/label';
 	import { type ReverseGeoJSON } from '$lib/types/GeoJSON';
 	import { getReverseLoc } from '$lib/utility/utility';
-	import { AlertTriangle, CheckCircle2, ImageUp, Leaf, MapPin, UploadCloud, X, Building2, User } from 'lucide-svelte';
+	import { AlertTriangle, Building2, CheckCircle2, ImageUp, Leaf, MapPin, UploadCloud, User, X } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { superForm } from 'sveltekit-superforms';
 	import type { PageProps } from './$types';
@@ -454,7 +454,7 @@
 			<div class="grid w-full items-center gap-2">
 				<Label for="planting_reason" class="text-sm font-medium text-foreground flex items-center gap-1.5">
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary/80"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-					Reason for Planting <span class="text-muted-foreground text-xs">(optional)</span>
+					Reason for Planting
 				</Label>
 				<textarea
 					name="planting_reason"
