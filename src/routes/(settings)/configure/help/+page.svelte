@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-	<title>Re:Forest :: Settings ::&gt; Help</title>
+	<title>Greening Belize :: Settings ::&gt; Help</title>
 </svelte:head>
 <page class="overflow-y-auto">
 	<main class="mx-6 my-10 flex min-h-[80vh] flex-col items-start gap-9">
@@ -25,7 +25,7 @@
 			<p>
 				We are a group of students from the University of Belize. We are currently studying
 				information Technology and we are in our fisrt year of our Bachelor Program. We are working
-				on a project called Re:Forest, which is a web application that aims to help users to plant
+				on a project called Greening Belize, which is a web application that aims to help users to plant
 				trees and to learn more about the environment.
 			</p>
 			<br />

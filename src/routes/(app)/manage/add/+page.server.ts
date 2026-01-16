@@ -14,7 +14,7 @@ const treeSchema = z.object({
 	tree_lng: z.number().min(-180).max(180),
 	tree_height: z.number().min(0).max(100),
 	tree_age: z.number().min(0).max(100).optional(),
-	tree_species: z.string().min(1), // Will contain the species ID
+	tree_species: z.string().optional(), // Will contain the species ID
 	planter_type: z.enum(['INDIVIDUAL', 'ORGANIZATION']),
 	organization_name: z.string().max(255).optional(),
 	planting_reason: z.string().max(1000).optional(),
@@ -51,12 +51,16 @@ export const actions: Actions = {
 			form.data;
 
 		try {
-			// Convert the tree species ID from string to number
-			const speciesId = parseInt(tree_species, 10);
-
-			if (isNaN(speciesId)) {
-				setError(form, 'tree_species', 'Invalid species selection');
-				return fail(400, { form });
+			// Convert the tree species ID from string to number (if provided)
+			let speciesId = 0; // Default to 0 if not provided
+			
+			if (tree_species && tree_species.trim() !== '') {
+				speciesId = parseInt(tree_species, 10);
+				
+				if (isNaN(speciesId)) {
+					setError(form, 'tree_species', 'Invalid species selection');
+					return fail(400, { form });
+				}
 			}
 
 			const new_tree = await Tree.create(
@@ -86,7 +90,7 @@ export const actions: Actions = {
 				typical_development_notice();
 				console.log('New tree created with ID:', new_tree.Id);
 			}
-			throw redirect(303, `/explore?tree_id=${new_tree.Id}`);
+			throw redirect(303, `/confirmation?tree_id=${new_tree.Id}`);
 		} catch (error) {
 			if (isActionFailure(error)) {
 				return error;

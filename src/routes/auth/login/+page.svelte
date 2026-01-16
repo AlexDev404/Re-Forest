@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-	<title>Re:Forest :: Login to the site</title>
+	<title>Greening Belize :: Login to the site</title>
 </svelte:head>
 <page class="overflow-y-auto">
 	{#if JSON.parse(PUBLIC_DEEP_DEBUG)}
@@ -35,7 +35,7 @@
 					/>
 				</svg>
 			</logo>
-			<h1 class="text-4xl font-bold text-primary">Re:Forest</h1>
+			<h1 class="text-4xl font-bold text-primary">Greening Belize</h1>
 		</div>
 		<!--- Login form -->
 		<!-- @todo Implement Login -->

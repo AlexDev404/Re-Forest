@@ -115,7 +115,7 @@
 </script>
 
 <svelte:head>
-	<title>Re:Forest :: Add New Tree - Enterprise</title>
+	<title>Greening Belize :: Add New Tree - Enterprise</title>
 </svelte:head>
 
 <page class="block min-h-screen bg-slate-50 dark:bg-slate-900 font-sans overflow-y-auto pb-24">
@@ -352,7 +352,7 @@
 			<div class="grid w-full items-center gap-2">
 				<Label for="tree_age" class="text-sm font-medium text-foreground flex items-center gap-1.5">
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary/80"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-					Age (years) <span class="text-muted-foreground text-xs">(optional)</span>
+					Tree Age (years) <span class="text-muted-foreground text-xs">(optional)</span>
 				</Label>
 				<Input
 					type="number"
@@ -375,7 +375,7 @@
 			<!-- Tree Species (Common Name) -->
 			<div class="grid w-full items-center gap-2">
 				<Label for="tree_species_search" class="text-sm font-medium text-foreground flex items-center gap-1.5">
-					<Leaf class="h-4 w-4 text-primary/80" /> Tree Species (Common Name) <span class="text-destructive text-xs">*</span>
+					<Leaf class="h-4 w-4 text-primary/80" /> Tree Species (Common Name) <span class="text-muted-foreground text-xs">(optional)</span>
 				</Label>
 				<input type="hidden" name="tree_species" id="tree_species" bind:value={$form.tree_species} />
 
@@ -523,7 +523,7 @@
 			<Button 
 				type="submit" 
 				class="w-full mt-4 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-md px-5 py-2.5 text-sm shadow hover:shadow-md transition-all duration-200 ease-out flex items-center justify-center gap-2 group disabled:opacity-60 disabled:cursor-not-allowed"
-				disabled={uploading || (typeof $form.tree_species === 'string' && $form.tree_species.trim() === '') || !location || !planterType}
+				disabled={uploading || !location || !planterType}
 			>
 				<Leaf class="mr-1.5 h-5 w-5 group-hover:scale-110 transition-transform" /> Submit Tree Planting
 			</Button>

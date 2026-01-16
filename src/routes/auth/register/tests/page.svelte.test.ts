@@ -70,7 +70,7 @@ describe('Register Page Component', () => {
 		render(RegisterPage, { props });
 
 		// Check for the presence of form elements
-		expect(screen.getByText('Re:Forest')).toBeInTheDocument();
+		expect(screen.getByText('Greening Belize')).toBeInTheDocument();
 		expect(screen.getByText('Full Name')).toBeInTheDocument();
 		expect(screen.getByText('Email')).toBeInTheDocument();
 		expect(screen.getByText('Password')).toBeInTheDocument();
