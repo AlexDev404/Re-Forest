@@ -13,7 +13,18 @@
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
-	const { form, errors, constraints, enhance } = superForm(data.form);
+	const { form, errors, constraints, enhance } = superForm(data.form, {
+		onSubmit: () => {
+			// Save form state before submission
+			saveFormState();
+		},
+		onResult: ({ result }) => {
+			if (result.type === 'redirect') {
+				// Clear form state on successful submission
+				clearFormState();
+			}
+		}
+	});
 	let treeImageSrc: string | null = $state(null);
 	let speciesData = $state<{ id: number; name: string }[] | null>(null);
 	let selectedSpeciesName = $state<string | null>(null);
@@ -27,6 +38,56 @@
 	let translated_location: string | null = $state(null);
 	let timeout: ReturnType<typeof setTimeout>;
 	let backoff = $state(500); // Svelte 5 rune, though likely doesn't need to be reactive unless changed by UI
+
+	// Form state persistence
+	const FORM_STATE_KEY = 'greening_belize_form_state';
+
+	function saveFormState() {
+		const formState = {
+			tree_name: $form.tree_name,
+			tree_species_text: $form.tree_species_text,
+			tree_height: $form.tree_height,
+			tree_age: $form.tree_age,
+			planter_type: $form.planter_type,
+			organization_name: $form.organization_name,
+			planting_reason: $form.planting_reason,
+			hashtags: $form.hashtags,
+			quantity: $form.quantity,
+			area_hectares: $form.area_hectares,
+			tree_image: $form.tree_image,
+			planterType: planterType,
+			treeImageSrc: treeImageSrc
+		};
+		localStorage.setItem(FORM_STATE_KEY, JSON.stringify(formState));
+	}
+
+	function restoreFormState() {
+		const savedState = localStorage.getItem(FORM_STATE_KEY);
+		if (savedState) {
+			try {
+				const formState = JSON.parse(savedState);
+				$form.tree_name = formState.tree_name || '';
+				$form.tree_species_text = formState.tree_species_text || '';
+				$form.tree_height = formState.tree_height || undefined;
+				$form.tree_age = formState.tree_age || undefined;
+				$form.planter_type = formState.planter_type || 'INDIVIDUAL';
+				$form.organization_name = formState.organization_name || '';
+				$form.planting_reason = formState.planting_reason || '';
+				$form.hashtags = formState.hashtags || '';
+				$form.quantity = formState.quantity || undefined;
+				$form.area_hectares = formState.area_hectares || undefined;
+				$form.tree_image = formState.tree_image || '';
+				planterType = formState.planterType || null;
+				treeImageSrc = formState.treeImageSrc || null;
+			} catch (e) {
+				console.error("Error restoring form state:", e);
+			}
+		}
+	}
+
+	function clearFormState() {
+		localStorage.removeItem(FORM_STATE_KEY);
+	}
 
 	// Function to fetch tree species
 	async function querySpecies(query: string = '') {
@@ -44,6 +105,9 @@
 	}
 
 	onMount(async () => {
+		// Restore form state first
+		restoreFormState();
+
 		// Fetch initial species list
 		await querySpecies();
 
@@ -67,6 +131,19 @@
 				location = null; // Reset if parsing fails
 			}
 		}
+
+		// Save form state on input changes
+		const formElement = document.querySelector('form');
+		if (formElement) {
+			formElement.addEventListener('input', saveFormState);
+		}
+
+		// Clear form state on successful submission
+		return () => {
+			if (formElement) {
+				formElement.removeEventListener('input', saveFormState);
+			}
+		};
 	});
 
 	function openMapPicker() {
@@ -372,8 +449,25 @@
 				{/if}
 			</div>
 
-			<!-- Tree Species (Common Name) -->
+			<!-- Tree Species (Free Text) - HIDDEN DROPDOWN BELOW -->
 			<div class="grid w-full items-center gap-2">
+				<Label for="tree_species_text" class="text-sm font-medium text-foreground flex items-center gap-1.5">
+					<Leaf class="h-4 w-4 text-primary/80" /> Tree Species <span class="text-muted-foreground text-xs">(optional)</span>
+				</Label>
+				<Input
+					type="text"
+					name="tree_species_text"
+					id="tree_species_text"
+					placeholder="e.g., Mahogany, Cedar, Pine"
+					bind:value={$form.tree_species_text}
+					class="w-full text-sm px-3 py-2 rounded-md border-input focus:ring-ring focus:border-ring shadow-sm transition-colors duration-200"
+					maxlength="255"
+				/>
+				<p class="text-xs text-muted-foreground">Enter the common or scientific name of the tree species.</p>
+			</div>
+
+			<!-- HIDDEN: Tree Species Dropdown (kept for future use) -->
+			<div class="hidden">
 				<Label for="tree_species_search" class="text-sm font-medium text-foreground flex items-center gap-1.5">
 					<Leaf class="h-4 w-4 text-primary/80" /> Tree Species (Common Name) <span class="text-muted-foreground text-xs">(optional)</span>
 				</Label>

@@ -14,7 +14,8 @@ const treeSchema = z.object({
 	tree_lng: z.number().min(-180).max(180),
 	tree_height: z.number().min(0).max(100),
 	tree_age: z.number().min(0).max(100).optional(),
-	tree_species: z.string().optional(), // Will contain the species ID
+	tree_species: z.string().optional(), // Will contain the species ID (hidden/unused)
+	tree_species_text: z.string().max(255).optional(), // Free-text species name
 	planter_type: z.enum(['INDIVIDUAL', 'ORGANIZATION']),
 	organization_name: z.string().max(255).optional(),
 	planting_reason: z.string().max(1000).optional(),
@@ -47,7 +48,7 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const { tree_name, tree_image, tree_lat, tree_lng, tree_height, tree_age, tree_species, planter_type, organization_name, planting_reason, hashtags, quantity, area_hectares } =
+		const { tree_name, tree_image, tree_lat, tree_lng, tree_height, tree_age, tree_species, tree_species_text, planter_type, organization_name, planting_reason, hashtags, quantity, area_hectares } =
 			form.data;
 
 		try {
@@ -65,7 +66,8 @@ export const actions: Actions = {
 
 			const new_tree = await Tree.create(
 				tree_name,
-				speciesId, // Use the parsed species ID
+				speciesId, // Use the parsed species ID (0 if not provided)
+				tree_species_text ?? null, // Use free-text species name
 				tree_height ?? 0,
 				'EXCELLENT', // Placeholder health status
 				tree_age ?? 0,

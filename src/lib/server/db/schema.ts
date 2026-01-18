@@ -38,6 +38,7 @@ export const Trees = pgTable(
 		}),
 		TreeName: varchar('tree_name', { length: 255 }),
 		TreeSpecies: integer('tree_species'),
+		TreeSpeciesText: varchar('tree_species_text', { length: 255 }),
 		Height: doublePrecision('height'),
 		Health: treehealth('health').default('EXCELLENT'),
 		Status: treeStatus('status').default('PENDING'),

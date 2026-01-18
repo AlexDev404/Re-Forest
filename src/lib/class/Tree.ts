@@ -10,6 +10,7 @@ export class Tree {
 	Id: number;
 	TreeName: string;
 	TreeSpecies: number;
+	TreeSpeciesText: string | null;
 	Height: number;
 	Health: 'POOR' | 'FAIR' | 'GOOD' | 'EXCELLENT';
 	Status: 'PENDING' | 'APPROVED' | 'DECLINED';
@@ -32,6 +33,7 @@ export class Tree {
 		id: number,
 		treeName: string,
 		treeSpecies: number,
+		treeSpeciesText: string | null,
 		height: number,
 		health: 'POOR' | 'FAIR' | 'GOOD' | 'EXCELLENT',
 		status: 'PENDING' | 'APPROVED' | 'DECLINED',
@@ -53,6 +55,7 @@ export class Tree {
 		this.Id = id;
 		this.TreeName = treeName;
 		this.TreeSpecies = treeSpecies;
+		this.TreeSpeciesText = treeSpeciesText;
 		this.Height = height;
 		this.Health = health;
 		this.Status = status;
@@ -78,6 +81,7 @@ export class Tree {
 	static async create(
 		treeName: string,
 		treeSpecies: number,
+		treeSpeciesText: string | null,
 		height: number,
 		health: 'POOR' | 'FAIR' | 'GOOD' | 'EXCELLENT',
 		age: number,
@@ -96,6 +100,7 @@ export class Tree {
 			0,
 			treeName,
 			treeSpecies,
+			treeSpeciesText,
 			height,
 			health,
 			'PENDING', // Default status
@@ -141,6 +146,7 @@ export class Tree {
 					this.Id = treeData.Id;
 					this.TreeName = treeData.TreeName ?? 'Untitled';
 					this.TreeSpecies = treeData.TreeSpecies ?? 0;
+					this.TreeSpeciesText = treeData.TreeSpeciesText ?? null;
 					this.Height = treeData.Height ?? 0;
 					this.Health = treeData.Health ?? 'EXCELLENT';
 					this.Status = treeData.Status ?? 'PENDING';
@@ -174,6 +180,7 @@ export class Tree {
 		const newTree = {
 			TreeName: this.TreeName,
 			TreeSpecies: this.TreeSpecies,
+			TreeSpeciesText: this.TreeSpeciesText,
 			Height: this.Height,
 			Health: this.Health,
 			Status: this.Status,
@@ -256,6 +263,7 @@ export class Tree {
 					treeData.Id,
 					treeData.TreeName ?? '',
 					treeData.TreeSpecies ?? 0,
+					treeData.TreeSpeciesText ?? null,
 					treeData.Height ?? 0,
 					treeData.Health ?? 'EXCELLENT',
 					treeData.Status ?? 'PENDING',
