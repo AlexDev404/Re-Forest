@@ -13,8 +13,15 @@ const treeSchema = z.object({
 	tree_lat: z.number().min(-90).max(90),
 	tree_lng: z.number().min(-180).max(180),
 	tree_height: z.number().min(0).max(100),
-	tree_age: z.number().min(0).max(100),
-	tree_species: z.string().min(1) // Will contain the species ID
+	tree_age: z.number().min(0).max(100).optional(),
+	tree_species: z.string().optional(), // Will contain the species ID (hidden/unused)
+	tree_species_text: z.string().max(255).optional(), // Free-text species name
+	planter_type: z.enum(['INDIVIDUAL', 'ORGANIZATION']),
+	organization_name: z.string().max(255).optional(),
+	planting_reason: z.string().max(1000).optional(),
+	hashtags: z.string().max(500).optional(),
+	quantity: z.number().min(1).optional(),
+	area_hectares: z.number().min(0).optional()
 });
 
 export const load: PageServerLoad = async (event) => {
@@ -41,28 +48,39 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const { tree_name, tree_image, tree_lat, tree_lng, tree_height, tree_age, tree_species } =
+		const { tree_name, tree_image, tree_lat, tree_lng, tree_height, tree_age, tree_species, tree_species_text, planter_type, organization_name, planting_reason, hashtags, quantity, area_hectares } =
 			form.data;
 
 		try {
-			// Convert the tree species ID from string to number
-			const speciesId = parseInt(tree_species, 10);
-
-			if (isNaN(speciesId)) {
-				setError(form, 'tree_species', 'Invalid species selection');
-				return fail(400, { form });
+			// Convert the tree species ID from string to number (if provided)
+			let speciesId = 0; // Default to 0 if not provided
+			
+			if (tree_species && tree_species.trim() !== '') {
+				speciesId = parseInt(tree_species, 10);
+				
+				if (isNaN(speciesId)) {
+					setError(form, 'tree_species', 'Invalid species selection');
+					return fail(400, { form });
+				}
 			}
 
 			const new_tree = await Tree.create(
 				tree_name,
-				speciesId, // Use the parsed species ID
-				tree_height,
+				speciesId, // Use the parsed species ID (0 if not provided)
+				tree_species_text ?? null, // Use free-text species name
+				tree_height ?? 0,
 				'EXCELLENT', // Placeholder health status
-				tree_age,
+				tree_age ?? 0,
 				tree_image,
 				tree_lat,
 				tree_lng,
-				user.Id
+				user.Id,
+				planter_type,
+				organization_name ?? null,
+				planting_reason ?? null,
+				hashtags ?? null,
+				quantity ?? 1,
+				area_hectares ?? null
 			);
 
 			if (new_tree instanceof Error) {
@@ -74,7 +92,7 @@ export const actions: Actions = {
 				typical_development_notice();
 				console.log('New tree created with ID:', new_tree.Id);
 			}
-			throw redirect(303, `/explore?tree_id=${new_tree.Id}`);
+			throw redirect(303, `/confirmation?tree_id=${new_tree.Id}`);
 		} catch (error) {
 			if (isActionFailure(error)) {
 				return error;

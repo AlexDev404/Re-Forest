@@ -10,6 +10,7 @@ export class Tree {
 	Id: number;
 	TreeName: string;
 	TreeSpecies: number;
+	TreeSpeciesText: string | null;
 	Height: number;
 	Health: 'POOR' | 'FAIR' | 'GOOD' | 'EXCELLENT';
 	Status: 'PENDING' | 'APPROVED' | 'DECLINED';
@@ -19,6 +20,12 @@ export class Tree {
 	Lng: number;
 	PlantedBy: number | App.Locals['user'];
 	PlantedOn: Date | null;
+	PlanterType: 'INDIVIDUAL' | 'ORGANIZATION';
+	OrganizationName: string | null;
+	PlantingReason: string | null;
+	Hashtags: string | null;
+	Quantity: number;
+	AreaHectares: number | null;
 	CreatedAt: Date | null;
 	UpdatedAt: Date | null;
 
@@ -26,6 +33,7 @@ export class Tree {
 		id: number,
 		treeName: string,
 		treeSpecies: number,
+		treeSpeciesText: string | null,
 		height: number,
 		health: 'POOR' | 'FAIR' | 'GOOD' | 'EXCELLENT',
 		status: 'PENDING' | 'APPROVED' | 'DECLINED',
@@ -35,12 +43,19 @@ export class Tree {
 		lng: number,
 		plantedBy: number,
 		plantedOn: Date | null,
+		planterType: 'INDIVIDUAL' | 'ORGANIZATION',
+		organizationName: string | null,
+		plantingReason: string | null,
+		hashtags: string | null,
+		quantity: number,
+		areaHectares: number | null,
 		createdAt: Date | null,
 		updatedAt: Date | null
 	) {
 		this.Id = id;
 		this.TreeName = treeName;
 		this.TreeSpecies = treeSpecies;
+		this.TreeSpeciesText = treeSpeciesText;
 		this.Height = height;
 		this.Health = health;
 		this.Status = status;
@@ -50,6 +65,12 @@ export class Tree {
 		this.Lng = lng;
 		this.PlantedBy = plantedBy;
 		this.PlantedOn = plantedOn;
+		this.PlanterType = planterType;
+		this.OrganizationName = organizationName;
+		this.PlantingReason = plantingReason;
+		this.Hashtags = hashtags;
+		this.Quantity = quantity;
+		this.AreaHectares = areaHectares;
 		this.CreatedAt = createdAt;
 		this.UpdatedAt = updatedAt;
 	}
@@ -60,18 +81,26 @@ export class Tree {
 	static async create(
 		treeName: string,
 		treeSpecies: number,
+		treeSpeciesText: string | null,
 		height: number,
 		health: 'POOR' | 'FAIR' | 'GOOD' | 'EXCELLENT',
 		age: number,
 		image: string | null,
 		lat: number,
 		lng: number,
-		plantedBy: number
+		plantedBy: number,
+		planterType: 'INDIVIDUAL' | 'ORGANIZATION' = 'INDIVIDUAL',
+		organizationName: string | null = null,
+		plantingReason: string | null = null,
+		hashtags: string | null = null,
+		quantity: number = 1,
+		areaHectares: number | null = null
 	): Promise<Tree> {
 		const tree = new Tree(
 			0,
 			treeName,
 			treeSpecies,
+			treeSpeciesText,
 			height,
 			health,
 			'PENDING', // Default status
@@ -81,6 +110,12 @@ export class Tree {
 			lng,
 			plantedBy,
 			new Date(),
+			planterType,
+			organizationName,
+			plantingReason,
+			hashtags,
+			quantity,
+			areaHectares,
 			new Date(),
 			new Date()
 		);
@@ -111,6 +146,7 @@ export class Tree {
 					this.Id = treeData.Id;
 					this.TreeName = treeData.TreeName ?? 'Untitled';
 					this.TreeSpecies = treeData.TreeSpecies ?? 0;
+					this.TreeSpeciesText = treeData.TreeSpeciesText ?? null;
 					this.Height = treeData.Height ?? 0;
 					this.Health = treeData.Health ?? 'EXCELLENT';
 					this.Status = treeData.Status ?? 'PENDING';
@@ -120,6 +156,12 @@ export class Tree {
 					this.Lng = treeData.Lng ?? 0;
 					this.PlantedBy = treeData.PlantedBy;
 					this.PlantedOn = treeData.PlantedOn ? new Date(treeData.PlantedOn) : new Date();
+					this.PlanterType = treeData.PlanterType ?? 'INDIVIDUAL';
+					this.OrganizationName = treeData.OrganizationName ?? null;
+					this.PlantingReason = treeData.PlantingReason ?? null;
+					this.Hashtags = treeData.Hashtags ?? null;
+					this.Quantity = treeData.Quantity ?? 1;
+					this.AreaHectares = treeData.AreaHectares ?? null;
 					this.CreatedAt = treeData.CreatedAt ?? new Date();
 					this.UpdatedAt = treeData.UpdatedAt ?? new Date();
 				} else {
@@ -138,6 +180,7 @@ export class Tree {
 		const newTree = {
 			TreeName: this.TreeName,
 			TreeSpecies: this.TreeSpecies,
+			TreeSpeciesText: this.TreeSpeciesText,
 			Height: this.Height,
 			Health: this.Health,
 			Status: this.Status,
@@ -147,6 +190,12 @@ export class Tree {
 			Lng: this.Lng,
 			PlantedBy: this.PlantedBy as number,
 			PlantedOn: this.PlantedOn !== null ? this.PlantedOn.toISOString() : new Date().toISOString(),
+			PlanterType: this.PlanterType,
+			OrganizationName: this.OrganizationName,
+			PlantingReason: this.PlantingReason,
+			Hashtags: this.Hashtags,
+			Quantity: this.Quantity,
+			AreaHectares: this.AreaHectares,
 			CreatedAt: new Date(),
 			UpdatedAt: new Date()
 		};
@@ -192,6 +241,12 @@ export class Tree {
 		if (details.Lat !== undefined) this.Lat = details.Lat;
 		if (details.Lng !== undefined) this.Lng = details.Lng;
 		if (details.PlantedBy !== undefined) this.PlantedBy = details.PlantedBy;
+		if (details.PlanterType !== undefined) this.PlanterType = details.PlanterType;
+		if (details.OrganizationName !== undefined) this.OrganizationName = details.OrganizationName;
+		if (details.PlantingReason !== undefined) this.PlantingReason = details.PlantingReason;
+		if (details.Hashtags !== undefined) this.Hashtags = details.Hashtags;
+		if (details.Quantity !== undefined) this.Quantity = details.Quantity;
+		if (details.AreaHectares !== undefined) this.AreaHectares = details.AreaHectares;
 
 		return true;
 	}
@@ -208,6 +263,7 @@ export class Tree {
 					treeData.Id,
 					treeData.TreeName ?? '',
 					treeData.TreeSpecies ?? 0,
+					treeData.TreeSpeciesText ?? null,
 					treeData.Height ?? 0,
 					treeData.Health ?? 'EXCELLENT',
 					treeData.Status ?? 'PENDING',
@@ -215,8 +271,14 @@ export class Tree {
 					treeData.Image ?? null,
 					treeData.Lat ?? 0,
 					treeData.Lng ?? 0,
-					treeData.PlantedBy ?? null,
+					treeData.PlantedBy ?? 0,
 					treeData.PlantedOn !== null ? new Date(treeData.PlantedOn) : null,
+					treeData.PlanterType ?? 'INDIVIDUAL',
+					treeData.OrganizationName ?? null,
+					treeData.PlantingReason ?? null,
+					treeData.Hashtags ?? null,
+					treeData.Quantity ?? 1,
+					treeData.AreaHectares ?? null,
 					treeData.CreatedAt !== null ? new Date(treeData.CreatedAt) : null,
 					treeData.UpdatedAt !== null ? new Date(treeData.UpdatedAt) : null
 				)

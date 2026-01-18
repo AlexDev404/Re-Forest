@@ -13,7 +13,7 @@
 </script>
 
 <svelte:head>
-	<title>Re:Forest :: Register an account</title>
+	<title>Greening Belize :: Register an account</title>
 </svelte:head>
 <page class="overflow-y-auto pb-20">
 	{#if JSON.parse(PUBLIC_DEEP_DEBUG)}
@@ -36,7 +36,7 @@
 					/>
 				</svg>
 			</logo>
-			<h1 class="text-4xl font-bold text-primary">Re:Forest</h1>
+			<h1 class="text-4xl font-bold text-primary">Greening Belize</h1>
 		</div>
 		<!-- Registration form -->
 		<form method="POST" use:enhance class="flex w-full flex-col gap-8 lg:px-12">

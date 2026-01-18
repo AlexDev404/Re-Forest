@@ -35,7 +35,7 @@
 </script>
 
 <svelte:head>
-	<title>Re:Forest :: Settings</title>
+	<title>Greening Belize :: Settings</title>
 </svelte:head>
 <page class="min-h-screen overflow-y-auto bg-slate-50 dark:bg-slate-900 font-sans">
 	<main class="mx-auto w-full max-w-3xl px-4 sm:px-6 py-10 sm:py-16 flex flex-col gap-8 sm:gap-10">
