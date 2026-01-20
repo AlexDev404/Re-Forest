@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { afterNavigate, beforeNavigate, onNavigate } from '$app/navigation';
-	import Navigation from '$lib/components/app/navigation.svelte';
 	import { Button } from '$lib/components/vendor/ui/button';
 	import { requestNotificationPermission } from '$lib/firebase';
 	import type { OnNavigate } from '@sveltejs/kit';
@@ -115,9 +114,7 @@
 		</div>
 	</div>
 	<content class="block {mobile ? '' : 'lg:hidden'}"><slot /></content>
-	<control class="fixed bottom-2 z-10 w-full px-3 {mobile ? '' : 'lg:hidden'}"
-		><Navigation user={data.user} /></control
-	>
+
 	<content class="hidden {mobile ? '' : 'lg:block'}">
 		<div class="flex h-screen w-full items-center justify-center">
 			<div class="max-w-md p-8 text-center">

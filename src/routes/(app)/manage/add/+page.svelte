@@ -198,10 +198,10 @@
 <page class="block min-h-screen bg-slate-50 dark:bg-slate-900 font-sans overflow-y-auto pb-24">
 	<main class="mx-auto w-full max-w-4xl px-4 sm:px-6 py-10 sm:py-16 flex flex-col gap-10">
 		<header class="flex flex-col items-start gap-2.5 pb-8">
-			<a href="/manage" class="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 mb-2">
+			<!-- <a href="/manage" class="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 mb-2">
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
 				Return to Tree Management
-			</a>
+			</a> -->
 			<h1 class="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight">
 				Register New Tree Planting
 			</h1>

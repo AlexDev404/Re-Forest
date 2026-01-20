@@ -134,7 +134,7 @@ describe('Add/Manage Tree page server', () => {
 			await actions.default(mockEvent);
 
 			expect(Tree.create).toHaveBeenCalled();
-			expect(sveltekit.redirect).toHaveBeenCalledWith(303, '/explore?tree_id=123');
+			expect(sveltekit.redirect).toHaveBeenCalledWith(303, '/?tree_id=123');
 		});
 
 		it('should handle errors during tree creation', async () => {

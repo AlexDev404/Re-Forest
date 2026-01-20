@@ -1,10 +1,10 @@
 import {
-	DEBUG,
-	JWT_SECRET,
-	SESSION_HTTP_ONLY,
-	SESSION_MAX_AGE,
-	SESSION_SAMESITE,
-	SESSION_SECURE
+    DEBUG,
+    JWT_SECRET,
+    SESSION_HTTP_ONLY,
+    SESSION_MAX_AGE,
+    SESSION_SAMESITE,
+    SESSION_SECURE
 } from '$env/static/private';
 import { User } from '$lib/class/User';
 import { db } from '$lib/server/db';
@@ -38,7 +38,7 @@ export const load: PageServerLoad = async (event) => {
 		console.log('Current auth session:', session);
 	}
 	if (session) {
-		throw redirect(302, '/explore');
+		throw redirect(302, '/');
 	}
 
 	return {
@@ -120,7 +120,7 @@ export const actions: Actions = {
 			);
 
 			// Redirect to explore page after successful registration
-			throw redirect(302, '/explore');
+			throw redirect(302, '/');
 		} catch (error) {
 			if (isActionFailure(error)) {
 				return error;

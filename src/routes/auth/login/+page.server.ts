@@ -1,11 +1,11 @@
 import {
-	DEBUG,
-	JWT_SECRET,
-	SESSION_HTTP_ONLY,
-	SESSION_MAX_AGE,
-	SESSION_SAMESITE,
-	SESSION_SECURE,
-	VERBOSE
+    DEBUG,
+    JWT_SECRET,
+    SESSION_HTTP_ONLY,
+    SESSION_MAX_AGE,
+    SESSION_SAMESITE,
+    SESSION_SECURE,
+    VERBOSE
 } from '$env/static/private';
 import { User } from '$lib/class/User';
 import { typical_development_notice } from '$lib/utility/typicals';
@@ -30,7 +30,7 @@ export const load: PageServerLoad = async (event) => {
 		console.log('Current auth session:', session);
 	}
 	if (session) {
-		throw redirect(302, '/explore');
+		throw redirect(302, '/');
 	}
 
 	return {
@@ -98,7 +98,7 @@ export const actions: Actions = {
 				}
 			);
 
-			throw redirect(302, '/explore');
+			throw redirect(302, '/');
 		} catch (error) {
 			if (isActionFailure(error)) {
 				return error;

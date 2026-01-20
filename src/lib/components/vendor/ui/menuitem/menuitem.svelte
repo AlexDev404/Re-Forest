@@ -18,7 +18,7 @@
 	tabindex="0"
 	aria-expanded="false"
 	class={cn(
-		'flex w-full cursor-pointer items-center rounded-sm border border-slate-100 px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-foreground data-[highlighted]:bg-accent data-[state=open]:bg-accent',
+		'flex w-full cursor-pointer items-center rounded-sm border border-slate-100 px-2 py-1.5 text-sm outline-none hover:bg-secondary hover:text-foreground data-[highlighted]:bg-secondary data-[state=open]:bg-secondary',
 		className
 	)}
 >

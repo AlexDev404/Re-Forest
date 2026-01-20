@@ -102,7 +102,7 @@ describe('Register page server', () => {
 			mockEvent.locals.user = { Id: 1 };
 
 			await expect(load(mockEvent)).rejects.toThrow();
-			expect(sveltekit.redirect).toHaveBeenCalledWith(302, '/explore');
+			expect(sveltekit.redirect).toHaveBeenCalledWith(302, '/');
 		});
 
 		it('should return form data when user is not logged in', async () => {
@@ -152,7 +152,7 @@ describe('Register page server', () => {
 				})
 			);
 
-			expect(sveltekit.redirect).toHaveBeenCalledWith(302, '/explore');
+			expect(sveltekit.redirect).toHaveBeenCalledWith(302, '/');
 		});
 	});
 });

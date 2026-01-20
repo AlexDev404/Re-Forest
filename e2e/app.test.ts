@@ -54,12 +54,12 @@ test.describe('Manage Tree page', () => {
 
 test.describe('Tree Explore page', () => {
 	test('tree explore page has expected title', async ({ page }) => {
-		await page.goto('/explore');
+		await page.goto('/');
 		await expect(await page.title()).toBe('Re:Forest :: Explore');
 		console.log('Tree explore page title passed');
 	});
 	test('tree explore page has <information-container/>', async ({ page }) => {
-		await page.goto('/explore');
+		await page.goto('/');
 		const information_containers = page.locator('information-container');
 		await expect(await information_containers.count()).toBeGreaterThanOrEqual(1);
 		console.log('Tree explore page information container passed');

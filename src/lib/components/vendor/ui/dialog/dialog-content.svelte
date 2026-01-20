@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { Dialog as DialogPrimitive, type WithoutChildrenOrChild } from 'bits-ui';
+	import { cn } from '$lib/components/vendor/shadcn/utils.js';
 	import X from '@lucide/svelte/icons/x';
+	import { Dialog as DialogPrimitive, type WithoutChildrenOrChild } from 'bits-ui';
 	import type { Snippet } from 'svelte';
 	import * as Dialog from './index.js';
-	import { cn } from '$lib/components/vendor/shadcn/utils.js';
 
 	let {
 		ref = $bindable(null),
@@ -29,7 +29,7 @@
 	>
 		{@render children?.()}
 		<DialogPrimitive.Close
-			class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+			class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary data-[state=open]:text-muted-foreground"
 		>
 			<X class="size-4" />
 			<span class="sr-only">Close</span>
