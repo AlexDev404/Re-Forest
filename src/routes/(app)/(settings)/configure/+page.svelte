@@ -41,7 +41,7 @@
 		<header class="pb-6 sm:pb-8">
 			<h1 class="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">Settings</h1>
 			<p class="mt-1 text-sm text-muted-foreground">
-				Manage your application preferences and configurations.
+				Manage your application preferences and configuration.
 			</p>
 		</header>
 
