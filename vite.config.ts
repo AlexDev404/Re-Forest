@@ -40,5 +40,13 @@ export default defineConfig({
 		coverage: {
 			provider: 'istanbul' // or 'v8'
 		}
+	},
+	server: {
+		allowedHosts: ['sveltekit.alexdev404.localplayer.dev']
+	},
+	preview: {
+		cors: {
+			origin: /^https?:\/\/sveltekit\.alexdev404\.localplayer\.dev(?::\d+)?$/
+		}
 	}
 });

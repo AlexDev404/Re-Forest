@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { DropdownMenu as DropdownMenuPrimitive, type WithoutChild } from 'bits-ui';
-	import Circle from '@lucide/svelte/icons/circle';
 	import { cn } from '$lib/components/vendor/shadcn/utils.js';
+	import Circle from '@lucide/svelte/icons/circle';
+	import { DropdownMenu as DropdownMenuPrimitive, type WithoutChild } from 'bits-ui';
 
 	let {
 		ref = $bindable(null),
@@ -14,7 +14,7 @@
 <DropdownMenuPrimitive.RadioItem
 	bind:ref
 	class={cn(
-		'relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[disabled]:opacity-50',
+		'relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-secondary data-[highlighted]:text-accent-foreground data-[disabled]:opacity-50',
 		className
 	)}
 	{...restProps}

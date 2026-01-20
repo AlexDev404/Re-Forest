@@ -81,7 +81,7 @@ describe('Login page server', () => {
 			mockEvent.locals.user = mockUser;
 
 			await expect(load(mockEvent)).rejects.toThrow();
-			expect(sveltekit.redirect).toHaveBeenCalledWith(302, '/explore');
+			expect(sveltekit.redirect).toHaveBeenCalledWith(302, '/');
 		});
 
 		it('should return form data when user is not logged in', async () => {
@@ -118,7 +118,7 @@ describe('Login page server', () => {
 					sameSite: 'lax'
 				})
 			);
-			expect(sveltekit.redirect).toHaveBeenCalledWith(302, '/explore');
+			expect(sveltekit.redirect).toHaveBeenCalledWith(302, '/');
 		});
 
 		it('should fail with error message if user authentication fails', async () => {
