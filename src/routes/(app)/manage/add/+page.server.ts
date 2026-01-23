@@ -19,7 +19,7 @@ const treeSchema = z.object({
 	tree_species: z.string(), // Will contain the species ID
 	planter_type: z.enum(['INDIVIDUAL', 'ORGANIZATION']),
 	organization_name: z.string().max(255).optional(),
-	planting_reason_id: z.string().optional(), // Changed from planting_reason to planting_reason_id
+	planting_reason_id: z.string().default('1'), // Changed from planting_reason to planting_reason_id
 	hashtags: z.string().max(500).optional(),
 	quantity: z.number().min(1).optional(),
 	area_hectares: z.number().min(0).optional()
@@ -27,10 +27,10 @@ const treeSchema = z.object({
 
 export const load: PageServerLoad = async (event) => {
 	const request = event.request;
-	
+
 	// Fetch all planting reasons from database
 	const plantingReasons = await db.select().from(PlantingReasons);
-	
+
 	return {
 		form: await superValidate(request, zod4(treeSchema)),
 		plantingReasons
@@ -56,16 +56,29 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const { tree_name, tree_image, tree_lat, tree_lng, tree_height, tree_age, tree_species, planter_type, organization_name, planting_reason_id, hashtags, quantity, area_hectares } =
-			form.data;
+		const {
+			tree_name,
+			tree_image,
+			tree_lat,
+			tree_lng,
+			tree_height,
+			tree_age,
+			tree_species,
+			planter_type,
+			organization_name,
+			planting_reason_id,
+			hashtags,
+			quantity,
+			area_hectares
+		} = form.data;
 
 		try {
 			// Convert the tree species ID from string to number (if provided)
 			let speciesId = 0; // Default to 0 if not provided
-			
+
 			if (tree_species && tree_species.trim() !== '') {
 				speciesId = parseInt(tree_species, 10);
-				
+
 				if (isNaN(speciesId)) {
 					setError(form, 'tree_species', 'Invalid species selection');
 					return fail(400, { form });
