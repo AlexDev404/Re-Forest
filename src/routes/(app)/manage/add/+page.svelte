@@ -25,6 +25,7 @@
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
+
 	const { form, errors, constraints, enhance } = superForm(data.form, {
 		onSubmit: () => {
 			// Save form state before submission
@@ -168,6 +169,11 @@
 			formElement.removeEventListener('input', saveFormState);
 		}
 	});
+
+	setInterval(() => {
+		saveFormState();
+	}, 3000);
+		
 
 	function openMapPicker() {
 		goto('/configure/site-location');
@@ -539,7 +545,7 @@
 							><line x1="12" y1="2" x2="12" y2="22"></line><polyline points="18 6 12 2 6 6"
 							></polyline><polyline points="18 18 12 22 6 18"></polyline></svg
 						>
-						Height (meters) <span class="text-xs text-muted-foreground">(optional)</span>
+						Height (feet) <span class="text-xs text-muted-foreground">(optional)</span>
 					</Label>
 					<Input
 						type="number"
@@ -745,7 +751,7 @@
 						>
 						Reason for Planting
 					</Label>
-					<RadioGroup.Root bind:value={$form.planting_reason_id} class="flex flex-col gap-2">
+					<RadioGroup.Root bind:value={$form.planting_reason_id}  class="flex flex-col gap-2">
 						{#each data.plantingReasons as reason (reason.Id)}
 							<div class="flex items-center space-x-3 rounded-md border border-input bg-background px-4 py-3 hover:bg-muted/50 transition-colors">
 								<RadioGroup.Item value={reason.Id.toString()} id={`reason-${reason.Id}`} />
