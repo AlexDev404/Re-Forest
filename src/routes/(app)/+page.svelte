@@ -63,7 +63,7 @@
 					class="absolute inset-0 bg-[url('/static/assets/splash/wallpapers/Gradient.png')] bg-cover bg-center opacity-40"
 				></div>
 				<p class="mb-6 text-xl drop-shadow sm:text-2xl">
-					Tree Planting Tracking for a Sustainable Future
+					Greening Belize:<br/>A <b>Million</b> Trees for Climate and Sustainable Development
 				</p>
 				<p class="text-base drop-shadow sm:text-lg">
 					Join us in our mission to restore and protect Belize's forests. Track your tree plantings
