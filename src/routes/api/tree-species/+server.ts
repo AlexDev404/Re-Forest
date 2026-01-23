@@ -2,13 +2,14 @@ import { db } from '$lib/server/db';
 import { TreeSpecies } from '$lib/server/db/schema';
 import type { RequestEvent } from '@sveltejs/kit';
 import { json } from '@sveltejs/kit';
-import { desc, ilike } from 'drizzle-orm';
+import { and, desc, eq, ilike } from 'drizzle-orm';
 
 export async function GET(event: RequestEvent) {
 	try {
 		// Get the search query from the URL params
 		const searchQuery = event.url.searchParams.get('q') || '';
 		const limit = parseInt(event.url.searchParams.get('limit') || '20');
+		const isTimber = event.url.searchParams.get('is_timber'); // Get is_timber filter
 
 		let query = db
 			.select({
@@ -17,9 +18,23 @@ export async function GET(event: RequestEvent) {
 			})
 			.from(TreeSpecies);
 
+		// Build filter conditions
+		const conditions = [];
+		
 		// Apply search filter if query exists
 		if (searchQuery) {
-			query = query.where(ilike(TreeSpecies.Name, `%${searchQuery}%`));
+			conditions.push(ilike(TreeSpecies.Name, `%${searchQuery}%`));
+		}
+		
+		// Apply is_timber filter if provided
+		if (isTimber !== null) {
+			const isTimberBool = isTimber === 'true';
+			conditions.push(eq(TreeSpecies.IsTimber, isTimberBool));
+		}
+		
+		// Apply all conditions
+		if (conditions.length > 0) {
+			query = query.where(and(...conditions));
 		}
 
 		// Apply ordering

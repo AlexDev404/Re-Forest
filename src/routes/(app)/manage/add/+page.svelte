@@ -5,6 +5,7 @@
 	import CommandItem2 from '$lib/components/vendor/ui/command/command-item2.svelte';
 	import { Input } from '$lib/components/vendor/ui/input';
 	import { Label } from '$lib/components/vendor/ui/label';
+	import { Switch } from '$lib/components/vendor/ui/switch';
 	import { type ReverseGeoJSON } from '$lib/types/GeoJSON';
 	import { getReverseLoc } from '$lib/utility/utility';
 	import {
@@ -38,6 +39,7 @@
 	let treeImageSrc: string | null = $state(null);
 	let speciesData = $state<{ id: number; name: string }[] | null>(null);
 	let selectedSpeciesName = $state<string | null>(null);
+	let showNonTimber = $state(false); // Switch state for filtering timber/non-timber
 
 	// New: Planter type selection
 	let planterType: 'INDIVIDUAL' | 'ORGANIZATION' | null = $state(null);
@@ -55,7 +57,6 @@
 	function saveFormState() {
 		const formState = {
 			tree_name: $form.tree_name,
-			tree_species_text: $form.tree_species_text,
 			tree_height: $form.tree_height,
 			tree_age: $form.tree_age,
 			planter_type: $form.planter_type,
@@ -66,7 +67,8 @@
 			area_hectares: $form.area_hectares,
 			tree_image: $form.tree_image,
 			planterType: planterType,
-			treeImageSrc: treeImageSrc
+			treeImageSrc: treeImageSrc,
+			showNonTimber: showNonTimber
 		};
 		sessionStorage.setItem(FORM_STATE_KEY, JSON.stringify(formState));
 	}
@@ -77,7 +79,6 @@
 			try {
 				const formState = JSON.parse(savedState);
 				$form.tree_name = formState.tree_name || '';
-				$form.tree_species_text = formState.tree_species_text || '';
 				$form.tree_height = formState.tree_height || undefined;
 				$form.tree_age = formState.tree_age || undefined;
 				$form.planter_type = formState.planter_type || 'INDIVIDUAL';
@@ -89,6 +90,7 @@
 				$form.tree_image = formState.tree_image || '';
 				planterType = formState.planterType || null;
 				treeImageSrc = formState.treeImageSrc || null;
+				showNonTimber = formState.showNonTimber || false;
 			} catch (e) {
 				console.error('Error restoring form state:', e);
 			}
@@ -102,7 +104,9 @@
 	// Function to fetch tree species
 	async function querySpecies(query: string = '') {
 		try {
-			const response = await fetch(`/api/tree-species?q=${query}&limit=10`);
+			// Filter by is_timber based on switch state
+			const isTimberParam = showNonTimber ? 'false' : 'true';
+			const response = await fetch(`/api/tree-species?q=${query}&limit=10&is_timber=${isTimberParam}`);
 			if (!response.ok) {
 				throw new Error('Failed to fetch species data');
 			}
@@ -601,38 +605,32 @@
 					{/if}
 				</div>
 
-				<!-- Tree Species (Free Text) - HIDDEN DROPDOWN BELOW -->
-				<div class="grid w-full items-center gap-2">
-					<Label
-						for="tree_species_text"
-						class="flex items-center gap-1.5 text-sm font-medium text-foreground"
-					>
-						<Leaf class="h-4 w-4 text-primary/80" /> Tree Species
-						<span class="text-xs text-muted-foreground">(optional)</span>
-					</Label>
-					<Input
-						type="text"
-						name="tree_species_text"
-						id="tree_species_text"
-						placeholder="e.g., Mahogany, Cedar, Pine"
-						bind:value={$form.tree_species_text}
-						class="w-full rounded-md border-input px-3 py-2 text-sm shadow-sm transition-colors duration-200 focus:border-ring focus:ring-ring"
-						maxlength="255"
-					/>
-					<p class="text-xs text-muted-foreground">
-						Enter the common or scientific name of the tree species.
-					</p>
-				</div>
-
 				<!--  Tree Species Dropdown  -->
-			
-					<Label
-						for="tree_species_search"
-						class="flex items-center gap-1.5 text-sm font-medium text-foreground"
-					>
-						<Leaf class="h-4 w-4 text-primary/80" /> Tree Species (Common Name)
-						<span class="text-xs text-muted-foreground">(optional)</span>
-					</Label>
+				<div class="grid w-full items-center gap-2">
+					<div class="flex items-center justify-between">
+						<Label
+							for="tree_species_search"
+							class="flex items-center gap-1.5 text-sm font-medium text-foreground"
+						>
+							<Leaf class="h-4 w-4 text-primary/80" /> Tree Species (Common Name)
+							<span class="text-xs text-muted-foreground">(optional)</span>
+						</Label>
+						<div class="flex items-center gap-2">
+							<span class="text-xs text-muted-foreground">
+								{showNonTimber ? 'Non-Timber' : 'Timber'}
+							</span>
+							<Switch
+								bind:checked={showNonTimber}
+								onCheckedChange={async () => {
+									// Reset selection when filter changes
+									selectedSpeciesName = null;
+									$form.tree_species = '';
+									// Fetch species with new filter
+									await querySpecies();
+								}}
+							/>
+						</div>
+					</div>
 					<input
 						type="hidden"
 						name="tree_species"
@@ -726,7 +724,7 @@
 							{$errors.tree_species}
 						</p>
 					{/if}
-			
+				</div>
 
 				<!-- Planting Reason -->
 				<div class="grid w-full items-center gap-2">
