@@ -1,10 +1,10 @@
 import {
-    DEBUG,
-    JWT_SECRET,
-    SESSION_HTTP_ONLY,
-    SESSION_MAX_AGE,
-    SESSION_SAMESITE,
-    SESSION_SECURE
+	DEBUG,
+	JWT_SECRET,
+	SESSION_HTTP_ONLY,
+	SESSION_MAX_AGE,
+	SESSION_SAMESITE,
+	SESSION_SECURE
 } from '$env/static/private';
 import { User } from '$lib/class/User';
 import { db } from '$lib/server/db';
@@ -14,7 +14,7 @@ import { fail, isActionFailure, isRedirect, redirect, type Actions } from '@svel
 import { eq } from 'drizzle-orm';
 import Jwt from 'jsonwebtoken';
 import { setError, superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
 
@@ -42,13 +42,13 @@ export const load: PageServerLoad = async (event) => {
 	}
 
 	return {
-		form: await superValidate(event, zod(registerSchema))
+		form: await superValidate(event, zod4(registerSchema))
 	};
 };
 
 export const actions: Actions = {
 	default: async (event) => {
-		const form = await superValidate(event, zod(registerSchema));
+		const form = await superValidate(event, zod4(registerSchema));
 		const cookies = event.cookies;
 
 		if (JSON.parse(DEBUG)) {

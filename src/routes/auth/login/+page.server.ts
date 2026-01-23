@@ -1,18 +1,18 @@
 import {
-    DEBUG,
-    JWT_SECRET,
-    SESSION_HTTP_ONLY,
-    SESSION_MAX_AGE,
-    SESSION_SAMESITE,
-    SESSION_SECURE,
-    VERBOSE
+	DEBUG,
+	JWT_SECRET,
+	SESSION_HTTP_ONLY,
+	SESSION_MAX_AGE,
+	SESSION_SAMESITE,
+	SESSION_SECURE,
+	VERBOSE
 } from '$env/static/private';
 import { User } from '$lib/class/User';
 import { typical_development_notice } from '$lib/utility/typicals';
 import { fail, isActionFailure, isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import Jwt from 'jsonwebtoken';
 import { setError, superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
 
@@ -34,13 +34,13 @@ export const load: PageServerLoad = async (event) => {
 	}
 
 	return {
-		form: await superValidate(event, zod(loginSchema))
+		form: await superValidate(event, zod4(loginSchema))
 	};
 };
 
 export const actions: Actions = {
 	default: async (event) => {
-		const form = await superValidate(event, zod(loginSchema));
+		const form = await superValidate(event, zod4(loginSchema));
 		const cookies = event.cookies;
 		if (JSON.parse(DEBUG)) {
 			typical_development_notice();
