@@ -68,11 +68,11 @@
 			planterType: planterType,
 			treeImageSrc: treeImageSrc
 		};
-		localStorage.setItem(FORM_STATE_KEY, JSON.stringify(formState));
+		sessionStorage.setItem(FORM_STATE_KEY, JSON.stringify(formState));
 	}
 
 	function restoreFormState() {
-		const savedState = localStorage.getItem(FORM_STATE_KEY);
+		const savedState = sessionStorage.getItem(FORM_STATE_KEY);
 		if (savedState) {
 			try {
 				const formState = JSON.parse(savedState);
@@ -96,7 +96,7 @@
 	}
 
 	function clearFormState() {
-		localStorage.removeItem(FORM_STATE_KEY);
+		sessionStorage.removeItem(FORM_STATE_KEY);
 	}
 
 	// Function to fetch tree species
@@ -122,7 +122,7 @@
 		await querySpecies();
 
 		// Get location data
-		const storedLocation = localStorage.getItem('location');
+		const storedLocation = sessionStorage.getItem('location');
 		if (storedLocation) {
 			try {
 				const parsedLocation = JSON.parse(storedLocation);
@@ -141,7 +141,7 @@
 					}
 				}
 			} catch (e) {
-				console.error('Error parsing location from localStorage', e);
+				console.error('Error parsing location from sessionStorage', e);
 				location = null; // Reset if parsing fails
 			}
 		}
