@@ -795,7 +795,6 @@
 						bind:value={$form.hashtags}
 						placeholder="e.g., #climateaction #reforestation #belize"
 						class="w-full rounded-md border-input px-3 py-2 text-sm shadow-sm transition-colors duration-200 focus:border-ring focus:ring-ring"
-						maxlength="500"
 					/>
 					<p class="text-xs text-muted-foreground">
 						Add relevant tags to categorize your planting (separate with spaces or commas).
