@@ -1,4 +1,5 @@
 import {
+	boolean,
 	date,
 	doublePrecision,
 	foreignKey,
@@ -23,6 +24,7 @@ export const TreeSpecies = pgTable('Tree_Species', {
 		maxValue: 2147483647
 	}),
 	Name: varchar('name', { length: 255 }),
+	IsTimber: boolean('is_timber').default(true),
 	CreatedAt: timestamp('created_at').defaultNow()
 });
 
@@ -38,7 +40,6 @@ export const Trees = pgTable(
 		}),
 		TreeName: varchar('tree_name', { length: 255 }),
 		TreeSpecies: integer('tree_species'),
-		TreeSpeciesText: varchar('tree_species_text', { length: 255 }),
 		Height: doublePrecision('height'),
 		Health: treehealth('health').default('EXCELLENT'),
 		Status: treeStatus('status').default('PENDING'),
