@@ -122,7 +122,7 @@
 		await querySpecies();
 
 		// Get location data
-		const storedLocation = sessionStorage.getItem('location');
+		const storedLocation = localStorage.getItem('location');
 		if (storedLocation) {
 			try {
 				const parsedLocation = JSON.parse(storedLocation);
@@ -141,7 +141,7 @@
 					}
 				}
 			} catch (e) {
-				console.error('Error parsing location from sessionStorage', e);
+				console.error('Error parsing location from localStorage', e);
 				location = null; // Reset if parsing fails
 			}
 		}
@@ -624,8 +624,8 @@
 					</p>
 				</div>
 
-				<!-- HIDDEN: Tree Species Dropdown (kept for future use) -->
-				<div class="hidden">
+				<!--  Tree Species Dropdown  -->
+			
 					<Label
 						for="tree_species_search"
 						class="flex items-center gap-1.5 text-sm font-medium text-foreground"
@@ -726,7 +726,7 @@
 							{$errors.tree_species}
 						</p>
 					{/if}
-				</div>
+			
 
 				<!-- Planting Reason -->
 				<div class="grid w-full items-center gap-2">
