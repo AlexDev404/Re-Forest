@@ -51,7 +51,6 @@ export const Trees = pgTable(
 		PlantedOn: date('planted_on'),
 		PlanterType: planterType('planter_type').default('INDIVIDUAL'),
 		OrganizationName: varchar('organization_name', { length: 255 }),
-		PlantingReason: text('planting_reason'),
 		Hashtags: text('hashtags'),
 		Quantity: integer('quantity').default(1),
 		AreaHectares: doublePrecision('area_hectares'),
@@ -108,6 +107,35 @@ export const User = pgTable(
 		})
 	]
 );
+
+export const PlantingReasons = pgTable('PlantingReasons', {
+	Id: integer('id').primaryKey().generatedByDefaultAsIdentity({
+		name: 'PlantingReasons_id_seq',
+		startWith: 1,
+		increment: 1,
+		minValue: 1,
+		maxValue: 2147483647
+	}),
+	Name: varchar('name', { length: 255 }).notNull(),
+	CreatedAt: timestamp('created_at').defaultNow()
+});
+
+export const Trees_PlantingReasons = pgTable('Trees_PlantingReasons', {
+	Id: integer('id').primaryKey().generatedByDefaultAsIdentity({
+		name: 'Trees_PlantingReasons_id_seq',
+		startWith: 1,
+		increment: 1,
+		minValue: 1,
+		maxValue: 2147483647
+	}),
+	TreeId: integer('tree_id')
+		.notNull()
+		.references(() => Trees.Id, { onDelete: 'cascade' }),
+	PlantingReasonId: integer('planting_reason_id')
+		.notNull()
+		.references(() => PlantingReasons.Id, { onDelete: 'cascade' }),
+	CreatedAt: timestamp('created_at').defaultNow()
+});
 
 export const Notifications = pgTable('Notifications', {
 	id: integer('id').primaryKey().generatedByDefaultAsIdentity(),

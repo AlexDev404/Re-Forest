@@ -5,6 +5,7 @@
 	import CommandItem2 from '$lib/components/vendor/ui/command/command-item2.svelte';
 	import { Input } from '$lib/components/vendor/ui/input';
 	import { Label } from '$lib/components/vendor/ui/label';
+	import * as RadioGroup from '$lib/components/vendor/ui/radio-group';
 	import { Switch } from '$lib/components/vendor/ui/switch';
 	import { type ReverseGeoJSON } from '$lib/types/GeoJSON';
 	import { getReverseLoc } from '$lib/utility/utility';
@@ -61,7 +62,7 @@
 			tree_age: $form.tree_age,
 			planter_type: $form.planter_type,
 			organization_name: $form.organization_name,
-			planting_reason: $form.planting_reason,
+			planting_reason_id: $form.planting_reason_id,
 			hashtags: $form.hashtags,
 			quantity: $form.quantity,
 			area_hectares: $form.area_hectares,
@@ -83,7 +84,7 @@
 				$form.tree_age = formState.tree_age || undefined;
 				$form.planter_type = formState.planter_type || 'INDIVIDUAL';
 				$form.organization_name = formState.organization_name || '';
-				$form.planting_reason = formState.planting_reason || '';
+				$form.planting_reason_id = formState.planting_reason_id || '';
 				$form.hashtags = formState.hashtags || '';
 				$form.quantity = formState.quantity || undefined;
 				$form.area_hectares = formState.area_hectares || undefined;
@@ -727,11 +728,8 @@
 				</div>
 
 				<!-- Planting Reason -->
-				<div class="grid w-full items-center gap-2">
-					<Label
-						for="planting_reason"
-						class="flex items-center gap-1.5 text-sm font-medium text-foreground"
-					>
+				<div class="grid w-full items-center gap-3">
+					<Label class="flex items-center gap-1.5 text-sm font-medium text-foreground">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							width="16"
@@ -747,15 +745,20 @@
 						>
 						Reason for Planting
 					</Label>
-					<textarea
-						name="planting_reason"
-						id="planting_reason"
-						bind:value={$form.planting_reason}
-						placeholder="e.g., Reforestation effort, beautification, climate action"
-						class="min-h-[80px] w-full resize-y rounded-md border-input px-3 py-2 text-sm shadow-sm transition-colors duration-200 focus:border-ring focus:ring-ring"
-						maxlength="1000"
-					></textarea>
-					<p class="text-xs text-muted-foreground">Share why you're planting these trees.</p>
+					<RadioGroup.Root bind:value={$form.planting_reason_id} class="flex flex-col gap-2">
+						{#each data.plantingReasons as reason (reason.Id)}
+							<div class="flex items-center space-x-3 rounded-md border border-input bg-background px-4 py-3 hover:bg-muted/50 transition-colors">
+								<RadioGroup.Item value={reason.Id.toString()} id={`reason-${reason.Id}`} />
+								<Label 
+									for={`reason-${reason.Id}`} 
+									class="flex-1 cursor-pointer text-sm font-normal leading-relaxed"
+								>
+									{reason.Name}
+								</Label>
+							</div>
+						{/each}
+					</RadioGroup.Root>
+					<p class="text-xs text-muted-foreground">Select the primary reason for planting.</p>
 				</div>
 
 				<!-- Hashtags -->

@@ -1,5 +1,7 @@
 import { DEBUG } from '$env/static/private';
 import { Tree } from '$lib/class/Tree';
+import { db } from '$lib/server/db/';
+import { PlantingReasons } from '$lib/server/db/schema';
 import { typical_development_notice } from '$lib/utility/typicals';
 import { fail, isActionFailure, isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms';
@@ -17,7 +19,7 @@ const treeSchema = z.object({
 	tree_species: z.string(), // Will contain the species ID
 	planter_type: z.enum(['INDIVIDUAL', 'ORGANIZATION']),
 	organization_name: z.string().max(255).optional(),
-	planting_reason: z.string().max(1000).optional(),
+	planting_reason_id: z.string().optional(), // Changed from planting_reason to planting_reason_id
 	hashtags: z.string().max(500).optional(),
 	quantity: z.number().min(1).optional(),
 	area_hectares: z.number().min(0).optional()
@@ -25,8 +27,13 @@ const treeSchema = z.object({
 
 export const load: PageServerLoad = async (event) => {
 	const request = event.request;
+	
+	// Fetch all planting reasons from database
+	const plantingReasons = await db.select().from(PlantingReasons);
+	
 	return {
-		form: await superValidate(request, zod4(treeSchema))
+		form: await superValidate(request, zod4(treeSchema)),
+		plantingReasons
 	};
 };
 
@@ -49,7 +56,7 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const { tree_name, tree_image, tree_lat, tree_lng, tree_height, tree_age, tree_species, planter_type, organization_name, planting_reason, hashtags, quantity, area_hectares } =
+		const { tree_name, tree_image, tree_lat, tree_lng, tree_height, tree_age, tree_species, planter_type, organization_name, planting_reason_id, hashtags, quantity, area_hectares } =
 			form.data;
 
 		try {
@@ -68,6 +75,16 @@ export const actions: Actions = {
 				return fail(400, { form });
 			}
 
+			// Convert planting_reason_id to number if provided
+			let plantingReasonIdNum: number | null = null;
+			if (planting_reason_id && planting_reason_id.trim() !== '') {
+				plantingReasonIdNum = parseInt(planting_reason_id, 10);
+				if (isNaN(plantingReasonIdNum)) {
+					setError(form, 'planting_reason_id', 'Invalid planting reason selection');
+					return fail(400, { form });
+				}
+			}
+
 			const new_tree = await Tree.create(
 				tree_name,
 				speciesId, // Use the parsed species ID (0 if not provided)
@@ -80,10 +97,10 @@ export const actions: Actions = {
 				user.Id,
 				planter_type,
 				organization_name ?? null,
-				planting_reason ?? null,
 				hashtags ?? null,
 				quantity ?? 1,
-				area_hectares ?? null
+				area_hectares ?? null,
+				plantingReasonIdNum // Pass the planting reason ID
 			);
 
 			if (new_tree instanceof Error) {

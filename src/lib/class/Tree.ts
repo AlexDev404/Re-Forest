@@ -21,7 +21,6 @@ export class Tree {
 	PlantedOn: Date | null;
 	PlanterType: 'INDIVIDUAL' | 'ORGANIZATION';
 	OrganizationName: string | null;
-	PlantingReason: string | null;
 	Hashtags: string | null;
 	Quantity: number;
 	AreaHectares: number | null;
@@ -43,7 +42,6 @@ export class Tree {
 		plantedOn: Date | null,
 		planterType: 'INDIVIDUAL' | 'ORGANIZATION',
 		organizationName: string | null,
-		plantingReason: string | null,
 		hashtags: string | null,
 		quantity: number,
 		areaHectares: number | null,
@@ -64,7 +62,6 @@ export class Tree {
 		this.PlantedOn = plantedOn;
 		this.PlanterType = planterType;
 		this.OrganizationName = organizationName;
-		this.PlantingReason = plantingReason;
 		this.Hashtags = hashtags;
 		this.Quantity = quantity;
 		this.AreaHectares = areaHectares;
@@ -87,10 +84,10 @@ export class Tree {
 		plantedBy: number,
 		planterType: 'INDIVIDUAL' | 'ORGANIZATION' = 'INDIVIDUAL',
 		organizationName: string | null = null,
-		plantingReason: string | null = null,
 		hashtags: string | null = null,
 		quantity: number = 1,
-		areaHectares: number | null = null
+		areaHectares: number | null = null,
+		plantingReasonId: number | null = null
 	): Promise<Tree> {
 		const tree = new Tree(
 			0,
@@ -107,7 +104,6 @@ export class Tree {
 			new Date(),
 			planterType,
 			organizationName,
-			plantingReason,
 			hashtags,
 			quantity,
 			areaHectares,
@@ -120,6 +116,11 @@ export class Tree {
 
 		// ✅ Now rehydrate to get the actual ID from DB
 		await tree.initializeTree();
+
+		// 🔗 If a planting reason is provided, create the junction table record
+		if (plantingReasonId !== null && tree.Id) {
+			await tree.addPlantingReason(plantingReasonId);
+		}
 
 		return tree;
 	}
@@ -152,7 +153,6 @@ export class Tree {
 					this.PlantedOn = treeData.PlantedOn ? new Date(treeData.PlantedOn) : new Date();
 					this.PlanterType = treeData.PlanterType ?? 'INDIVIDUAL';
 					this.OrganizationName = treeData.OrganizationName ?? null;
-					this.PlantingReason = treeData.PlantingReason ?? null;
 					this.Hashtags = treeData.Hashtags ?? null;
 					this.Quantity = treeData.Quantity ?? 1;
 					this.AreaHectares = treeData.AreaHectares ?? null;
@@ -185,7 +185,6 @@ export class Tree {
 			PlantedOn: this.PlantedOn !== null ? this.PlantedOn.toISOString() : new Date().toISOString(),
 			PlanterType: this.PlanterType,
 			OrganizationName: this.OrganizationName,
-			PlantingReason: this.PlantingReason,
 			Hashtags: this.Hashtags,
 			Quantity: this.Quantity,
 			AreaHectares: this.AreaHectares,
@@ -205,6 +204,31 @@ export class Tree {
 			})
 			.catch((error) => {
 				throw Error('Error registering tree: ' + error);
+			});
+
+		return true;
+	}
+
+	/**
+	 * Add planting reason to tree
+	 */
+	async addPlantingReason(plantingReasonId: number): Promise<boolean> {
+		const { Trees_PlantingReasons } = await import('$lib/server/db/schema');
+
+		await db
+			.insert(Trees_PlantingReasons)
+			.values({
+				TreeId: this.Id,
+				PlantingReasonId: plantingReasonId
+			})
+			.then((result) => {
+				if (JSON.parse(DEBUG) && JSON.parse(VERBOSE)) {
+					typical_development_notice();
+					console.log('Planting reason linked successfully:', result);
+				}
+			})
+			.catch((error) => {
+				throw Error('Error linking planting reason: ' + error);
 			});
 
 		return true;
@@ -236,7 +260,6 @@ export class Tree {
 		if (details.PlantedBy !== undefined) this.PlantedBy = details.PlantedBy;
 		if (details.PlanterType !== undefined) this.PlanterType = details.PlanterType;
 		if (details.OrganizationName !== undefined) this.OrganizationName = details.OrganizationName;
-		if (details.PlantingReason !== undefined) this.PlantingReason = details.PlantingReason;
 		if (details.Hashtags !== undefined) this.Hashtags = details.Hashtags;
 		if (details.Quantity !== undefined) this.Quantity = details.Quantity;
 		if (details.AreaHectares !== undefined) this.AreaHectares = details.AreaHectares;
@@ -267,7 +290,6 @@ export class Tree {
 					treeData.PlantedOn !== null ? new Date(treeData.PlantedOn) : null,
 					treeData.PlanterType ?? 'INDIVIDUAL',
 					treeData.OrganizationName ?? null,
-					treeData.PlantingReason ?? null,
 					treeData.Hashtags ?? null,
 					treeData.Quantity ?? 1,
 					treeData.AreaHectares ?? null,

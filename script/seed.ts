@@ -1,33 +1,113 @@
 // scripts/seed.ts
-import { TreeSpecies, Trees } from '../src/lib/server/db/schema.js'; // Import correct table names
+import { TreeSpecies, Trees, PlantingReasons } from '../src/lib/server/db/schema.js'; // Import correct table names
 import { db } from './support/db.js';
-import type { SourceData } from './types/SourceData.ts';
-const SEED_TYPE: 'species' | 'trees' = process.argv[2] as 'species' | 'trees';
+
+const SEED_TYPE: 'species' | 'trees' | 'reasons' = process.argv[2] as 'species' | 'trees' | 'reasons';
+
+async function seed_planting_reasons() {
+	console.log('🌱 Seeding planting reasons...');
+
+	const reasons = [
+		{ Name: 'Event' },
+		{ Name: 'Special Occasion (birthdays, anniversary, etc)' },
+		{ Name: 'Reforestation' },
+		{ Name: 'Environmental Protection (soil retention, coastal protection, etc.)' },
+		{ Name: 'Recreational' },
+		{ Name: 'Cultural' },
+		{ Name: 'Other' }
+	];
+
+	await db
+		.insert(PlantingReasons)
+		.values(reasons)
+		.onConflictDoNothing()
+		.then(() => {
+			console.log('✅ Planting reasons seeded successfully!');
+		})
+		.catch((error) => {
+			console.error('❌ Failed to seed planting reasons:', error);
+			process.exit(1);
+		});
+}
 
 async function seed() {
-	console.log('🌱 Seeding the database...');
+	console.log('🌱 Seeding tree species...');
 
-	const response = await fetch(
-		'https://perenual.com/api/species-list?key=sk-tzM06822d8ca57cc110407&page=1'
-	);
-	const data: SourceData = await response.json();
-	const speciesList = data.data.map((species) => ({
-		Name: species.common_name
-	}));
+	// Timber species with scientific names
+	const timberSpecies = [
+		{ Name: 'Mahogany (Swietenia macrophylla)', IsTimber: true },
+		{ Name: 'Cedar (Cedrela mexicana)', IsTimber: true },
+		{ Name: 'Banak (Virola Koschyni)', IsTimber: true },
+		{ Name: 'Mayflower (Tabebuia Pentaphylla)', IsTimber: true },
+		{ Name: 'Pine (Pinus caribaea)', IsTimber: true },
+		{ Name: 'Podo/Cypress (Podocarpus guatemalensis)', IsTimber: true },
+		{ Name: 'Santa Maria (Calophyllum brasilliense var rekoi)', IsTimber: true },
+		{ Name: 'Tubroos (Enterolobium cyclocarpum)', IsTimber: true },
+		{ Name: 'Yemeri/San Juan (Vochysia Hondurensis)', IsTimber: true },
+		{ Name: 'Barba Jolote (Acacia, & Pithecolobium spp.)', IsTimber: true },
+		{ Name: 'Cabbage Bark (Lonchocarpus castilloi)', IsTimber: true },
+		{ Name: 'Nargusta/Bullywood (Terminalia amazonia)', IsTimber: true },
+		{ Name: 'Salmwood (Cordia allidora)', IsTimber: true },
+		{ Name: 'Sapodilla - dead trees only (Achras zapota)', IsTimber: true },
+		{ Name: 'Tamarind (Acacia & Pithecolobium spp.)', IsTimber: true },
+		{ Name: 'Billy Webb (Sweetia Panamensia)', IsTimber: true },
+		{ Name: 'Bullet Tree (Bucida Buceras)', IsTimber: true },
+		{ Name: 'Ceiba/Cotton Tree (Ceiba octidentalis)', IsTimber: true },
+		{ Name: 'Cortez (Tabebuia chrysantha)', IsTimber: true },
+		{ Name: 'Mylady (Aspidosperma spp)', IsTimber: true },
+		{ Name: 'Provision tree (Pachira aquatic)', IsTimber: true },
+		{ Name: 'Quamwood (Schizolobium paraphybum)', IsTimber: true },
+		{ Name: 'Madre Cacao (Gliricidia speium)', IsTimber: true },
+		{ Name: 'Mylady Poles (Aspidosperma magalocarpon)', IsTimber: true },
+		{ Name: 'Ziricote (Cordia Dodecandra)', IsTimber: true },
+		{ Name: 'Mangrove (Rhizophora, Laguncularia & Avicennia spp)', IsTimber: true },
+		{ Name: 'Hobillo (Astronium graveolens)', IsTimber: true },
+		{ Name: 'Teak (Tectona grandis)', IsTimber: true },
+		{ Name: 'Copa (Protium copal)', IsTimber: true },
+		{ Name: 'Breadnut (Brosimum alicastrum)', IsTimber: true }
+	];
+
+	// Fruit species
+	const fruitSpecies = [
+		{ Name: 'Balam', IsTimber: false },
+		{ Name: 'Breadnut', IsTimber: false },
+		{ Name: 'Bri Bri', IsTimber: false },
+		{ Name: 'Cow sap', IsTimber: false },
+		{ Name: 'Chinese Plum', IsTimber: false },
+		{ Name: 'Jackfruit', IsTimber: false },
+		{ Name: 'Kinep', IsTimber: false },
+		{ Name: 'Inga Edulis', IsTimber: false },
+		{ Name: 'Monkey Cap', IsTimber: false },
+		{ Name: 'Mammey sapote', IsTimber: false },
+		{ Name: 'Mallay Apple', IsTimber: false },
+		{ Name: 'Pacaya', IsTimber: false },
+		{ Name: 'Rose Apple', IsTimber: false },
+		{ Name: 'Sankil Che', IsTimber: false },
+		{ Name: 'Star Apple', IsTimber: false },
+		{ Name: 'Suriname Cherry', IsTimber: false },
+		{ Name: 'Sweet Lime', IsTimber: false },
+		{ Name: 'Velvet Apple', IsTimber: false },
+		{ Name: 'Wax Apple', IsTimber: false },
+		{ Name: 'Ixim Che', IsTimber: false },
+		{ Name: 'Other', IsTimber: false }
+	];
+
+	const allSpecies = [...timberSpecies, ...fruitSpecies];
 
 	// Seed TreeSpecies table
 	const insertedSpecies = await db
 		.insert(TreeSpecies) // Use TreeSpecies table
-		.values(speciesList)
+		.values(allSpecies)
 		.onConflictDoNothing() // Handle conflicts (e.g., species already exist)
 		.returning();
+
+	console.log(`✅ Seeded ${insertedSpecies.length} tree species!`);
 
 	// Check if we got a valid species ID
 	const speciesId = insertedSpecies[0]?.Id; // Use Id here since that's the primary key
 
-	if (!speciesId) {
-		console.error('❌ Failed to seed species or species already exist. Aborting tree seed.');
-		process.exit(1); // Abort if species insertion failed
+	if (!speciesId && insertedSpecies.length === 0) {
+		console.log('ℹ️ No new species inserted (may already exist).');
 	}
 }
 
@@ -466,8 +546,17 @@ if (SEED_TYPE == 'species') {
 			console.error('Unhandled error:', err);
 			process.exit(1);
 		});
+} else if (SEED_TYPE == 'reasons') {
+	seed_planting_reasons()
+		.then(() => {
+			console.log('✅ Seeding completed!');
+		})
+		.catch((err) => {
+			console.error('Unhandled error:', err);
+			process.exit(1);
+		});
 } else {
-	console.error('❌ Invalid SEED_TYPE. Use "species" or "trees".');
-	console.error('Usage: npm run seed <species|trees>');
+	console.error('❌ Invalid SEED_TYPE. Use "species", "trees", or "reasons".');
+	console.error('Usage: npm run seed <species|trees|reasons>');
 	process.exit(1);
 }
