@@ -11,6 +11,24 @@ vi.mock('$env/static/private', () => ({
 	DEBUG: 'true'
 }));
 
+vi.mock('$lib/server/db', () => {
+	const mockSelect = vi.fn(() => ({
+		from: vi.fn(() => Promise.resolve([
+			{ Id: 1, Name: 'Event', CreatedAt: new Date() },
+			{ Id: 2, Name: 'Reforestation', CreatedAt: new Date() },
+			{ Id: 3, Name: 'Other', CreatedAt: new Date() }
+		]))
+	}));
+	
+	return {
+		db: {
+			insert: vi.fn(),
+			select: mockSelect
+		},
+		PlantingReasons: {}
+	};
+});
+
 vi.mock('$lib/class/Tree', () => ({
 	Tree: {
 		create: vi.fn().mockResolvedValue({
@@ -59,7 +77,9 @@ vi.mock('sveltekit-superforms', () => ({
 			tree_lng: -74.006,
 			tree_height: 5,
 			tree_age: 10,
-			tree_species: 1
+			tree_species: '1',
+			planter_type: 'INDIVIDUAL',
+			planting_reason_id: '1'
 		}
 	}),
 	setError: vi.fn()
@@ -76,13 +96,6 @@ describe('Add/Manage Tree page server', () => {
 		returningMock = vi.fn().mockResolvedValue([{ Id: 123 }]);
 		valuesMock = vi.fn(() => ({ returning: returningMock }));
 		insertMock = vi.fn(() => ({ values: valuesMock }));
-
-		// Set up the mock db module with the initialized mocks inside beforeEach
-		vi.mock('$lib/server/db', () => {
-			return {
-				db: { insert: insertMock }
-			};
-		});
 
 		// Initialize mock event
 		mockEvent = {
@@ -104,10 +117,12 @@ describe('Add/Manage Tree page server', () => {
 	});
 
 	describe('load function', () => {
-		it('should return form data', async () => {
+		it('should return form data and planting reasons', async () => {
 			// @ts-expect-error Forcing the type to match the expected structure
 			const result = await load(mockEvent);
 			expect(result).toBeDefined();
+			expect(result.form).toBeDefined();
+			expect(result.plantingReasons).toBeDefined();
 		});
 	});
 
@@ -134,7 +149,7 @@ describe('Add/Manage Tree page server', () => {
 			await actions.default(mockEvent);
 
 			expect(Tree.create).toHaveBeenCalled();
-			expect(sveltekit.redirect).toHaveBeenCalledWith(303, '/?tree_id=123');
+			expect(sveltekit.redirect).toHaveBeenCalledWith(303, '/confirmation?tree_id=123');
 		});
 
 		it('should handle errors during tree creation', async () => {
