@@ -26,5 +26,3 @@ vite.config.ts.timestamp-*
 # Coverage
 
 coverage
-.env
-.env
