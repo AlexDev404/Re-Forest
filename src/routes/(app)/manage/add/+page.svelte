@@ -20,7 +20,7 @@
 		X
 	} from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import { superForm } from 'sveltekit-superforms';
+	import { superForm } from 'sveltekit-superforms/client';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -562,8 +562,8 @@
 					{/if}
 				</div>
 
-				<!-- Tree Age (optional) -->
-				<div class="grid w-full items-center gap-2">
+				<!-- Tree Age (HIDDEN/optional) -->
+				<div class="__grid__ w-full items-center gap-2 hidden">
 					<Label
 						for="tree_age"
 						class="flex items-center gap-1.5 text-sm font-medium text-foreground"
@@ -612,12 +612,12 @@
 							for="tree_species_search"
 							class="flex items-center gap-1.5 text-sm font-medium text-foreground"
 						>
-							<Leaf class="h-4 w-4 text-primary/80" /> Tree Species (Common Name)
-							<span class="text-xs text-muted-foreground">(optional)</span>
+							<Leaf class="h-4 w-4 text-primary/80" /> Plant Species (Common Name)
+							<!-- <span class="text-xs text-muted-foreground">(optional)</span> -->
 						</Label>
 						<div class="flex items-center gap-2">
 							<span class="text-xs text-muted-foreground">
-								{showNonTimber ? 'Non-Timber' : 'Timber'}
+								{showNonTimber ? 'Fruit' : 'Timber'}
 							</span>
 							<Switch
 								bind:checked={showNonTimber}

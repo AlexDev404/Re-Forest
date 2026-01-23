@@ -3,7 +3,7 @@ import { Tree } from '$lib/class/Tree';
 import { typical_development_notice } from '$lib/utility/typicals';
 import { fail, isActionFailure, isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
 
@@ -24,14 +24,16 @@ const treeSchema = z.object({
 });
 
 export const load: PageServerLoad = async (event) => {
+	const request = event.request;
 	return {
-		form: await superValidate(event, zod(treeSchema))
+		form: await superValidate(request, zod4(treeSchema))
 	};
 };
 
 export const actions: Actions = {
 	default: async (event) => {
-		const form = await superValidate(event, zod(treeSchema));
+		const request = event.request;
+		const form = await superValidate(request, zod4(treeSchema));
 		const user = event.locals.user;
 
 		if (!user) {
@@ -61,6 +63,9 @@ export const actions: Actions = {
 					setError(form, 'tree_species', 'Invalid species selection');
 					return fail(400, { form });
 				}
+			} else {
+				setError(form, 'tree_species', 'Plant species is required');
+				return fail(400, { form });
 			}
 
 			const new_tree = await Tree.create(
