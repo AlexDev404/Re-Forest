@@ -1,11 +1,15 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { CheckCircle2, Home, Leaf } from 'lucide-svelte';
 	import { Button } from '$lib/components/vendor/ui/button';
-	
+	import { CheckCircle2, Home, Leaf } from 'lucide-svelte';
+	import { onMount } from 'svelte';
+	const FORM_STATE_KEY = 'greening_belize_form_state';
 	let treeId = $state<string | null>(null);
 	
 	onMount(() => {
+			
+			
+		sessionStorage.removeItem(FORM_STATE_KEY);
+	
 		// Get tree ID from URL query params
 		const params = new URLSearchParams(window.location.search);
 		treeId = params.get('tree_id');

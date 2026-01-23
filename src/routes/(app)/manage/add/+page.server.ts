@@ -14,7 +14,7 @@ const treeSchema = z.object({
 	tree_image: z.string().url(),
 	tree_lat: z.number().min(-90).max(90),
 	tree_lng: z.number().min(-180).max(180),
-	tree_height: z.number().min(1).max(100).optional(),
+	tree_height: z.number().min(0).max(100).optional(),
 	tree_age: z.number().min(0).max(100).optional(),
 	tree_species: z.string(), // Will contain the species ID
 	planter_type: z.enum(['INDIVIDUAL', 'ORGANIZATION']),

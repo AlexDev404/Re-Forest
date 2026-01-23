@@ -101,6 +101,7 @@
 
 	function clearFormState() {
 		sessionStorage.removeItem(FORM_STATE_KEY);
+		
 	}
 
 	// Function to fetch tree species
@@ -123,6 +124,10 @@
 	onMount(async () => {
 		// Restore form state first
 		restoreFormState();
+
+		// const x = setInterval(() => {
+		// 	saveFormState();
+		// }, 3000);
 
 		// Fetch initial species list
 		await querySpecies();
@@ -169,11 +174,6 @@
 			formElement.removeEventListener('input', saveFormState);
 		}
 	});
-
-	setInterval(() => {
-		saveFormState();
-	}, 3000);
-		
 
 	function openMapPicker() {
 		goto('/configure/site-location');
