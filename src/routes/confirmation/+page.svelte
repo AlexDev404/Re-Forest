@@ -68,7 +68,7 @@
 
 		<div class="mt-8 text-center">
 			<p class="text-xs text-muted-foreground">
-				Your submission will be reviewed by the Forestry Department.
+				Your submission will be reviewed by the Belize Forest Department.
 			</p>
 		</div>
 	</main>

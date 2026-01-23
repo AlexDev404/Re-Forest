@@ -72,10 +72,12 @@
 
 				<!-- Partner Logos -->
 				<div class="mb-16 rounded-2xl border-2 border-primary p-4 backdrop-blur-sm">
-					<p class="mb-4 text-center text-lg font-semibold text-primary">In Partnership With</p>
+					<p class="mb-4 flex text-center text-lg font-semibold text-primary gap-4">In Partnership With</p>
+					<div class="flex flex-wrap items-center justify-center gap-6 mb-8 sm:gap-8">
+							<img src="/MSDCCSWM.png" alt="MSDCCSWM" class="h-20 object-contain sm:h-16" />
+						</div>
 					<div class="flex flex-wrap items-center justify-center gap-6 sm:gap-8">
-						<img src="/MSDCCSWM.png" alt="MSDCCSWM" class="h-12 object-contain sm:h-16" />
-						<img src="/FD.png" alt="Forestry Department" class="h-12 object-contain sm:h-16" />
+						<img src="/FD.png" alt="Belize Forest Department" class="h-12 object-contain sm:h-16" />
 						<img src="/GEF.png" alt="GEF" class="h-12 object-contain sm:h-16" />
 						<img src="/UNDP-Logo-Blue-Large.png" alt="UNDP" class="h-12 object-contain sm:h-16" />
 					</div>
