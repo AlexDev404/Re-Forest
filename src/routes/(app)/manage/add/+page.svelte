@@ -18,34 +18,11 @@
 		User,
 		X
 	} from 'lucide-svelte';
-	import {
-		AlertTriangle,
-		Building2,
-		CheckCircle2,
-		ImageUp,
-		Leaf,
-		MapPin,
-		UploadCloud,
-		User,
-		X
-	} from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { superForm } from 'sveltekit-superforms';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
-	const { form, errors, constraints, enhance } = superForm(data.form, {
-		onSubmit: () => {
-			// Save form state before submission
-			saveFormState();
-		},
-		onResult: ({ result }) => {
-			if (result.type === 'redirect') {
-				// Clear form state on successful submission
-				clearFormState();
-			}
-		}
-	});
 	const { form, errors, constraints, enhance } = superForm(data.form, {
 		onSubmit: () => {
 			// Save form state before submission
@@ -65,8 +42,6 @@
 	// New: Planter type selection
 	let planterType: 'INDIVIDUAL' | 'ORGANIZATION' | null = $state(null);
 
-	// New: Planter type selection
-	let planterType: 'INDIVIDUAL' | 'ORGANIZATION' | null = $state(null);
 
 	// Location handling
 	let tree_added = $state(false); // Svelte 5 rune
