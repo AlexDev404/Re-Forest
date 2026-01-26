@@ -208,6 +208,9 @@
 		try {
 			const loc: GeolocationCoordinates | null = await getCurrentLocation();
 			if (loc !== null) {
+				// Save the location data
+				localStorage.setItem('location', JSON.stringify(loc));
+				// Parse and set location in real-time
 				location = loc;
 				const reverse_location: ReverseGeoJSON | null = await getReverseLoc(
 					loc.latitude,
@@ -1031,6 +1034,7 @@
 					<Button
 						type="button"
 						variant="outline"
+						disabled={translated_location? true: false}
 						onclick={useCurrentLocation}
 						class="flex w-full items-center justify-center gap-1.5 rounded-md border-input bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all duration-200 ease-out hover:bg-slate-100 hover:shadow-md dark:hover:bg-slate-700 sm:w-auto"
 					>
