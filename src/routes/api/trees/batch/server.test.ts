@@ -1,4 +1,4 @@
-// file: src/routes/api/trees/batch/+server.test.ts
+// file: src/routes/api/trees/batch/server.test.ts
 
 import { Tree } from '$lib/class/Tree';
 import { json } from '@sveltejs/kit';

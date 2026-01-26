@@ -68,6 +68,7 @@
 	let treeEntries = $state<TreeEntry[]>([]);
 	let editingEntryId = $state<string | null>(null);
 	let batchSubmitting = $state(false);
+	let batchErrorMessage = $state<string | null>(null);
 
 	// Location handling
 	let tree_added = $state(false); // Svelte 5 rune
@@ -250,7 +251,7 @@
 		}
 
 		const entry: TreeEntry = {
-			id: editingEntryId || `tree-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+			id: editingEntryId || `tree-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
 			tree_name: $form.tree_name,
 			tree_species: $form.tree_species,
 			tree_species_name: selectedSpeciesName || 'Unknown Species',
@@ -323,8 +324,18 @@
 		}
 	}
 
+	function canSubmitBatch(): boolean {
+		return (
+			treeEntries.length > 0 && 
+			location !== null && 
+			typeof location === 'object' && 
+			!!location.latitude && 
+			!!location.longitude
+		);
+	}
+
 	async function submitAllTrees() {
-		if (treeEntries.length === 0 || !location || typeof location !== 'object' || !location.latitude || !location.longitude) {
+		if (!canSubmitBatch()) {
 			return;
 		}
 
@@ -361,17 +372,18 @@
 				// Clear form state
 				clearFormState();
 				treeEntries = [];
+				batchErrorMessage = null;
 				
 				// Redirect to confirmation with multiple tree IDs
 				const treeIds = result.treeIds.join(',');
 				goto(`/confirmation?tree_ids=${treeIds}`);
 			} else {
 				console.error('Batch submission failed:', result.error);
-				// TODO: Show user-friendly error
+				batchErrorMessage = result.error || 'Failed to submit trees. Please try again.';
 			}
 		} catch (error) {
 			console.error('Error submitting batch:', error);
-			// TODO: Show user-friendly error
+			batchErrorMessage = 'An unexpected error occurred while submitting your trees. Please try again.';
 		} finally {
 			batchSubmitting = false;
 		}
@@ -1121,6 +1133,13 @@
 							</div>
 						{/each}
 					</div>
+
+					{#if batchErrorMessage}
+						<div class="mt-4 flex items-center gap-2 rounded-md border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+							<AlertTriangle class="h-5 w-5 flex-shrink-0" />
+							<p>{batchErrorMessage}</p>
+						</div>
+					{/if}
 				</div>
 			{/if}
 		{/if}
