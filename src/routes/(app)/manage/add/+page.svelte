@@ -13,16 +13,16 @@
 		AlertTriangle,
 		Building2,
 		CheckCircle2,
+		Edit,
 		ImageUp,
 		Leaf,
+		List,
 		MapPin,
-		UploadCloud,
-		User,
-		X,
 		Plus,
 		Trash2,
-		Edit,
-		List
+		UploadCloud,
+		User,
+		X
 	} from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { superForm } from 'sveltekit-superforms/client';
@@ -1010,16 +1010,7 @@
 
 				<!-- Batch entry buttons -->
 				<div class="flex flex-col gap-3 sm:flex-row">
-					<Button
-						type="button"
-						variant="outline"
-						onclick={addTreeToBatch}
-						class="group flex w-full items-center justify-center gap-2 rounded-md border-2 border-primary bg-background px-5 py-2.5 text-sm font-medium text-primary shadow transition-all duration-200 ease-out hover:bg-primary hover:text-primary-foreground disabled:cursor-not-allowed disabled:opacity-60 sm:flex-1"
-						disabled={uploading || !location || !planterType || !$form.tree_name || !$form.tree_species || !$form.tree_image}
-					>
-						<Plus class="h-5 w-5 transition-transform group-hover:scale-110" />
-						{editingEntryId ? 'Update Tree in Batch' : 'Add Tree to Batch'}
-					</Button>
+				
 					<Button
 						type="submit"
 						onclick={() => {
@@ -1031,6 +1022,17 @@
 						disabled={uploading || !location || !planterType}
 					>
 						<Leaf class="mr-1.5 h-5 w-5 transition-transform group-hover:scale-110" /> Submit Single Tree
+					</Button>
+
+					<Button
+						type="button"
+						variant="outline"
+						onclick={addTreeToBatch}
+						class="group flex w-full items-center justify-center gap-2 rounded-md border-2 border-primary bg-background px-5 py-2.5 text-sm font-medium text-primary shadow transition-all duration-200 ease-out hover:bg-primary hover:text-primary-foreground disabled:cursor-not-allowed disabled:opacity-60 sm:flex-1"
+						disabled={uploading || !location || !planterType || !$form.tree_name || !$form.tree_species || !$form.tree_image}
+					>
+						<Plus class="h-5 w-5 transition-transform group-hover:scale-110" />
+						{editingEntryId ? 'Update Tree in Batch' : 'Add Tree to Batch'}
 					</Button>
 				</div>
 
