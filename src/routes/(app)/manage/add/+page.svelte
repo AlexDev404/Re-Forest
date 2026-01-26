@@ -18,7 +18,11 @@
 		MapPin,
 		UploadCloud,
 		User,
-		X
+		X,
+		Plus,
+		Trash2,
+		Edit,
+		List
 	} from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { superForm } from 'sveltekit-superforms/client';
@@ -45,6 +49,25 @@
 
 	// New: Planter type selection
 	let planterType: 'INDIVIDUAL' | 'ORGANIZATION' | null = $state(null);
+
+	// Multi-tree batch entry
+	type TreeEntry = {
+		id: string;
+		tree_name: string;
+		tree_species: string;
+		tree_species_name: string;
+		tree_height?: number;
+		tree_age?: number;
+		tree_image: string;
+		planting_reason_id: string;
+		hashtags?: string;
+		quantity?: number;
+		area_hectares?: number;
+	};
+	
+	let treeEntries = $state<TreeEntry[]>([]);
+	let editingEntryId = $state<string | null>(null);
+	let batchSubmitting = $state(false);
 
 	// Location handling
 	let tree_added = $state(false); // Svelte 5 rune
@@ -216,6 +239,141 @@
 			} finally {
 				uploading = false;
 			}
+		}
+	}
+
+	// Multi-tree batch functions
+	function addTreeToBatch() {
+		// Validate that required fields are filled
+		if (!$form.tree_name || !$form.tree_species || !$form.tree_image) {
+			return;
+		}
+
+		const entry: TreeEntry = {
+			id: editingEntryId || `tree-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+			tree_name: $form.tree_name,
+			tree_species: $form.tree_species,
+			tree_species_name: selectedSpeciesName || 'Unknown Species',
+			tree_height: $form.tree_height,
+			tree_age: $form.tree_age,
+			tree_image: $form.tree_image,
+			planting_reason_id: $form.planting_reason_id,
+			hashtags: $form.hashtags,
+			quantity: $form.quantity,
+			area_hectares: $form.area_hectares
+		};
+
+		if (editingEntryId) {
+			// Update existing entry
+			const index = treeEntries.findIndex(e => e.id === editingEntryId);
+			if (index !== -1) {
+				treeEntries[index] = entry;
+			}
+			editingEntryId = null;
+		} else {
+			// Add new entry
+			treeEntries = [...treeEntries, entry];
+		}
+
+		// Reset form fields for next entry (except planter type and organization)
+		resetFormForNextEntry();
+	}
+
+	function resetFormForNextEntry() {
+		$form.tree_name = '';
+		$form.tree_species = '';
+		$form.tree_height = undefined;
+		$form.tree_age = undefined;
+		$form.tree_image = '';
+		$form.planting_reason_id = '1';
+		$form.hashtags = '';
+		$form.quantity = undefined;
+		$form.area_hectares = undefined;
+		treeImageSrc = null;
+		selectedSpeciesName = null;
+		editingEntryId = null;
+	}
+
+	function editEntry(entryId: string) {
+		const entry = treeEntries.find(e => e.id === entryId);
+		if (!entry) return;
+
+		// Load entry data into form
+		$form.tree_name = entry.tree_name;
+		$form.tree_species = entry.tree_species;
+		$form.tree_height = entry.tree_height;
+		$form.tree_age = entry.tree_age;
+		$form.tree_image = entry.tree_image;
+		$form.planting_reason_id = entry.planting_reason_id;
+		$form.hashtags = entry.hashtags || '';
+		$form.quantity = entry.quantity;
+		$form.area_hectares = entry.area_hectares;
+		treeImageSrc = entry.tree_image;
+		selectedSpeciesName = entry.tree_species_name;
+		editingEntryId = entryId;
+
+		// Scroll to form
+		formElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+	}
+
+	function removeEntry(entryId: string) {
+		treeEntries = treeEntries.filter(e => e.id !== entryId);
+		if (editingEntryId === entryId) {
+			editingEntryId = null;
+		}
+	}
+
+	async function submitAllTrees() {
+		if (treeEntries.length === 0 || !location || typeof location !== 'object') {
+			return;
+		}
+
+		batchSubmitting = true;
+
+		try {
+			const response = await fetch('/api/trees/batch', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					trees: treeEntries.map(entry => ({
+						tree_name: entry.tree_name,
+						tree_species: entry.tree_species,
+						tree_height: entry.tree_height || 0,
+						tree_age: entry.tree_age || 0,
+						tree_image: entry.tree_image,
+						tree_lat: location.latitude,
+						tree_lng: location.longitude,
+						planter_type: planterType,
+						organization_name: $form.organization_name || null,
+						planting_reason_id: entry.planting_reason_id,
+						hashtags: entry.hashtags || null,
+						quantity: entry.quantity || 1,
+						area_hectares: entry.area_hectares || null
+					}))
+				})
+			});
+
+			const result = await response.json();
+
+			if (response.ok && result.success) {
+				// Clear form state
+				clearFormState();
+				treeEntries = [];
+				
+				// Redirect to confirmation with multiple tree IDs
+				const treeIds = result.treeIds.join(',');
+				goto(`/confirmation?tree_ids=${treeIds}`);
+			} else {
+				console.error('Batch submission failed:', result.error);
+				// TODO: Show user-friendly error
+			}
+		} catch (error) {
+			console.error('Error submitting batch:', error);
+			// TODO: Show user-friendly error
+		} finally {
+			batchSubmitting = false;
 		}
 	}
 </script>
@@ -850,19 +1008,121 @@
 					</p>
 				{/if}
 
-				<Button
-					type="submit"
-					onclick={() => {
-						if (formElement) {
-							formElement.submitted = true;
-						}
-					}}
-					class="group mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow transition-all duration-200 ease-out hover:bg-primary/90 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
-					disabled={uploading || !location || !planterType}
-				>
-					<Leaf class="mr-1.5 h-5 w-5 transition-transform group-hover:scale-110" /> Submit Tree Planting
-				</Button>
+				<!-- Batch entry buttons -->
+				<div class="flex flex-col gap-3 sm:flex-row">
+					<Button
+						type="button"
+						variant="outline"
+						onclick={addTreeToBatch}
+						class="group flex w-full items-center justify-center gap-2 rounded-md border-2 border-primary bg-background px-5 py-2.5 text-sm font-medium text-primary shadow transition-all duration-200 ease-out hover:bg-primary hover:text-primary-foreground disabled:cursor-not-allowed disabled:opacity-60 sm:flex-1"
+						disabled={uploading || !location || !planterType || !$form.tree_name || !$form.tree_species || !$form.tree_image}
+					>
+						<Plus class="h-5 w-5 transition-transform group-hover:scale-110" />
+						{editingEntryId ? 'Update Tree in Batch' : 'Add Tree to Batch'}
+					</Button>
+					<Button
+						type="submit"
+						onclick={() => {
+							if (formElement) {
+								formElement.submitted = true;
+							}
+						}}
+						class="group flex w-full items-center justify-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow transition-all duration-200 ease-out hover:bg-primary/90 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60 sm:flex-1"
+						disabled={uploading || !location || !planterType}
+					>
+						<Leaf class="mr-1.5 h-5 w-5 transition-transform group-hover:scale-110" /> Submit Single Tree
+					</Button>
+				</div>
+
+				{#if treeEntries.length > 0}
+					<div class="mt-2 text-center text-xs text-muted-foreground">
+						Or add multiple trees to a batch and submit all at once
+					</div>
+				{/if}
 			</form>
+
+			<!-- Batch Tree Entries List -->
+			{#if treeEntries.length > 0}
+				<div class="rounded-xl border border-border bg-card p-6 shadow">
+					<div class="mb-4 flex items-center justify-between">
+						<div class="flex items-center gap-2">
+							<List class="h-5 w-5 text-primary" />
+							<h2 class="text-lg font-semibold text-foreground">
+								Batch Tree Entries ({treeEntries.length})
+							</h2>
+						</div>
+						<Button
+							type="button"
+							onclick={submitAllTrees}
+							disabled={batchSubmitting}
+							class="bg-primary text-primary-foreground hover:bg-primary/90"
+						>
+							{#if batchSubmitting}
+								<UploadCloud class="mr-2 h-4 w-4 animate-spin" />
+								Submitting...
+							{:else}
+								<CheckCircle2 class="mr-2 h-4 w-4" />
+								Submit All {treeEntries.length} Trees
+							{/if}
+						</Button>
+					</div>
+
+					<div class="space-y-3">
+						{#each treeEntries as entry, index (entry.id)}
+							<div class="flex items-start gap-4 rounded-lg border border-border bg-background p-4 transition-all hover:border-primary/50">
+								<div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border border-border">
+									<img src={entry.tree_image} alt={entry.tree_name} class="h-full w-full object-cover" />
+								</div>
+								<div class="flex-1">
+									<div class="mb-1 flex items-start justify-between">
+										<div>
+											<h3 class="font-medium text-foreground">{entry.tree_name}</h3>
+											<p class="text-xs text-muted-foreground">{entry.tree_species_name}</p>
+										</div>
+										<span class="rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
+											#{index + 1}
+										</span>
+									</div>
+									<div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+										{#if entry.tree_height}
+											<span>Height: {entry.tree_height}m</span>
+										{/if}
+										{#if entry.tree_age}
+											<span>Age: {entry.tree_age} years</span>
+										{/if}
+										{#if entry.quantity}
+											<span>Qty: {entry.quantity}</span>
+										{/if}
+										{#if entry.area_hectares}
+											<span>Area: {entry.area_hectares} ha</span>
+										{/if}
+									</div>
+								</div>
+								<div class="flex flex-col gap-2">
+									<Button
+										type="button"
+										size="sm"
+										variant="ghost"
+										onclick={() => editEntry(entry.id)}
+										class="h-8 w-8 p-0"
+									>
+										<Edit class="h-4 w-4" />
+									</Button>
+									<Button
+										type="button"
+										size="sm"
+										variant="ghost"
+										onclick={() => removeEntry(entry.id)}
+										class="h-8 w-8 p-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
+									>
+										<Trash2 class="h-4 w-4" />
+									</Button>
+								</div>
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/if}
 		{/if}
 	</main>
 </page>

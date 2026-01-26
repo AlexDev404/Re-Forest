@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	const FORM_STATE_KEY = 'greening_belize_form_state';
 	let treeId = $state<string | null>(null);
+	let treeIds = $state<string[]>([]);
 	
 	onMount(() => {
 			
@@ -12,7 +13,14 @@
 	
 		// Get tree ID from URL query params
 		const params = new URLSearchParams(window.location.search);
-		treeId = params.get('tree_id');
+		const singleId = params.get('tree_id');
+		const multipleIds = params.get('tree_ids');
+		
+		if (multipleIds) {
+			treeIds = multipleIds.split(',').filter(id => id.trim() !== '');
+		} else if (singleId) {
+			treeId = singleId;
+		}
 	});
 </script>
 
@@ -28,13 +36,15 @@
 		
 		<div class="text-center">
 			<h1 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-				Tree Submitted Successfully!
+				{treeIds.length > 0 ? `${treeIds.length} Trees Submitted Successfully!` : 'Tree Submitted Successfully!'}
 			</h1>
 			<p class="text-lg text-muted-foreground mb-2">
 				Thank you for contributing to Greening Belize.
 			</p>
 			<p class="text-sm text-muted-foreground">
-				Your tree planting has been recorded and is pending approval.
+				{treeIds.length > 0 
+					? `Your ${treeIds.length} tree plantings have been recorded and are pending approval.` 
+					: 'Your tree planting has been recorded and is pending approval.'}
 			</p>
 		</div>
 
@@ -45,6 +55,22 @@
 				<p class="text-sm font-medium text-foreground">Submission ID</p>
 			</div>
 			<p class="text-2xl font-mono font-bold text-primary">#{treeId}</p>
+		</div>
+		{/if}
+
+		{#if treeIds.length > 0}
+		<div class="bg-card border border-border rounded-lg p-6 w-full">
+			<div class="flex items-center gap-3 mb-3">
+				<Leaf class="w-5 h-5 text-primary" />
+				<p class="text-sm font-medium text-foreground">Submission IDs ({treeIds.length} trees)</p>
+			</div>
+			<div class="flex flex-wrap gap-2">
+				{#each treeIds as id, index}
+					<span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+						#{id}
+					</span>
+				{/each}
+			</div>
 		</div>
 		{/if}
 
