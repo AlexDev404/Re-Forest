@@ -32,13 +32,13 @@
 			><House /></Menubar.Trigger
 		>
 
-		{#if user.Role !== 3}
+		<!-- {#if user.Role !== 3} -->
 			<Menubar.Trigger
 				onclick={() => handleNavigation('manage/add')}
 				class="{activeButton === 'manage/add' || activeButton === 'manageadd' ? 'bg-secondary' : ''} w-20 justify-center"
 				><CirclePlus /></Menubar.Trigger
 			>
-		{/if}
+		<!-- {/if} -->
 		
 		<Menubar.Trigger
 			onclick={() => handleNavigation('configure')}
