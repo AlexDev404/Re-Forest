@@ -324,7 +324,7 @@
 	}
 
 	async function submitAllTrees() {
-		if (treeEntries.length === 0 || !location || typeof location !== 'object') {
+		if (treeEntries.length === 0 || !location || typeof location !== 'object' || !location.latitude || !location.longitude) {
 			return;
 		}
 
