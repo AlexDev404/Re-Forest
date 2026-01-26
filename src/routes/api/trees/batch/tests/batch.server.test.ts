@@ -1,9 +1,9 @@
-// file: src/routes/api/trees/batch/server.test.ts
+// file: src/routes/api/trees/batch/tests/batch.server.test.ts
 
 import { Tree } from '$lib/class/Tree';
 import { json } from '@sveltejs/kit';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { POST } from './+server';
+import { POST } from '../+server';
 
 // Mock modules
 vi.mock('$env/static/private', () => ({
