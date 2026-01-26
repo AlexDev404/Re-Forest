@@ -111,7 +111,7 @@ export async function POST(event: RequestEvent) {
 				tree_name,
 				speciesId,
 				tree_height ?? 0,
-				'EXCELLENT', // Placeholder health status
+				'EXCELLENT', // Default health status for new plantings; health is assessed separately
 				tree_age ?? 0,
 				tree_image,
 				tree_lat,
