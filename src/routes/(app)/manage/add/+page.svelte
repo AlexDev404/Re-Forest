@@ -900,7 +900,11 @@
 													<span class="text-xs">{species.name}</span>
 												</div>
 												<Command.Shortcut class="text-xs text-muted-foreground"
-													>ID: {species.id}</Command.Shortcut
+													>
+													{" "}
+													<!-- ID: {species.id} -->
+													
+													</Command.Shortcut
 												>
 											</CommandItem2>
 										{/each}
