@@ -55,7 +55,11 @@ vi.mock('sveltekit-superforms/client', () => ({
 
 // Mock utility functions
 vi.mock('$lib/utility/utility', () => ({
-	getReverseLoc: vi.fn().mockResolvedValue({ display_name: 'New York City, NY, USA' })
+	getReverseLoc: vi.fn().mockResolvedValue({ display_name: 'New York City, NY, USA' }),
+	getCurrentLocation: vi.fn().mockResolvedValue({
+		latitude: 40.7128,
+		longitude: -74.006
+	})
 }));
 
 describe('Add/Manage Tree Page Component', () => {
