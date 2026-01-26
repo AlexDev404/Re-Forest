@@ -1007,7 +1007,7 @@
 						class="mt-1 flex w-full items-center justify-center gap-1.5 rounded-md border-input bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all duration-200 ease-out hover:bg-slate-100 hover:shadow-md dark:hover:bg-slate-700 sm:w-auto"
 					>
 						<MapPin class="h-4 w-4" />
-						{translated_location ? 'Modify Location' : 'Set Location via Map'}
+						{translated_location ? 'Modify Location' : 'Set Location'}
 					</Button>
 				</div>
 
