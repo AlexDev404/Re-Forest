@@ -1,6 +1,6 @@
 {
-	"name": "Re:forest",
-	"short_name": "Re:forest",
+	"name": "Greening Belize",
+	"short_name": "Greening Belize",
 	"description": "Track and monitor trees planted in reforestation and conservation areas",
 	"start_url": "/",
 	"scope": "/",
@@ -24,7 +24,12 @@
 	"screenshots": [
 		{
 			"src": "/pwa-screenshot/screenshot.png",
-			"sizes": "389x847",
+			"sizes": "325x585",
+			"type": "image/png"
+		},
+		{
+			"src": "/pwa-screenshot/screenshot_2.png",
+			"sizes": "325x585",
 			"type": "image/png"
 		},
 		{
