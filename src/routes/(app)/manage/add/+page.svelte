@@ -215,6 +215,10 @@
 				);
 				if (reverse_location) {
 					translated_location = reverse_location.display_name;
+				} else {
+					// Keep the coordinates but alert about reverse geocoding failure
+					translated_location = `${loc.latitude.toFixed(5)}, ${loc.longitude.toFixed(5)}`;
+					alert('Could not get location name, but coordinates have been set.');
 				}
 			}
 		} catch (error) {
