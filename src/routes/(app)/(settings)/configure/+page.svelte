@@ -85,7 +85,7 @@
 				<ChevronRight class="h-5 w-5 text-slate-400 dark:text-slate-500" />
 			</MenuItem>
 
-			<MenuItem
+			<!-- <MenuItem
 				class="transition-colors duration-150 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:hover:bg-slate-800/60 dark:focus-visible:ring-offset-slate-900"
 				onclick={() => goto('/configure/help')}
 				title="Help & Support"
@@ -94,7 +94,7 @@
 					<HelpCircle class="h-5 w-5 text-slate-500 dark:text-slate-400" />
 				</svelte:fragment>
 				<ChevronRight class="h-5 w-5 text-slate-400 dark:text-slate-500" />
-			</MenuItem>
+			</MenuItem> -->
 		</div>
 
 		<div
