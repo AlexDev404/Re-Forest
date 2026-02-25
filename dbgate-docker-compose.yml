@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  dbgate:
+    image: dbgate/dbgate:latest
+    container_name: dbgate
+    restart: unless-stopped
+    ports:
+      - "9002:3000"
+    environment:
+      # No login required by default - you can change this if needed
+      - LOGIN_REQUIRED=true
+      - LOGIN=dokployadmin
+      - PASSWORD=Numerator9-Device5-Curve2-Retriever7-Stegosaur4
+      
+      # Optional: Set a custom port if 3000 conflicts
+      - PORT=3000
+      
+    volumes:
+      # Persist DbGate data and connection settings
+      - dbgate_data:/root/.dbgate
+      # Optional: Custom configuration directory
+      - dbgate_data:/root/.dbgate-config
+volumes:
+  dbgate_data:
