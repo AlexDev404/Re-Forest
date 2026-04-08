@@ -72,7 +72,7 @@
 		"chart.js": "^4.4.9",
 		"chartjs-adapter-date-fns": "^3.0.0",
 		"date-fns": "^4.1.0",
-		"drizzle-orm": "^0.40.0",
+		"drizzle-orm": "^0.45.2",
 		"firebase": "^11.7.1",
 		"firebase-admin": "^13.3.0",
 		"jsonwebtoken": "^9.0.2",
