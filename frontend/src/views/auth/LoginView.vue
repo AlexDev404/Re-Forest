@@ -28,7 +28,7 @@ async function handleLogin() {
 </script>
 
 <template>
-  <div class="overflow-y-auto">
+  <div class="min-h-screen overflow-y-auto bg-background">
     <main
       class="mx-6 my-10 flex min-h-[80vh] flex-col items-center justify-center gap-9"
     >

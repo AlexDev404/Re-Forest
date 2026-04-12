@@ -41,7 +41,7 @@ async function handleRegister() {
 </script>
 
 <template>
-  <div class="overflow-y-auto pb-20">
+  <div class="min-h-screen overflow-y-auto bg-background pb-20">
     <main class="mx-6 my-10 flex min-h-[80vh] flex-col items-center justify-center gap-9">
       <div class="flex items-center justify-center gap-4 self-stretch">
         <img

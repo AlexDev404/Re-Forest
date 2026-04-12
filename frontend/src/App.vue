@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { authAdapter } from '@/adapters/auth';
 import NavigationBar from '@/components/app/NavigationBar.vue';
 import { Button } from '@/components/ui/button';
-import { CircleX } from 'lucide-vue-next';
 import { requestNotificationPermission } from '@/composables/firebase';
-import { authAdapter } from '@/adapters/auth';
+import { CircleX } from 'lucide-vue-next';
+import { computed, onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
@@ -47,6 +47,9 @@ onMounted(async () => {
     splashScreen?.classList.add('animate-fade-out');
   }, 1000);
   setTimeout(() => {
+    document.body.style.overflow = '';
+    document.documentElement.style.overflowX = '';
+    document.documentElement.style.overflowY = ''; // Re-enable scrolling after splash screen is removed
     splashScreen?.remove();
   }, 2000);
 

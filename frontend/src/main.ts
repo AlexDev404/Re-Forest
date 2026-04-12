@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import App from './App.vue';
 import './assets/main.css';
+import capacitorApp from './lib/capacitor';
 
 // Route components
 import LoginView from './views/auth/LoginView.vue';
@@ -48,3 +49,5 @@ router.beforeEach(async (to, _from, next) => {
 const app = createApp(App);
 app.use(router);
 app.mount('#app');
+
+capacitorApp.init(router);
