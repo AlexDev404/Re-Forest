@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import type { UserData } from '../repositories/UserRepository';
+
 import { TreeRepository } from '../repositories/TreeRepository';
 
 const reports = new Hono();
@@ -8,7 +8,7 @@ const reports = new Hono();
  * GET /reports - Generate report data
  */
 reports.get('/', async (c) => {
-  const user = c.get('user') as UserData | null;
+  const user = c.get('user');
   if (!user) {
     return c.json({ error: 'Unauthorized' }, 401);
   }
@@ -62,7 +62,7 @@ reports.get('/', async (c) => {
  * GET /reports/export - Export report as CSV or JSON
  */
 reports.get('/export', async (c) => {
-  const user = c.get('user') as UserData | null;
+  const user = c.get('user');
   if (!user || (user.Role !== 1 && user.Role !== 2)) {
     return c.json({ error: 'Unauthorized' }, 401);
   }

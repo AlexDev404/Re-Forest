@@ -87,7 +87,7 @@ export class TreeRepository {
         good: 'GOOD',
         excellent: 'EXCELLENT'
       };
-      const healthValue = healthMap[filters.health];
+      const healthValue = healthMap[filters.health] as 'POOR' | 'FAIR' | 'GOOD' | 'EXCELLENT' | undefined;
       if (healthValue) {
         conditions.push(eq(Trees.Health, healthValue));
       }
@@ -224,17 +224,15 @@ export class TreeRepository {
       conditions.push(eq(TreeSpecies.IsTimber, isTimberBool));
     }
 
-    let query = db
+    const baseQuery = db
       .select({ id: TreeSpecies.Id, name: TreeSpecies.Name })
       .from(TreeSpecies);
 
-    if (conditions.length > 0) {
-      query = query.where(and(...conditions));
-    }
+    const filtered = conditions.length > 0
+      ? baseQuery.where(and(...conditions))
+      : baseQuery;
 
-    query = query.orderBy(desc(TreeSpecies.Id)).limit(options.limit ?? 20);
-
-    return query;
+    return filtered.orderBy(desc(TreeSpecies.Id)).limit(options.limit ?? 20);
   }
 
   /**
@@ -247,10 +245,9 @@ export class TreeRepository {
   // ===== Report Methods =====
 
   static async getTreeHealthReport(startDate: Date | null) {
-    let condition = eq(Trees.Status, 'APPROVED');
-    if (startDate) {
-      condition = and(condition, gte(Trees.PlantedOn, startDate.toISOString().split('T')[0]));
-    }
+    const condition = startDate
+      ? and(eq(Trees.Status, 'APPROVED'), gte(Trees.PlantedOn, startDate.toISOString().split('T')[0]))!
+      : eq(Trees.Status, 'APPROVED');
 
     const healthDistribution = await db
       .select({ health: Trees.Health, count: count() })
@@ -270,10 +267,9 @@ export class TreeRepository {
   }
 
   static async getTreesBySpeciesReport(startDate: Date | null) {
-    let condition = eq(Trees.Status, 'APPROVED');
-    if (startDate) {
-      condition = and(condition, gte(Trees.PlantedOn, startDate.toISOString().split('T')[0]));
-    }
+    const condition = startDate
+      ? and(eq(Trees.Status, 'APPROVED'), gte(Trees.PlantedOn, startDate.toISOString().split('T')[0]))!
+      : eq(Trees.Status, 'APPROVED');
 
     const speciesDistribution = await db
       .select({
@@ -329,10 +325,9 @@ export class TreeRepository {
   }
 
   static async getUserContributionsReport(startDate: Date | null) {
-    let condition = eq(Trees.Status, 'APPROVED');
-    if (startDate) {
-      condition = and(condition, gte(Trees.PlantedOn, startDate.toISOString().split('T')[0]));
-    }
+    const condition = startDate
+      ? and(eq(Trees.Status, 'APPROVED'), gte(Trees.PlantedOn, startDate.toISOString().split('T')[0]))!
+      : eq(Trees.Status, 'APPROVED');
 
     const contributions = await db
       .select({
@@ -359,10 +354,9 @@ export class TreeRepository {
   }
 
   static async getTreeGrowthReport(startDate: Date | null) {
-    let condition = eq(Trees.Status, 'APPROVED');
-    if (startDate) {
-      condition = and(condition, gte(Trees.PlantedOn, startDate.toISOString().split('T')[0]));
-    }
+    const condition = startDate
+      ? and(eq(Trees.Status, 'APPROVED'), gte(Trees.PlantedOn, startDate.toISOString().split('T')[0]))!
+      : eq(Trees.Status, 'APPROVED');
 
     const ageRanges = [
       { label: '0-1 years', min: 0, max: 1 },

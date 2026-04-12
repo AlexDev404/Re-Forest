@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import type { UserData } from '../repositories/UserRepository';
+
 import { NotificationRepository } from '../repositories/NotificationRepository';
 import { TreeRepository } from '../repositories/TreeRepository';
 
@@ -9,7 +9,7 @@ const misc = new Hono();
  * POST /save-fcm-token - Save Firebase Cloud Messaging token
  */
 misc.post('/save-fcm-token', async (c) => {
-  const user = c.get('user') as UserData | null;
+  const user = c.get('user');
 
   try {
     const { fcmToken, deviceInfo } = await c.req.json();

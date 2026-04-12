@@ -1,6 +1,5 @@
 import { Hono } from 'hono';
 import { z } from 'zod';
-import type { UserData } from '../repositories/UserRepository';
 import { TreeRepository } from '../repositories/TreeRepository';
 
 const trees = new Hono();
@@ -60,7 +59,7 @@ const treeBatchSchema = z.object({
  * POST /trees/batch - Batch create trees
  */
 trees.post('/batch', async (c) => {
-  const user = c.get('user') as UserData | null;
+  const user = c.get('user');
   if (!user) {
     return c.json({ success: false, error: 'You must be logged in to create trees' }, 401);
   }
@@ -158,7 +157,7 @@ const treeSchema = z.object({
  * POST /trees - Create a single tree
  */
 trees.post('/', async (c) => {
-  const user = c.get('user') as UserData | null;
+  const user = c.get('user');
   if (!user) {
     return c.json({ success: false, error: 'You must be logged in to create a tree' }, 401);
   }
@@ -221,7 +220,7 @@ trees.post('/', async (c) => {
  * DELETE /trees/:id - Delete a tree
  */
 trees.delete('/:id', async (c) => {
-  const user = c.get('user') as UserData | null;
+  const user = c.get('user');
   if (!user) {
     return c.json({ error: 'Unauthorized' }, 401);
   }
