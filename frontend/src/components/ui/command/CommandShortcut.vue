@@ -8,7 +8,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <p :class="cn('text-sm text-muted-foreground', props.class)">
+  <span :class="cn('ml-auto text-xs tracking-widest text-muted-foreground', props.class)">
     <slot />
-  </p>
+  </span>
 </template>

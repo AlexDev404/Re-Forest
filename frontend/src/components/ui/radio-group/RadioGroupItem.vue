@@ -1,23 +1,34 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from 'vue'
-import { RadioGroupIndicator, RadioGroupItem, type RadioGroupItemProps } from 'radix-vue'
-import { cn } from '@/lib/utils'
+import type { RadioGroupItemProps } from "reka-ui"
+import type { HTMLAttributes } from "vue"
+import { reactiveOmit } from "@vueuse/core"
+import { CheckIcon } from '@radix-icons/vue'
+import {
+  RadioGroupIndicator,
+  RadioGroupItem,
+  useForwardProps,
+} from "reka-ui"
+import { cn } from "@/lib/utils"
 
-const props = defineProps<RadioGroupItemProps & { class?: HTMLAttributes['class'] }>()
+const props = defineProps<RadioGroupItemProps & { class?: HTMLAttributes["class"] }>()
+
+const delegatedProps = reactiveOmit(props, "class")
+
+const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
   <RadioGroupItem
-    v-bind="props"
-    :class="cn(
-      'aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-      props.class,
-    )"
+    v-bind="forwardedProps"
+    :class="
+      cn(
+        'peer aspect-square h-4 w-4 rounded-full border border-primary text-primary shadow focus:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
+        props.class,
+      )
+    "
   >
     <RadioGroupIndicator class="flex items-center justify-center">
-      <svg width="10" height="10" viewBox="0 0 10 10">
-        <circle cx="5" cy="5" r="4" fill="currentColor" />
-      </svg>
+      <CheckIcon class="h-3.5 w-3.5 text-primary" />
     </RadioGroupIndicator>
   </RadioGroupItem>
 </template>
