@@ -3,7 +3,8 @@
     "allow": [
       "Bash(npm install:*)",
       "Bash(npm uninstall:*)",
-      "Bash(git:*)"
+      "Bash(git:*)",
+      "Bash(npx esbuild:*)"
     ]
   }
 }
