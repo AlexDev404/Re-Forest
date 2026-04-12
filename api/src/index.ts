@@ -46,6 +46,9 @@ app.notFound((c) => {
   return c.json({ error: 'Not found' }, 404);
 });
 
+// Export app for Vercel adapter
+export { app };
+
 const port = parseInt(process.env.PORT || '3000');
 
 console.log(`🌱 Re-Forest API running on http://localhost:${port}`);
