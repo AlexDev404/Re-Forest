@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { cn } from '@/lib/utils';
+import { CirclePlus, Cog, House } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { House, CirclePlus, Cog } from 'lucide-vue-next';
-import { cn } from '@/lib/utils';
 
 defineProps<{
   user?: { Id: number | null; FirstName: string; LastName: string; Role: number } | null;
@@ -22,7 +22,7 @@ function handleNavigation(page: string) {
 </script>
 
 <template>
-  <div :class="cn('flex h-fit items-center justify-between self-stretch rounded-md border bg-primary p-1 text-background shadow-sm lg:justify-center lg:space-x-1')">
+  <div :class="cn('flex h-fit items-center justify-between self-stretch rounded-md border bg-primary p-1 w-full text-background shadow-sm lg:justify-center lg:space-x-1')">
     <button
       @click="handleNavigation('')"
       :class="cn(
