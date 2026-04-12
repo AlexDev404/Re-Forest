@@ -10,15 +10,6 @@ body {
 }
 
 /* View transitions */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 0.3s ease, opacity 0.3s ease;
@@ -64,10 +55,6 @@ body {
 
 @keyframes fade-out {
   to { opacity: 0; }
-}
-
-@keyframes fade-in {
-  from { opacity: 0; }
 }
 
 /* Navigation bar - prevent transition */
