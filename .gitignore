@@ -1,11 +1,9 @@
-test-results
+# Dependencies
 node_modules
 
-# Output
-.output
-.vercel
-/.svelte-kit
-/build
+# Build output
+dist
+*.tsbuildinfo
 
 # OS
 .DS_Store
@@ -15,14 +13,12 @@ Thumbs.db
 .env
 .env.*
 !.env.example
-!.env.test
 
-# Vite
-vite.config.js.timestamp-*
-vite.config.ts.timestamp-*
-
-.vercel
+# IDE
+.vs
+.vscode
+.idea
 
 # Coverage
-
 coverage
+test-results
