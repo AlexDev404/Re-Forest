@@ -1,13 +1,16 @@
 <script setup lang="ts">
+import EmbeddedNav from '@/components/EmbeddedNav.vue';
 </script>
 
 <template>
-  <div class="min-h-screen bg-background font-sans">
+  <div class="min-h-screen bg-background pb-16 font-sans">
     <router-view v-slot="{ Component }">
       <transition name="slide" mode="out-in">
         <component :is="Component" />
       </transition>
     </router-view>
+
+    <EmbeddedNav />
   </div>
 </template>
 
