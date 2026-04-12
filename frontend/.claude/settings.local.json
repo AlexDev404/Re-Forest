@@ -3,7 +3,10 @@
     "allow": [
       "Bash(npm list:*)",
       "Bash(npm install:*)",
-      "Bash(npx vue-tsc:*)"
+      "Bash(npx vue-tsc:*)",
+      "Bash(grep -r \"route\\\\|Route\" /c/Users/Immanuel/source/repos/re-forest/api/src/routes/*.ts)",
+      "Bash(npx drizzle-kit:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

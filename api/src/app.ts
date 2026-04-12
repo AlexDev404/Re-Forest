@@ -2,7 +2,9 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { authMiddleware } from './middleware/auth';
+import achievementsRoutes from './routes/achievements';
 import authRoutes from './routes/auth';
+import leaderboardRoutes from './routes/leaderboard';
 import miscRoutes from './routes/misc';
 import reportsRoutes from './routes/reports';
 import speciesRoutes from './routes/species';
@@ -28,7 +30,9 @@ app.use('*', authMiddleware);
 app.get('/', (c) => c.json({ status: 'ok', name: 'Re-Forest API', version: '1.0.0' }));
 
 // Routes
+app.route('/achievements', achievementsRoutes);
 app.route('/auth', authRoutes);
+app.route('/leaderboard', leaderboardRoutes);
 app.route('/trees', treesRoutes);
 app.route('/tree-species', speciesRoutes);
 app.route('/reports', reportsRoutes);

@@ -160,3 +160,80 @@ export const UserTokens = pgTable('User_Tokens', {
   deviceInfo: varchar('device_info', { length: 255 }),
   lastUpdated: timestamp('last_updated').defaultNow()
 });
+
+export const thresholdType = pgEnum('thresholdtype', [
+  'TREES_PLANTED',
+  'SPECIES_COUNT',
+  'AREA_HECTARES',
+  'DAYS_ACTIVE'
+]);
+
+export const AchievementCategories = pgTable('Achievement_Categories', {
+  Id: integer('id').primaryKey().generatedByDefaultAsIdentity({
+    name: 'Achievement_Categories_id_seq',
+    startWith: 1,
+    increment: 1,
+    minValue: 1,
+    maxValue: 2147483647
+  }),
+  Name: varchar('name', { length: 255 }).notNull(),
+  Description: text('description'),
+  DisplayOrder: integer('display_order').default(0),
+  CreatedAt: timestamp('created_at').defaultNow()
+});
+
+export const Achievements = pgTable(
+  'Achievements',
+  {
+    Id: integer('id').primaryKey().generatedByDefaultAsIdentity({
+      name: 'Achievements_id_seq',
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      maxValue: 2147483647
+    }),
+    CategoryId: integer('category_id').notNull(),
+    Name: varchar('name', { length: 255 }).notNull(),
+    Description: text('description'),
+    Icon: varchar('icon', { length: 255 }),
+    Threshold: integer('threshold').default(1),
+    ThresholdType: thresholdType('threshold_type').notNull(),
+    DisplayOrder: integer('display_order').default(0),
+    CreatedAt: timestamp('created_at').defaultNow()
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.CategoryId],
+      foreignColumns: [AchievementCategories.Id],
+      name: 'Achievements_category_id_fkey'
+    })
+  ]
+);
+
+export const UserAchievements = pgTable(
+  'User_Achievements',
+  {
+    Id: integer('id').primaryKey().generatedByDefaultAsIdentity({
+      name: 'User_Achievements_id_seq',
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      maxValue: 2147483647
+    }),
+    UserId: integer('user_id').notNull(),
+    AchievementId: integer('achievement_id').notNull(),
+    UnlockedAt: timestamp('unlocked_at').defaultNow()
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.UserId],
+      foreignColumns: [User.Id],
+      name: 'User_Achievements_user_id_fkey'
+    }),
+    foreignKey({
+      columns: [table.AchievementId],
+      foreignColumns: [Achievements.Id],
+      name: 'User_Achievements_achievement_id_fkey'
+    })
+  ]
+);

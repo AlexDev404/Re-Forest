@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { z } from 'zod';
+import { AchievementRepository } from '../repositories/AchievementRepository';
 import { TreeRepository } from '../repositories/TreeRepository';
 
 const trees = new Hono();
@@ -119,10 +120,14 @@ trees.post('/batch', async (c) => {
       createdTrees.push(newTree.Id);
     }
 
+    // Check for new achievements
+    const newAchievements = await AchievementRepository.checkAndAward(user.Id);
+
     return c.json({
       success: true,
       message: `Successfully created ${createdTrees.length} trees`,
-      treeIds: createdTrees
+      treeIds: createdTrees,
+      newAchievements
     });
   } catch (error) {
     console.error('Batch tree creation error:', error);
@@ -206,7 +211,10 @@ trees.post('/', async (c) => {
       plantingReasonId: plantingReasonIdNum
     });
 
-    return c.json({ success: true, treeId: newTree.Id });
+    // Check for new achievements
+    const newAchievements = await AchievementRepository.checkAndAward(user.Id);
+
+    return c.json({ success: true, treeId: newTree.Id, newAchievements });
   } catch (error) {
     console.error('Tree creation error:', error);
     return c.json(
