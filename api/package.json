@@ -13,6 +13,7 @@
     "vercel-build": "node scripts/build-vercel.mjs"
   },
   "dependencies": {
+    "@hono/node-server": "^1.19.13",
     "@neondatabase/serverless": "^0.10.4",
     "argon2-wasm-edge": "^1.0.23",
     "drizzle-orm": "^0.45.2",

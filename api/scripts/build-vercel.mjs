@@ -1,9 +1,11 @@
 import { build } from 'esbuild';
+import { execSync } from 'child_process';
 import { mkdirSync, writeFileSync } from 'fs';
 
 const FUNC_DIR = '.vercel/output/functions/api.func';
+mkdirSync(FUNC_DIR, { recursive: true });
 
-// 1. Bundle the app
+// 1. Bundle the app (sharp is native, must stay external)
 await build({
   entryPoints: ['src/vercel.ts'],
   bundle: true,
@@ -15,6 +17,9 @@ await build({
   },
   external: ['sharp'],
 });
+
+// 2. Install sharp for linux so it's available at runtime
+execSync(`npm install --prefix ${FUNC_DIR} sharp --os=linux --cpu=x64`, { stdio: 'inherit' });
 
 // 2. Function config
 writeFileSync(`${FUNC_DIR}/.vc-config.json`, JSON.stringify({
