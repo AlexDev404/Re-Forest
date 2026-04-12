@@ -1,0 +1,42 @@
+{
+	"name": "Greening Belize",
+	"short_name": "Greening Belize",
+	"description": "Track and monitor trees planted in reforestation and conservation areas",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"background_color": "#ffffff",
+	"theme_color": "#10b981",
+	"icons": [
+		{
+			"src": "/favicon.png",
+			"sizes": "128x128",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/pwa-icons/favicon-144.png",
+			"sizes": "144x144",
+			"type": "image/png",
+			"purpose": "any"
+		}
+	],
+	"screenshots": [
+		{
+			"src": "/pwa-screenshot/screenshot.png",
+			"sizes": "325x585",
+			"type": "image/png"
+		},
+		{
+			"src": "/pwa-screenshot/screenshot_2.png",
+			"sizes": "325x585",
+			"type": "image/png"
+		},
+		{
+			"src": "/pwa-screenshot/screenshot-desktop.png",
+			"sizes": "1919x926",
+			"form_factor": "wide",
+			"type": "image/png"
+		}
+	]
+}

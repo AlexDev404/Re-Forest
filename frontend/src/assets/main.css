@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  overflow-y: hidden;
+}
+
+/* View transitions */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.slide-enter-from {
+  transform: translateX(30px);
+  opacity: 0;
+}
+.slide-leave-to {
+  transform: translateX(-30px);
+  opacity: 0;
+}
+
+/* Loading bar */
+@keyframes loading2 {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes loading {
+  from { transform: translateX(0) scaleX(6); }
+  to { transform: translateX(500%) scaleX(6); }
+}
+
+.loading-gradient-2 {
+  will-change: transform;
+}
+
+.loading-gradient {
+  will-change: transform;
+  transform-origin: right;
+  background-image: linear-gradient(
+    to right,
+    hsl(var(--accent)),
+    hsl(var(--primary)),
+    hsl(var(--secondary))
+  );
+}
+
+.animate-fade-out {
+  animation: fade-out 0.3s ease-out forwards;
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+/* Navigation bar - prevent transition */
+.nav-control {
+  display: flex;
+  justify-content: space-between;
+}
+
+@layer base {
+  :root {
+    /* Greening Belize Color Scheme */
+    --primary: 150 100% 21%;
+    --secondary: 153 37% 40%;
+    --accent: 48 43% 75%;
+    --background: 0 0% 100%;
+    --foreground: 150 30% 15%;
+    --muted: 150 10% 96%;
+    --muted-foreground: 150 10% 45%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 30% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 150 30% 15%;
+    --border: 150 15% 90%;
+    --input: 150 15% 90%;
+    --primary-foreground: 0 0% 100%;
+    --secondary-foreground: 0 0% 100%;
+    --accent-foreground: 150 30% 15%;
+    --destructive: 0 72.2% 50.6%;
+    --destructive-foreground: 210 40% 98%;
+    --ring: 150 100% 21%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 150 30% 8%;
+    --foreground: 150 10% 95%;
+    --muted: 150 15% 15%;
+    --muted-foreground: 150 10% 65%;
+    --popover: 150 30% 8%;
+    --popover-foreground: 150 10% 95%;
+    --card: 150 30% 8%;
+    --card-foreground: 150 10% 95%;
+    --border: 150 15% 20%;
+    --input: 150 15% 20%;
+    --primary: 153 37% 40%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 150 20% 25%;
+    --secondary-foreground: 150 10% 95%;
+    --accent: 48 43% 75%;
+    --accent-foreground: 150 30% 8%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --ring: 153 37% 40%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
