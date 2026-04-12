@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { Label } from '@/components/ui/label';
+import { authAdapter } from '@/adapters/auth';
 import MenuItem from '@/components/app/MenuItem.vue';
+import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { ChevronRight, DoorOpen, Map, Shield, Thermometer } from 'lucide-vue-next';
-import { authAdapter } from '@/adapters/auth';
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const checked = ref(false);
@@ -28,7 +28,7 @@ function onclickUnits() {
 </script>
 
 <template>
-  <div class="min-h-screen overflow-y-auto bg-slate-50 font-sans dark:bg-slate-900">
+  <div class="min-h-screen overflow-y-auto">
     <main class="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-10 sm:gap-10 sm:px-6 sm:py-16">
       <header class="pb-6 sm:pb-8">
         <h1 class="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">Settings</h1>
