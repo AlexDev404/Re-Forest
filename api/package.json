@@ -13,14 +13,13 @@
     "vercel-build": "true"
   },
   "dependencies": {
-    "hono": "^4.4.0",
-    "drizzle-orm": "^0.45.2",
     "@neondatabase/serverless": "^0.10.4",
-    "argon2": "^0.43.0",
+    "argon2-wasm-edge": "^1.0.23",
+    "drizzle-orm": "^0.45.2",
+    "hono": "^4.4.0",
     "jsonwebtoken": "^9.0.2",
     "sharp": "^0.33.5",
-    "zod": "^4.0.0",
-    "firebase-admin": "^13.3.0"
+    "zod": "^4.0.0"
   },
   "devDependencies": {
     "@types/bun": "latest",

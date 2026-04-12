@@ -1,4 +1,5 @@
-import argon2 from 'argon2';
+import { argon2id, argon2Verify } from 'argon2-wasm-edge';
+import crypto from 'crypto';
 import { eq } from 'drizzle-orm';
 import { db } from '../db';
 import { User as UserSchema } from '../db/schema';
@@ -68,7 +69,16 @@ export class UserRepository {
     firstName: string,
     lastName: string
   ): Promise<UserData> {
-    const hashedPassword = await argon2.hash(password);
+    const salt = crypto.randomBytes(16);
+    const hashedPassword = await argon2id({
+      password,
+      salt,
+      iterations: 3,
+      parallelism: 1,
+      memorySize: 65536,
+      hashLength: 32,
+      outputType: 'encoded',
+    });
 
     const newUser = {
       Email: email.toLowerCase(),
@@ -90,7 +100,7 @@ export class UserRepository {
    * Verify user password
    */
   static async verifyPassword(storedHash: string, password: string): Promise<boolean> {
-    return argon2.verify(storedHash, password);
+    return argon2Verify({ password, hash: storedHash });
   }
 
   /**
