@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "npm run build:achievements && vue-tsc -b && vite build",
-    "build:achievements": "(cd ../achievements && npm install && npm run build && rm -rf ../frontend/public/static/achievements && cp -r dist ../frontend/public/static/achievements) || echo 'Achievements build failed, using existing static assets if available'",
+    "build:achievements": "(cd ../achievements && npm install && npm run build:embed && rm -rf ../frontend/public/static/achievements && cp -r dist ../frontend/public/static/achievements) || echo 'Achievements build failed, using existing static assets if available'",
     "preview": "vite preview",
     "android": "npm run build && npx cap sync android && npx cap open android",
     "cap:sync": "npm run build && npx cap sync android",

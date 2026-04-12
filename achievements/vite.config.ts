@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
-  base: '/static/achievements/',
+  base: process.env.BUILD_MODE === 'embed' ? '/static/achievements/' : '/',
   plugins: [vue()],
   resolve: {
     alias: {
