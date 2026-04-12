@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import NavigationBar from '@/components/app/NavigationBar.vue';
 import { Button } from '@/components/ui/button';
 import { CircleX } from 'lucide-vue-next';
@@ -8,18 +8,47 @@ import { requestNotificationPermission } from '@/composables/firebase';
 import { authAdapter } from '@/adapters/auth';
 
 const route = useRoute();
+const router = useRouter();
 const loadingBarRef = ref<HTMLDivElement | null>(null);
 const mobile = ref(false);
 const user = ref<{ Id: number | null; FirstName: string; LastName: string; Role: number } | null>(null);
 
 const showNav = computed(() => route.meta.showNav === true);
 
-onMounted(async () => {
-  // Remove splash screen
-  const splash = document.getElementById('splash-screen');
-  if (splash) {
-    setTimeout(() => splash.remove(), 2000);
+// Loading bar: show on beforeEach, hide on afterEach (matching SvelteKit beforeNavigate/afterNavigate)
+router.beforeEach((_to, _from, next) => {
+  if (loadingBarRef.value) {
+    loadingBarRef.value.style.opacity = '1';
   }
+  next();
+});
+
+router.afterEach(() => {
+  setTimeout(() => {
+    loadingBarRef.value?.classList.add('animate-fade-out');
+  }, 1115);
+  setTimeout(() => {
+    if (loadingBarRef.value) {
+      loadingBarRef.value.style.opacity = '0';
+      loadingBarRef.value.classList.remove('animate-fade-out');
+    }
+  }, 1125);
+});
+
+onMounted(async () => {
+  // Hide loading bar initially
+  if (loadingBarRef.value) {
+    loadingBarRef.value.style.opacity = '0';
+  }
+
+  // Fade out and remove splash screen (matching SvelteKit onMount behavior)
+  const splashScreen = document.getElementById('splash-screen');
+  setTimeout(() => {
+    splashScreen?.classList.add('animate-fade-out');
+  }, 1000);
+  setTimeout(() => {
+    splashScreen?.remove();
+  }, 2000);
 
   // Mobile detection
   mobile.value = localStorage.getItem('mobile') === 'true';
