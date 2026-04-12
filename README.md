@@ -4,11 +4,12 @@ A tree planting and tracking application for Belize's national reforestation eff
 
 ## Architecture
 
-This repository contains two independent projects:
+This repository contains three independent projects:
 
 ```
-api/        → Hono API running on Bun
-frontend/   → Vite + Vue.js 3 SPA
+api/            → Hono API running on Bun
+frontend/       → Vite + Vue.js 3 SPA (main app)
+achievements/   → Vite + Vue.js 3 SPA (leaderboard & achievements microfrontend)
 ```
 
 ### API (`api/`)
@@ -17,7 +18,7 @@ A REST API built with [Hono](https://hono.dev/) on the [Bun](https://bun.sh/) ru
 
 - **Database**: Drizzle ORM with Neon PostgreSQL (serverless)
 - **Auth**: JWT-based authentication
-- **Endpoints**: Auth, Trees (CRUD + batch), Species, Reports (with CSV export), Image Upload, FCM Notifications
+- **Endpoints**: Auth, Trees (CRUD + batch), Species, Reports (with CSV export), Image Upload, FCM Notifications, Leaderboard, Achievements
 
 ```bash
 cd api
@@ -41,6 +42,21 @@ npm install
 npm run dev            # starts on http://localhost:5173 (proxies /api → API)
 ```
 
+### Achievements Microfrontend (`achievements/`)
+
+A standalone single-page application for the leaderboard and user achievements system, built with [Vue.js 3](https://vuejs.org/) + [Vite](https://vite.dev/).
+
+- **Leaderboard**: Users ranked by trees planted and achievements unlocked
+- **Achievements**: Per-user achievement badges grouped by category, with unlocked/locked display
+- **Styling**: Tailwind CSS with the same Greening Belize color scheme
+
+```bash
+cd achievements
+cp .env.example .env   # configure API URL if needed
+npm install
+npm run dev            # starts on http://localhost:5174 (proxies /api → API)
+```
+
 ### Building for Production
 
 ```bash
@@ -48,7 +64,10 @@ npm run dev            # starts on http://localhost:5173 (proxies /api → API)
 cd api && bun run start
 
 # Frontend
-cd frontend && npm run build   # outputs to frontend/dist/
+cd frontend && npm run build         # outputs to frontend/dist/
+
+# Achievements
+cd achievements && npm run build     # outputs to achievements/dist/
 ```
 
 ## License
