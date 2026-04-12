@@ -2,6 +2,13 @@ import type { Context, Next } from 'hono';
 import Jwt from 'jsonwebtoken';
 import { UserRepository, type UserData } from '../repositories/UserRepository';
 
+// Hono context variable type augmentation
+declare module 'hono' {
+  interface ContextVariableMap {
+    user: UserData | null;
+  }
+}
+
 const JWT_SECRET = process.env.JWT_SECRET || '';
 
 /**
@@ -58,7 +65,7 @@ export async function authMiddleware(c: Context, next: Next) {
  * Middleware that requires authentication - returns 401 if no user
  */
 export async function requireAuth(c: Context, next: Next) {
-  const user = c.get('user') as UserData | null;
+  const user = c.get('user');
   if (!user) {
     return c.json({ error: 'Unauthorized' }, 401);
   }
@@ -70,7 +77,7 @@ export async function requireAuth(c: Context, next: Next) {
  */
 export async function requireRole(roles: number[]) {
   return async (c: Context, next: Next) => {
-    const user = c.get('user') as UserData | null;
+    const user = c.get('user');
     if (!user || !roles.includes(user.Role ?? 0)) {
       return c.json({ error: 'Forbidden' }, 403);
     }

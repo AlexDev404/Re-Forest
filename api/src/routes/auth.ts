@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { UserRepository, type UserData } from '../repositories/UserRepository';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
-const SESSION_MAX_AGE = process.env.SESSION_MAX_AGE || '72';
+const SESSION_MAX_AGE = parseInt(process.env.SESSION_MAX_AGE || '72');
 
 const auth = new Hono();
 
@@ -45,7 +45,7 @@ auth.post('/login', async (c) => {
     }
 
     const token = Jwt.sign({ email: user.Email }, JWT_SECRET, {
-      expiresIn: SESSION_MAX_AGE + 'h'
+      expiresIn: SESSION_MAX_AGE * 60 * 60
     });
 
     return c.json({
@@ -94,7 +94,7 @@ auth.post('/register', async (c) => {
     const user = await UserRepository.register(email, password, firstName, lastName);
 
     const token = Jwt.sign({ email: user.Email }, JWT_SECRET, {
-      expiresIn: SESSION_MAX_AGE + 'h'
+      expiresIn: SESSION_MAX_AGE * 60 * 60
     });
 
     return c.json({
@@ -124,7 +124,7 @@ auth.post('/logout', async (c) => {
  * GET /auth/me - Get current user info
  */
 auth.get('/me', async (c) => {
-  const user = c.get('user') as UserData | null;
+  const user = c.get('user');
 
   if (!user) {
     return c.json({

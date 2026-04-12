@@ -37,7 +37,7 @@ upload.post('/', async (c) => {
 
     // Prepare form data for imgbb
     const formData = new FormData();
-    formData.append('image', new Blob([compressedBuffer], { type: 'image/jpeg' }));
+    formData.append('image', new Blob([new Uint8Array(compressedBuffer)], { type: 'image/jpeg' }));
 
     // Upload to imgbb
     const uploadResponse = await fetch(`${IMGBB_API_URL}?key=${IMGBB_API_KEY}`, {
