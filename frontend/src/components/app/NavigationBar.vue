@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { cn } from '@/lib/utils';
-import { CirclePlus, Cog, House } from 'lucide-vue-next';
+import { CirclePlus, Cog, House, Trophy } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -42,6 +42,15 @@ function handleNavigation(page: string) {
     >
       <CirclePlus />
     </button>
+
+    <a
+      href="/static/achievements/index.html"
+      :class="cn(
+        'flex cursor-default select-none items-center self-stretch rounded-sm px-3.5 py-2.5 text-sm font-medium outline-none focus:bg-secondary'
+      )"
+    >
+      <Trophy />
+    </a>
 
     <button
       @click="handleNavigation('configure')"
