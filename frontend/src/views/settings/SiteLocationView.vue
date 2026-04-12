@@ -78,7 +78,7 @@ function getLocationIcon(type?: string) {
 </script>
 
 <template>
-  <div class="overflow-y-auto">
+  <div class="min-h-screen overflow-y-auto bg-slate-50 font-sans dark:bg-slate-900">
     <main class="mx-6 my-10 flex min-h-[80vh] flex-col items-start gap-9">
       <div class="flex flex-col items-start self-stretch">
         <h1 class="text-2xl font-semibold">

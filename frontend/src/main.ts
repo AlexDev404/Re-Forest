@@ -23,7 +23,7 @@ const routes = [
   { path: '/configure', name: 'configure', component: ConfigureView, meta: { showNav: true } },
   { path: '/configure/site-location', name: 'site-location', component: SiteLocationView, meta: { showNav: true } },
   { path: '/configure/help', name: 'help', component: HelpView, meta: { showNav: true } },
-  { path: '/confirmation', name: 'confirmation', component: ConfirmationView, meta: { showNav: true } }
+  { path: '/confirmation', name: 'confirmation', component: ConfirmationView, meta: { showNav: false } }
 ];
 
 const router = createRouter({
