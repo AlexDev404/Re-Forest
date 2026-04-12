@@ -4,7 +4,8 @@
       "Bash(npm install:*)",
       "Bash(npm uninstall:*)",
       "Bash(git:*)",
-      "Bash(npx esbuild:*)"
+      "Bash(npx esbuild:*)",
+      "Bash(node:*)"
     ]
   }
 }

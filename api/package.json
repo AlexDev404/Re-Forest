@@ -10,7 +10,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "seed": "bun run src/seed.ts",
-    "vercel-build": "esbuild src/vercel.ts --bundle --platform=node --format=esm --outfile=api/index.mjs --banner:js=\"import { createRequire } from 'module'; const require = createRequire(import.meta.url);\" --external:sharp"
+    "vercel-build": "node scripts/build-vercel.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
