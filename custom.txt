@@ -1,0 +1,3 @@
+* icon-card
+* menuitem
+* navigator
