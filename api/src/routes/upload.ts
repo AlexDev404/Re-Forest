@@ -35,9 +35,10 @@ upload.post('/', async (c) => {
       .jpeg({ quality: 80 })
       .toBuffer();
 
-    // Prepare form data for imgbb
+    // Prepare form data for imgbb using base64 (avoids Bun/Node blob multipart differences)
+    const base64Image = compressedBuffer.toString('base64');
     const formData = new FormData();
-    formData.append('image', new Blob([new Uint8Array(compressedBuffer)], { type: 'image/jpeg' }));
+    formData.append('image', base64Image);
 
     // Upload to imgbb
     const uploadResponse = await fetch(`${IMGBB_API_URL}?key=${IMGBB_API_KEY}`, {
@@ -47,7 +48,7 @@ upload.post('/', async (c) => {
 
     const uploadResult = await uploadResponse.json();
 
-    if (!uploadResult.success) {
+    if (!uploadResult?.success) {
       return c.json({ error: 'Failed to upload image' }, 500);
     }
 
