@@ -2,6 +2,8 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import NavigationBar from '@/components/app/NavigationBar.vue';
+import { Button } from '@/components/ui/button';
+import { CircleX } from 'lucide-vue-next';
 import { requestNotificationPermission } from '@/composables/firebase';
 import { authAdapter } from '@/adapters/auth';
 
@@ -90,17 +92,18 @@ function forceEnableMobile() {
     <div v-if="!mobile" class="hidden lg:block">
       <div class="flex h-screen w-full items-center justify-center">
         <div class="max-w-md p-8 text-center">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mx-auto mb-4"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          <CircleX :size="48" class="mx-auto mb-4" />
           <h1 class="mb-2 text-2xl font-bold">Nope!</h1>
           <p class="text-gray-600">
             This app is designed for mobile devices. Please use a mobile device or open the device emulator in your browser.
           </p>
-          <button
-            class="mt-4 rounded-md bg-primary px-6 py-3 text-primary-foreground"
+          <Button
+            class="mt-4"
+            size="lg"
             @click="forceEnableMobile"
           >
             Whatever
-          </button>
+          </Button>
         </div>
       </div>
     </div>

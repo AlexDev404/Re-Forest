@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { House, CirclePlus, Settings } from 'lucide-vue-next';
+import { House, CirclePlus, Cog } from 'lucide-vue-next';
+import { cn } from '@/lib/utils';
 
 defineProps<{
   user?: { Id: number | null; FirstName: string; LastName: string; Role: number } | null;
@@ -11,7 +12,7 @@ const route = useRoute();
 const router = useRouter();
 
 const activeButton = computed(() => {
-  const path = route.path.replace(/^\//, '');
+  const path = route.path.replace(/\//g, '');
   return path || 'home';
 });
 
@@ -21,27 +22,35 @@ function handleNavigation(page: string) {
 </script>
 
 <template>
-  <div class="flex w-full items-center justify-around rounded-xl border border-border bg-card p-1 shadow-lg backdrop-blur">
+  <div :class="cn('flex h-fit items-center justify-between self-stretch rounded-md border bg-primary p-1 text-background shadow-sm lg:justify-center lg:space-x-1')">
     <button
       @click="handleNavigation('')"
-      class="flex flex-1 items-center justify-center rounded-lg p-3 transition-colors"
-      :class="activeButton === 'home' || activeButton === '' ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground hover:text-foreground'"
+      :class="cn(
+        'flex cursor-default select-none items-center self-stretch rounded-sm px-3.5 py-2.5 text-sm font-medium outline-none focus:bg-secondary',
+        activeButton === 'home' || activeButton === '' ? 'bg-secondary' : ''
+      )"
     >
-      <House :size="20" />
+      <House />
     </button>
+
     <button
       @click="handleNavigation('manage/add')"
-      class="flex w-20 items-center justify-center rounded-lg p-3 transition-colors"
-      :class="activeButton.includes('manage') ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground hover:text-foreground'"
+      :class="cn(
+        'flex w-20 cursor-default select-none items-center justify-center self-stretch rounded-sm px-3.5 py-2.5 text-sm font-medium outline-none focus:bg-secondary',
+        activeButton === 'manageadd' || activeButton.includes('manage') ? 'bg-secondary' : ''
+      )"
     >
-      <CirclePlus :size="20" />
+      <CirclePlus />
     </button>
+
     <button
       @click="handleNavigation('configure')"
-      class="flex flex-1 items-center justify-center rounded-lg p-3 transition-colors"
-      :class="activeButton === 'configure' ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground hover:text-foreground'"
+      :class="cn(
+        'flex cursor-default select-none items-center self-stretch rounded-sm px-3.5 py-2.5 text-sm font-medium outline-none focus:bg-secondary',
+        activeButton === 'configure' ? 'bg-secondary' : ''
+      )"
     >
-      <Settings :size="20" />
+      <Cog />
     </button>
   </div>
 </template>
