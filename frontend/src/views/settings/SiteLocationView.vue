@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import Button from '@/components/ui/Button.vue';
-import Label from '@/components/ui/Label.vue';
-import MenuItem from '@/components/ui/MenuItem.vue';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import MenuItem from '@/components/app/MenuItem.vue';
 import { Building, House, Locate, Map as MapIcon } from 'lucide-vue-next';
 import { getCurrentLocation, getReverseLoc } from '@/composables/utility';
 import type { GeoJSON, ReverseGeoJSON } from '@/types/geo';

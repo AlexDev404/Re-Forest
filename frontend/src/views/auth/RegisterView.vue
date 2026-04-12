@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import Button from '@/components/ui/Button.vue';
-import Input from '@/components/ui/Input.vue';
-import Label from '@/components/ui/Label.vue';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { authAdapter } from '@/adapters/auth';
 
 const router = useRouter();

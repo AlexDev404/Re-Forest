@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import Label from '@/components/ui/Label.vue';
-import MenuItem from '@/components/ui/MenuItem.vue';
-import SwitchComp from '@/components/ui/Switch.vue';
+import { Label } from '@/components/ui/label';
+import MenuItem from '@/components/app/MenuItem.vue';
+import { Switch } from '@/components/ui/switch';
 import { ChevronRight, DoorOpen, Map, Shield, Thermometer } from 'lucide-vue-next';
 import { authAdapter } from '@/adapters/auth';
 
@@ -43,7 +43,7 @@ function onclickUnits() {
           </template>
           <div class="flex cursor-pointer items-center space-x-2" @click.stop="onclickUnits">
             <Label class="cursor-pointer text-sm text-slate-700 dark:text-slate-300">Metric</Label>
-            <SwitchComp :modelValue="checked" @update:modelValue="() => onclickUnits()" />
+            <Switch :checked="checked" @update:checked="() => onclickUnits()" />
             <Label class="cursor-pointer text-sm text-slate-700 dark:text-slate-300">Imperial</Label>
           </div>
         </MenuItem>

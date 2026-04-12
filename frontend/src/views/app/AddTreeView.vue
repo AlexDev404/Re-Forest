@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import Button from '@/components/ui/Button.vue';
-import Input from '@/components/ui/Input.vue';
-import Label from '@/components/ui/Label.vue';
-import SwitchComp from '@/components/ui/Switch.vue';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import {
   AlertTriangle,
   Building2,
@@ -519,7 +519,7 @@ onMounted(async () => {
               </Label>
               <div class="flex items-center gap-2">
                 <span class="text-xs text-muted-foreground">{{ showNonTimber ? 'Fruit' : 'Timber' }}</span>
-                <SwitchComp :modelValue="showNonTimber" @update:modelValue="handleTimberToggle" />
+                <Switch :checked="showNonTimber" @update:checked="handleTimberToggle" />
               </div>
             </div>
 
