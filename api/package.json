@@ -18,7 +18,7 @@
     "@neondatabase/serverless": "^0.10.4",
     "argon2-wasm-edge": "^1.0.23",
     "drizzle-orm": "^0.45.2",
-    "hono": "^4.4.0",
+    "hono": "^4.12.14",
     "jsonwebtoken": "^9.0.2",
     "sharp": "^0.33.5",
     "zod": "^4.0.0"
