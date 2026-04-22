@@ -1072,6 +1072,7 @@ onMounted(async () => {
       accept="image/jpeg,image/png,image/webp,image/heic"
       @change="handleFileSelect"
       class="hidden"
+      capture="environment"
     />
   </div>
 </template>
