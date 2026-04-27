@@ -103,6 +103,24 @@ export class UserRepository {
     return argon2Verify({ password, hash: storedHash });
   }
 
+  static async updatePassword(userId: number, newPassword: string): Promise<void> {
+    const salt = crypto.randomBytes(16);
+    const hashedPassword = await argon2id({
+      password: newPassword,
+      salt,
+      iterations: 3,
+      parallelism: 1,
+      memorySize: 65536,
+      hashLength: 32,
+      outputType: 'encoded',
+    });
+
+    await db
+      .update(UserSchema)
+      .set({ Password: hashedPassword })
+      .where(eq(UserSchema.Id, userId));
+  }
+
   /**
    * Check if email is already registered
    */

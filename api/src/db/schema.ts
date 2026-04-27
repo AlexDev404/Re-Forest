@@ -151,6 +151,17 @@ export const Notifications = pgTable('Notifications', {
   createdAt: timestamp('created_at').defaultNow()
 });
 
+export const PasswordResetTokens = pgTable('Password_Reset_Tokens', {
+  id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => User.Id, { onDelete: 'cascade' }),
+  token: varchar('token', { length: 255 }).notNull(),
+  expiresAt: timestamp('expires_at').notNull(),
+  used: boolean('used').default(false),
+  createdAt: timestamp('created_at').defaultNow()
+});
+
 export const UserTokens = pgTable('User_Tokens', {
   id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
   userId: integer('user_id')

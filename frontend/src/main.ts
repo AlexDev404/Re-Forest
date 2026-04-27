@@ -8,6 +8,8 @@ import capacitorApp from './lib/capacitor';
 import LoginView from './views/auth/LoginView.vue';
 import RegisterView from './views/auth/RegisterView.vue';
 import LogoutView from './views/auth/LogoutView.vue';
+import ForgotPasswordView from './views/auth/ForgotPasswordView.vue';
+import ResetPasswordView from './views/auth/ResetPasswordView.vue';
 import HomeView from './views/app/HomeView.vue';
 import AddTreeView from './views/app/AddTreeView.vue';
 import ConfigureView from './views/settings/ConfigureView.vue';
@@ -19,6 +21,8 @@ const routes = [
   { path: '/auth/login', name: 'login', component: LoginView, meta: { auth: false } },
   { path: '/auth/register', name: 'register', component: RegisterView, meta: { auth: false } },
   { path: '/auth/logout', name: 'logout', component: LogoutView },
+  { path: '/auth/forgot-password', name: 'forgot-password', component: ForgotPasswordView, meta: { auth: false } },
+  { path: '/auth/reset-password', name: 'reset-password', component: ResetPasswordView, meta: { auth: false } },
   { path: '/', name: 'home', component: HomeView, meta: { requiresAuth: false, showNav: true } },
   { path: '/manage/add', name: 'add-tree', component: AddTreeView, meta: { requiresAuth: true, showNav: true } },
   { path: '/configure', name: 'configure', component: ConfigureView, meta: { showNav: true } },

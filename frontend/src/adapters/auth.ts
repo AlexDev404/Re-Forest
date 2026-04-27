@@ -59,6 +59,14 @@ export const authAdapter = {
     return api.get<MeResponse>('/auth/me');
   },
 
+  async forgotPassword(email: string): Promise<void> {
+    await api.post('/auth/forgot-password', { email });
+  },
+
+  async resetPassword(token: string, password: string): Promise<void> {
+    await api.post('/auth/reset-password', { token, password });
+  },
+
   isAuthenticated(): boolean {
     return !!localStorage.getItem('auth_token');
   },

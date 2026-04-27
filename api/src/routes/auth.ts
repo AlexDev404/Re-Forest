@@ -1,6 +1,11 @@
 import { Hono } from 'hono';
 import Jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import { and, eq, gt } from 'drizzle-orm';
 import { z } from 'zod';
+import { db } from '../db';
+import { PasswordResetTokens } from '../db/schema';
+import { sendPasswordResetEmail } from '../lib/email';
 import { UserRepository, type UserData } from '../repositories/UserRepository';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
@@ -110,6 +115,77 @@ auth.post('/register', async (c) => {
   } catch (error) {
     console.error('Registration error:', error);
     return c.json({ error: 'An error occurred during registration' }, 500);
+  }
+});
+
+/**
+ * POST /auth/forgot-password
+ */
+auth.post('/forgot-password', async (c) => {
+  try {
+    const { email } = await c.req.json();
+    if (!email || typeof email !== 'string') {
+      return c.json({ error: 'Email is required' }, 400);
+    }
+
+    const user = await UserRepository.findByEmail(email);
+    // Always return success to avoid email enumeration
+    if (!user || !user.Id) {
+      return c.json({ success: true });
+    }
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+    await db.insert(PasswordResetTokens).values({ userId: user.Id, token, expiresAt });
+    await sendPasswordResetEmail(email, token);
+
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    return c.json({ error: 'An error occurred' }, 500);
+  }
+});
+
+/**
+ * POST /auth/reset-password
+ */
+auth.post('/reset-password', async (c) => {
+  try {
+    const body = await c.req.json();
+    const { token, password } = body;
+
+    if (!token || !password || password.length < 8) {
+      return c.json({ error: 'Invalid request' }, 400);
+    }
+
+    const now = new Date();
+    const records = await db
+      .select()
+      .from(PasswordResetTokens)
+      .where(
+        and(
+          eq(PasswordResetTokens.token, token),
+          eq(PasswordResetTokens.used, false),
+          gt(PasswordResetTokens.expiresAt, now)
+        )
+      );
+
+    if (records.length === 0) {
+      return c.json({ error: 'Invalid or expired reset link' }, 400);
+    }
+
+    const record = records[0];
+    await UserRepository.updatePassword(record.userId, password);
+    await db
+      .update(PasswordResetTokens)
+      .set({ used: true })
+      .where(eq(PasswordResetTokens.id, record.id));
+
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    return c.json({ error: 'An error occurred' }, 500);
   }
 });
 

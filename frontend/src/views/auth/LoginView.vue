@@ -78,7 +78,10 @@ async function handleLogin() {
           <Button type="submit" class="w-full" :disabled="loading">
             {{ loading ? "Logging in..." : "Login" }}
           </Button>
-          <div class="flex w-full items-center justify-center">
+          <div class="flex w-full items-center justify-between">
+            <router-link to="/auth/forgot-password" class="text-sm text-muted-foreground"
+              >Forgot password?</router-link
+            >
             <router-link to="/auth/register" class="text-sm text-primary"
               >Create an account</router-link
             >
