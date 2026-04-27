@@ -81,7 +81,6 @@ const location = ref<GeolocationCoordinates | null>(null);
 const translatedLocation = ref<string | null>(null);
 
 // Upload
-const fileInputRef = ref<HTMLInputElement | null>(null);
 const uploading = ref(false);
 
 // Form state persistence
@@ -194,25 +193,29 @@ async function useCurrentLocationFn() {
 }
 
 // Photo handling
-function handlePhotoClick() {
-  fileInputRef.value?.click();
-}
-
-async function handleFileSelect(event: Event) {
-  const target = event.target as HTMLInputElement;
-  if (!target.files?.[0]) return;
-
-  const file = target.files[0];
+async function handlePhotoClick() {
+  const { Camera, CameraResultType, CameraSource } = await import('@capacitor/camera');
   uploading.value = true;
-
   try {
+    const photo = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: false,
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Prompt,
+    });
+    if (!photo.dataUrl) return;
+    const res = await fetch(photo.dataUrl);
+    const blob = await res.blob();
+    const file = new File([blob], `tree-${Date.now()}.jpg`, { type: blob.type || 'image/jpeg' });
     const data = await uploadAdapter.uploadImage(file);
     if (data.success) {
       treeImage.value = data.url;
       treeImageSrc.value = data.url;
     }
-  } catch (error) {
-    console.error("Error uploading file:", error);
+  } catch (error: any) {
+    if (error?.message !== 'User cancelled photos app') {
+      console.error('Error capturing photo:', error);
+    }
   } finally {
     uploading.value = false;
   }
@@ -1066,14 +1069,6 @@ onMounted(async () => {
         </div>
       </template>
     </main>
-    <input
-      ref="fileInputRef"
-      type="file"
-      accept="image/jpeg,image/png,image/webp,image/heic"
-      @change="handleFileSelect"
-      class="hidden"
-      capture="environment"
-    />
   </div>
 </template>
 

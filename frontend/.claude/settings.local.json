@@ -10,7 +10,8 @@
       "Bash(echo \"exit: $?\")",
       "Bash(xargs grep *)",
       "Bash(bun add *)",
-      "PowerShell(Get-Command *)"
+      "PowerShell(Get-Command *)",
+      "Bash(git show *)"
     ]
   }
 }
