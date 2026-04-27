@@ -9,7 +9,7 @@
     "db:push": "drizzle-kit push",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "seed": "bun run src/seed.ts",
+    "seed": "bun run src/db/seed.ts",
     "seed:achievements": "bun run src/db/seed-achievements.ts",
     "vercel-build": "node scripts/build-vercel.mjs"
   },
@@ -22,6 +22,7 @@
     "hono": "^4.12.14",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^8.0.6",
+    "pg": "^8.20.0",
     "sharp": "^0.33.5",
     "zod": "^4.0.0"
   },

@@ -4,6 +4,14 @@ import {
   type PlantingReason,
   type TreeSpeciesData,
 } from "@/adapters/trees";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerFooter,
+  DrawerClose,
+} from "@/components/ui/drawer";
 import { uploadAdapter } from "@/adapters/upload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -82,6 +90,7 @@ const translatedLocation = ref<string | null>(null);
 
 // Upload
 const uploading = ref(false);
+const showPhotoSourcePicker = ref(false);
 
 // Form state persistence
 const FORM_STATE_KEY = "greening_belize_form_state";
@@ -193,29 +202,47 @@ async function useCurrentLocationFn() {
 }
 
 // Photo handling
-async function handlePhotoClick() {
-  const { Camera, CameraResultType, CameraSource } = await import('@capacitor/camera');
+async function uploadFromUri(uri: string) {
+  const { Capacitor } = await import('@capacitor/core');
+  const webUrl = Capacitor.convertFileSrc(uri);
+  const res = await fetch(webUrl);
+  const blob = await res.blob();
+  const file = new File([blob], `tree-${Date.now()}.jpg`, { type: blob.type || 'image/jpeg' });
+  const data = await uploadAdapter.uploadImage(file);
+  if (data.success) {
+    treeImage.value = data.url;
+    treeImageSrc.value = data.url;
+  }
+}
+
+function handlePhotoClick() {
+  showPhotoSourcePicker.value = true;
+}
+
+async function takeNewPhoto() {
+  showPhotoSourcePicker.value = false;
+  const { Camera } = await import('@capacitor/camera');
   uploading.value = true;
   try {
-    const photo = await Camera.getPhoto({
-      quality: 90,
-      allowEditing: false,
-      resultType: CameraResultType.DataUrl,
-      source: CameraSource.Prompt,
-    });
-    if (!photo.dataUrl) return;
-    const res = await fetch(photo.dataUrl);
-    const blob = await res.blob();
-    const file = new File([blob], `tree-${Date.now()}.jpg`, { type: blob.type || 'image/jpeg' });
-    const data = await uploadAdapter.uploadImage(file);
-    if (data.success) {
-      treeImage.value = data.url;
-      treeImageSrc.value = data.url;
-    }
+    const result = await Camera.takePhoto({ quality: 90 });
+    if (result.uri) await uploadFromUri(result.uri);
   } catch (error: any) {
-    if (error?.message !== 'User cancelled photos app') {
-      console.error('Error capturing photo:', error);
-    }
+    if (!error?.message?.includes('cancelled')) console.error('Error taking photo:', error);
+  } finally {
+    uploading.value = false;
+  }
+}
+
+async function chooseFromGallery() {
+  showPhotoSourcePicker.value = false;
+  const { Camera } = await import('@capacitor/camera');
+  uploading.value = true;
+  try {
+    const result = await Camera.chooseFromGallery({ limit: 1 });
+    const first = result.results?.[0];
+    if (first?.uri) await uploadFromUri(first.uri);
+  } catch (error: any) {
+    if (!error?.message?.includes('cancelled')) console.error('Error picking photo:', error);
   } finally {
     uploading.value = false;
   }
@@ -1069,6 +1096,22 @@ onMounted(async () => {
         </div>
       </template>
     </main>
+    <Drawer :open="showPhotoSourcePicker" @update:open="showPhotoSourcePicker = $event">
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>Add a photo</DrawerTitle>
+        </DrawerHeader>
+        <div class="flex flex-col gap-3 px-4 pb-2">
+          <Button variant="outline" class="w-full" @click="takeNewPhoto">Take Photo</Button>
+          <Button variant="outline" class="w-full" @click="chooseFromGallery">Choose from Gallery</Button>
+        </div>
+        <DrawerFooter>
+          <DrawerClose as-child>
+            <Button variant="ghost" class="w-full text-muted-foreground">Cancel</Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   </div>
 </template>
 
