@@ -19,7 +19,7 @@
     "@types/nodemailer": "^8.0.0",
     "argon2-wasm-edge": "^1.0.23",
     "drizzle-orm": "^0.45.2",
-    "hono": "^4.12.14",
+    "hono": "^4.12.18",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^8.0.6",
     "pg": "^8.20.0",
