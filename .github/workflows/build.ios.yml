@@ -42,5 +42,5 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: ios-simulator-app
-          path: ./frontend/build_output/Build/Products/Debug-iphonesimulator/App.app
+          path: ~/Library/Developer/Xcode/DerivedData/App-*/Build/Products/Debug-iphonesimulator/App.app
           retention-days: 7
