@@ -19,6 +19,7 @@
     "@capacitor/cli": "^8.3.0",
     "@capacitor/core": "^8.3.0",
     "@capacitor/device": "^8.0.2",
+    "@capacitor/ios": "^8.3.4",
     "@radix-icons/vue": "^1.0.0",
     "@vueuse/core": "^14.2.1",
     "chart.js": "^4.4.9",
