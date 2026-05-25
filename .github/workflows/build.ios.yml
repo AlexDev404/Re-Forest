@@ -1,5 +1,5 @@
 name: Build Capacitor iOS
-on: [push]
+on: [push, workflow_dispatch ]
 
 jobs:
   build:
